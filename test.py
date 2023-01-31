@@ -3,8 +3,8 @@ import pygame
 win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
 
-x=50
-y=50
+x=41
+y=41
 width=40
 height=60
 vel=20
