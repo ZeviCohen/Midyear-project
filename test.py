@@ -17,9 +17,9 @@ while run:
         if event.type == pygame.QUIT:
             run=False
     keys= pygame.key.get_pressed()
-    if keys[pygame.K_LEFT] and x>=0:
+    if keys[pygame.K_LEFT] and x>vel:
         x-=vel
-    if keys[pygame.K_RIGHT] and x<=500:
+    if keys[pygame.K_RIGHT] and x < 600 - width:
         x+= vel
     if keys[pygame.K_UP]and y>=0:
         y-= vel
