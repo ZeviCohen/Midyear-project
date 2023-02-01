@@ -73,14 +73,14 @@ class Player(object):
         self.radius = 10
         self.vel = 5
 class Platform(object):
-    def __init__(self):
-        self.x = 0
-        self.y = 550
-        self.width = 70
-        self.height = 20
+    def __init__(self,x,y,width,height):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
         self.rect = pygame.Rect(self.x,self.y,self.width,self.height)
-platform = Platform()
-import pygame
+platform1 = Platform(0,550,70,20)
+platform2 = Platform(530,550,70,20)
 win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
 run=True
@@ -89,6 +89,27 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run=False
-        pygame.draw.rect(win,(255,0,0),platform.rect)
+        pygame.draw.rect(win,(255,0,0),platform1.rect)
+        pygame.draw.rect(win,(255,0,0),platform2.rect)
+        x += vel
+        x2 -= vel
+        cy += cyvel
+        
+        if x > 530:
+            vel *= -1
+        if x < 0:
+            vel *= -1
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            cx-=5
+        if keys[pygame.K_RIGHT]:
+            cx += 5
+        if keys[pygame.K_UP]:
+            cy-= 5
+            cy-=5
+            cy-=5
+        if keys[pygame.K_DOWN]:
+            cy += 5
         pygame.display.update()
+
 pygame.quit()
