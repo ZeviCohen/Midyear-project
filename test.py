@@ -73,20 +73,22 @@ class Player(object):
         self.radius = 10
         self.vel = 5
 class Platform(object):
-    def __init__(self,x,y,width,height):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
+    def __init__(self):
+        self.x = 0
+        self.y = 550
+        self.width = 70
+        self.height = 20
+        self.rect = pygame.Rect(self.x,self.y,self.width,self.height)
+platform = Platform()
 import pygame
 win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
-
 run=True
 while run:
     pygame.time.delay(100)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run=False
-    
+        pygame.draw.rect(win,(255,0,0),platform.rect)
+        pygame.display.update()
 pygame.quit()
