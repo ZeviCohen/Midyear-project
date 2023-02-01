@@ -24,15 +24,28 @@ class Player(object):
         if keys[pygame.K_DOWN]:
             if (player1.x >= platform1.rect.x and player1.x <= platform1.rect.x + 70 and player1.y <= platform1.rect.y - 10 and player1.y >= platform1.rect.y - 12) or (player1.x >= platform2.rect.x and player1.x <= platform2.rect.x + 70 and player1.y <= platform2.rect.y - 10 and player1.y >= platform2.rect.y - 12) :
                 self.y += 5
-    def jump(self):
+    def jumpy(self):
+        #This still doesn't work but it is a start
         keys = pygame.key.get_pressed()
-        if self.jump:
+        v = self.yvel
+        m = self.m
+        if self.jump==False:
             if keys[pygame.K_UP]:
-                self.jump= True
-        if self.jump:        
-            if (player1.x >= platform1.rect.x and player1.x <= platform1.rect.x + 70 and player1.y <= platform1.rect.y - 10 and player1.y >= platform1.rect.y - 12) or (player1.x >= platform2.rect.x and player1.x <= platform2.rect.x + 70 and player1.y <= platform2.rect.y - 10 and player1.y >= platform2.rect.y - 12):
-                F =(1 / 2)*self.m*(self.vel**2)
-                self.y -= 15
+                if (player1.x >= platform1.rect.x and player1.x <= platform1.rect.x + 70 and player1.y <= platform1.rect.y - 10 and player1.y >= platform1.rect.y - 12) or (player1.x >= platform2.rect.x and player1.x <= platform2.rect.x + 70 and player1.y <= platform2.rect.y - 10 and player1.y >= platform2.rect.y - 12):
+                    self.jump= True
+        if self.jump == True:     
+                F =(1 / 2)* m *(v**2)
+                self.y-=F
+                v-=1
+                if v<0:
+                    m *= -1
+                if v == -(v+1):
+                    self.jump = False
+                    m = self.m
+                    v = self.yvel
+        pygame.time.delay(10)
+        pygame.display.update()
+                    
 class Platform(object):
     def __init__(self,x,y,width,height,vel):
         self.rect = pygame.Rect(x,y,width,height)
@@ -46,7 +59,7 @@ class Platform(object):
         pygame.display.update()
 platform1 = Platform(0,550,70,20, 5)
 platform2 = Platform(530,550,70,20, -5)
-player1 = Player(200,200,10,15,0)
+player1 = Player(200,200,10,5,0,1)
 win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
 run=True
@@ -62,6 +75,7 @@ while run:
     platform1.moves()
     platform2.moves()
     player1.move()
+    player1.jumpy()
     pygame.display.update()
     if player1.x >= platform1.rect.x and player1.x <= platform1.rect.x + 70 and player1.y <= platform1.rect.y - 10 and player1.y >= platform1.rect.y - 12:
         player1.yvel = 0
