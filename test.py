@@ -3,6 +3,7 @@ import pygame
 win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
 
+<<<<<<< HEAD
 x=0
 y=550
 width=70
@@ -10,6 +11,13 @@ height=20
 vel=5
 x2 = 530
 y2 = 550
+=======
+x=41
+y=41
+width=40
+height=60
+vel=20
+>>>>>>> 7252062a6370f7eca53081d683fa56010466519d
 
 run=True
 while run:
