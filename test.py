@@ -11,6 +11,8 @@ height=20
 vel=5
 x2 = 530
 y2 = 550
+cx = 300
+cy = 300
 # =======
 # x=41
 # y=41
@@ -40,7 +42,7 @@ while run:
     win.fill((0,0,0))
     pygame.draw.rect(win,(255,0,0), (x,y,width,height))
     pygame.draw.rect(win,(255,0,0),(x2,y2,width,height))
-    pygame.draw.circle(win,(255,156,32),(300,300), (10))
+    pygame.draw.circle(win,(255,156,32),(cx,cy), (10))
     pygame.display.update()
     x += vel
     x2 -= vel
@@ -48,5 +50,14 @@ while run:
         vel *= -1
     if x < 0:
         vel *= -1
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        cx-=vel
+    if keys[pygame.K_RIGHT]:
+        cx += vel
+    if keys[pygame.K_UP]:
+        cy-= vel
+    if keys[pygame.K_DOWN]:
+        cy += vel
 
 pygame.quit()
