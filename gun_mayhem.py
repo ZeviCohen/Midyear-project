@@ -31,22 +31,22 @@ class Player(object):
     def jumpy(self):
         #This still doesn't work but it is a start
         keys = pygame.key.get_pressed()
-        v = self.yvel
+        v = 5
         m = self.m
         if self.jump==False:
             if keys[pygame.K_UP]:
                 if (player1.x >= platform1.rect.x and player1.x <= platform1.rect.x + 70 and player1.y <= platform1.rect.y - 10 and player1.y >= platform1.rect.y - 12) or (player1.x >= platform2.rect.x and player1.x <= platform2.rect.x + 70 and player1.y <= platform2.rect.y - 10 and player1.y >= platform2.rect.y - 12):
                     self.jump= True
-        if self.jump == True:     
-                F =(1 / 2)* m *(v**2)
-                self.y-=F
-                v-=1
-                if v<0:
-                    m *= -1
-                if v == -(v+1):
-                    self.jump = False
-                    m = self.m
-                    v = self.yvel
+        if self.jump == True:
+            F =(1 / 2)* m *(v**2)
+            self.y-= F
+            v-=1
+            if v<0:
+                m *= -1
+            if v == -(v+1):
+                self.jump = False
+                m = self.m
+                v = 5
         pygame.time.delay(10)
         pygame.display.update()
                     
