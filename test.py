@@ -1,4 +1,4 @@
-# import pygame
+import pygame
 
 # win = pygame.display.set_mode((600, 600))
 # pygame.display.set_caption("This is pygame")
@@ -82,7 +82,8 @@ class Platform(object):
         self.plat1height = 20
         self.plat2width = 70
         self.plat2height = 20
-import pygame
+
+#Main
 win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
 
