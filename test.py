@@ -79,7 +79,12 @@ class Platform(object):
         self.width = width
         self.height = height
         self.rect = pygame.Rect(self.x,self.y,self.width,self.height)
+<<<<<<< HEAD
     
+=======
+    def moves(self):
+        
+>>>>>>> f0a93bdbf96878f852401c8aebde13fb066e4fb5
 platform1 = Platform(0,550,70,20)
 platform2 = Platform(530,550,70,20)
 player1 = Player(200,200,10,5)
