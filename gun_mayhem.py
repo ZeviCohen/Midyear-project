@@ -5,12 +5,14 @@ green = (0, 255, 0)
 blue = (0, 0, 255)
 black = (0, 0, 0)
 class Player(object):
-    def __init__(self,x,y,radius,yvel,xvel):
+    def __init__(self,x,y,radius,yvel,xvel, mass):
         self.x = x
         self.y = y
         self.radius = radius
         self.yvel = yvel
         self.xvel = xvel
+        self.jump = False
+        self.m = mass
     def move(self):
         self.y += self.yvel
         self.x += self.xvel
@@ -19,12 +21,18 @@ class Player(object):
             self.x-= 5
         if keys[pygame.K_RIGHT]:
             self.x += 5
-        if keys[pygame.K_UP]:
-            if (player1.x >= platform1.rect.x and player1.x <= platform1.rect.x + 70 and player1.y <= platform1.rect.y - 10 and player1.y >= platform1.rect.y - 12) or (player1.x >= platform2.rect.x and player1.x <= platform2.rect.x + 70 and player1.y <= platform2.rect.y - 10 and player1.y >= platform2.rect.y - 12):
-                self.y -= 15
         if keys[pygame.K_DOWN]:
             if (player1.x >= platform1.rect.x and player1.x <= platform1.rect.x + 70 and player1.y <= platform1.rect.y - 10 and player1.y >= platform1.rect.y - 12) or (player1.x >= platform2.rect.x and player1.x <= platform2.rect.x + 70 and player1.y <= platform2.rect.y - 10 and player1.y >= platform2.rect.y - 12) :
                 self.y += 5
+    def jump(self):
+        keys = pygame.key.get_pressed()
+        if self.jump:
+            if keys[pygame.K_UP]:
+                self.jump= True
+        if self.jump:        
+            if (player1.x >= platform1.rect.x and player1.x <= platform1.rect.x + 70 and player1.y <= platform1.rect.y - 10 and player1.y >= platform1.rect.y - 12) or (player1.x >= platform2.rect.x and player1.x <= platform2.rect.x + 70 and player1.y <= platform2.rect.y - 10 and player1.y >= platform2.rect.y - 12):
+                F =(1 / 2)*self.m*(self.vel**2)
+                self.y -= 15
 class Platform(object):
     def __init__(self,x,y,width,height,vel):
         self.rect = pygame.Rect(x,y,width,height)
