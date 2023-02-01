@@ -68,7 +68,7 @@ while run:
 		F =(1 / 2)*m*(v**2)
 		
 		# change in the y co-ordinate
-		y-= F
+		y-= 2*F
 		
 		# decreasing velocity while going up and become negative while coming down
 		v = v-1
