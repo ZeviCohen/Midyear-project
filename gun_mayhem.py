@@ -6,28 +6,27 @@ green = (0, 255, 0)
 blue = (0, 0, 255)
 black = (0, 0, 0)
 class Player(object):
-    def __init__(self,x,y,radius,yvel,xvel, mass):
-        self.x = x
-        self.y = y
-        self.radius = radius
+    def __init__(self,x,y,width,height,yvel,xvel, mass):
         self.yvel = yvel
         self.xvel = xvel
         self.jump = False
         self.m = mass
+        self.y = y
+        self.square = pygame.Rect(x,y,width,height)
     def move(self):
-        self.y += self.yvel
-        self.x += self.xvel
+        self.square.y += self.yvel
+        self.square.x += self.xvel
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
             self.x-= 5
         if keys[pygame.K_RIGHT]:
             self.x += 5
         if keys[pygame.K_UP]:
-            if (player1.x >= platform2.rect.x and player1.x <= platform2.rect.x + 70 and player1.y <= platform2.rect.y - 10 and player1.y >= platform2.rect.y - 12) or (player1.x >= platform2.rect.x and player1.x <= platform2.rect.x + 70 and player1.y <= platform2.rect.y - 10 and player1.y >= platform2.rect.y - 12):
-                self.y -= 60
+            if (player1.square.x >= platform2.rect.x and player1.square.x <= platform2.rect.x + 70 and player1.square.y <= platform2.rect.y - 10 and player1.square.y >= platform2.rect.y - 12) or (player1.square.x >= platform2.rect.x and player1.square.x <= platform2.rect.x + 70 and player1.square.y <= platform2.rect.y - 10 and player1.square.y >= platform2.rect.y - 12):
+                self.square.y -= 60
         if keys[pygame.K_DOWN]:
-            if (player1.x >= platform1.rect.x and player1.x <= platform1.rect.x + 70 and player1.y <= platform1.rect.y - 10 and player1.y >= platform1.rect.y - 12) or (player1.x >= platform2.rect.x and player1.x <= platform2.rect.x + 70 and player1.y <= platform2.rect.y - 10 and player1.y >= platform2.rect.y - 12) :
-                self.y += 5
+            if (player1.square.x >= platform1.rect.x and player1.square.x <= platform1.rect.x + 70 and player1.square.y <= platform1.rect.y - 10 and player1.square.y >= platform1.rect.y - 12) or (player1.square.x >= platform2.rect.x and player1.square.x <= platform2.rect.x + 70 and player1.square.y <= platform2.rect.y - 10 and player1.square.y >= platform2.rect.y - 12) :
+                self.square.y += 5
     def jumpy(self):
         #This still doesn't work but it is a start
         keys = pygame.key.get_pressed()
@@ -35,7 +34,7 @@ class Player(object):
         m = self.m
         if self.jump==False:
             if keys[pygame.K_UP]:
-                if (player1.x >= platform1.rect.x and player1.x <= platform1.rect.x + 70 and player1.y <= platform1.rect.y - 10 and player1.y >= platform1.rect.y - 12) or (player1.x >= platform2.rect.x and player1.x <= platform2.rect.x + 70 and player1.y <= platform2.rect.y - 10 and player1.y >= platform2.rect.y - 12):
+                if (player1.square.x >= platform1.rect.x and player1.square.x <= platform1.rect.x + 70 and player1.square.y <= platform1.rect.y - 10 and player1.square.y >= platform1.rect.y - 12) or (player1.square.x >= platform2.rect.x and player1.square.x <= platform2.rect.x + 70 and player1.square.y <= platform2.rect.y - 10 and player1.square.y >= platform2.rect.y - 12):
                     self.jump= True
         if self.jump == True:     
                 F =(1 / 2)* m *(v**2)
@@ -63,7 +62,7 @@ class Platform(object):
         pygame.display.update()
 platform1 = Platform(0,550,70,20, 5)
 platform2 = Platform(530,550,70,20, -5)
-player1 = Player(200,200,10,5,0,1)
+player1 = Player(200,200,10,10,5,0,1)
 win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
 run=True
@@ -75,16 +74,16 @@ while run:
     win.fill((0,0,0))
     pygame.draw.rect(win,red,platform1.rect)
     pygame.draw.rect(win,red,platform2.rect)
-    pygame.draw.circle(win,green,(player1.x,player1.y),player1.radius)
+    pygame.draw.rect(win,green,player1.square)
     platform1.moves()
     platform2.moves()
     player1.move()
     player1.jumpy()
     pygame.display.update()
-    if player1.x >= platform1.rect.x and player1.x <= platform1.rect.x + 70 and player1.y <= platform1.rect.y - 10 and player1.y >= platform1.rect.y - 12:
+    if player1.square.x >= platform1.rect.x and player1.square.x <= platform1.rect.x + 70 and player1.square.y <= platform1.rect.y - 10 and player1.square.y >= platform1.rect.y - 12:
         player1.yvel = 0
         player1.xvel = platform1.vel
-    elif player1.x >= platform2.rect.x and player1.x <= platform2.rect.x + 70 and player1.y <= platform2.rect.y - 10 and player1.y >= platform2.rect.y - 12:
+    elif player1.square.x >= platform2.rect.x and player1.square.x <= platform2.rect.x + 70 and player1.square.y <= platform2.rect.y - 10 and player1.square.y >= platform2.rect.y - 12:
         player1.yvel = 0
         player1.xvel = platform2.vel
     else:
