@@ -52,12 +52,12 @@ while run:
         vel *= -1
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
-        cx-=vel
+        cx-=5
     if keys[pygame.K_RIGHT]:
-        cx += vel
+        cx += 5
     if keys[pygame.K_UP]:
-        cy-= vel
+        cy-= 5
     if keys[pygame.K_DOWN]:
-        cy += vel
+        cy += 5
 
 pygame.quit()
