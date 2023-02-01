@@ -1,4 +1,5 @@
 import pygame
+gained = 0
 white = (255, 255, 255)
 red = (255, 0, 0)
 green = (0, 255, 0)
@@ -64,5 +65,4 @@ while run:
     else:
         player1.yvel = 5
         player1.xvel = 0
-
 pygame.quit()
