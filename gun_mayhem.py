@@ -18,24 +18,25 @@ class Player(object):
         if keys[pygame.K_RIGHT]:
             self.square.x += 5
         if keys[pygame.K_DOWN]:
-            if (player1.square.x >= platform1.rect.x and player1.square.x <= platform1.rect.x + 70 and player1.square.y <= platform1.rect.y - 10 and player1.square.y >= platform1.rect.y - 12) or (player1.square.x >= platform2.rect.x and player1.square.x <= platform2.rect.x + 70 and player1.square.y <= platform2.rect.y - 10 and player1.square.y >= platform2.rect.y - 12) :
+            if (player1.square.x >= platform1.rect.x and player1.square.x <= platform1.rect.x + 70 and player1.square.y <= platform1.rect.y - 10 and player1.square.y >= platform1.rect.y - 12) or (player1.square.x >= platform2.rect.x and player1.square.x <= platform2.rect.x + 70 and player1.square.y <= platform2.rect.y - 10 and player1.square.y >= platform2.rect.y - 12):
                 self.square.y += 5
     def jumpy(self):
         #This still doesn't work but it is a start
         keys = pygame.key.get_pressed()
-        v = 5
+        vel=5
+        v = vel
         m = self.m
         if self.jump==False:
             if keys[pygame.K_UP]:
                 if (player1.square.x >= platform1.rect.x and player1.square.x <= platform1.rect.x + 70 and player1.square.y <= platform1.rect.y - 10 and player1.square.y >= platform1.rect.y - 12) or (player1.square.x >= platform2.rect.x and player1.square.x <= platform2.rect.x + 70 and player1.square.y <= platform2.rect.y - 10 and player1.square.y >= platform2.rect.y - 12):
                     self.jump= True
-        if self.jump == True:
+        while self.jump == True:
             F =(1 / 2)* m *(v**2)
-            self.y-= F
+            self.square.y-= F
             v-=1
             if v<0:
                 m *= -1
-            if v == -(v+1):
+            if v == -vel-1:
                 self.jump = False
                 m = self.m
                 v = 5
