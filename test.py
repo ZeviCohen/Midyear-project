@@ -74,20 +74,20 @@ class Player(object):
         self.playeryvel = 5
 class Platform(object):
     def __init__(self):
-        self.plat1x = 70
-        self.plat2x = 530
-        self.plat1y = 550
-        self.plat2y = 550
-        self.plat1width = 70
-        self.plat1height = 20
-        self.plat2width = 70
-        self.plat2height = 20
+        self.x = 70
+        self.x = 530
+        self.y = 550
+        self.y = 550
+        self.width = 70
+        self.height = 20
+        self.rect1 = pygame.Rect(self.x,self.y,self.width,self.height)
+        self.rect2 = pygame.Rect(self.x,self.y,self.width,self.height)
 import pygame
 win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
 
 run=True
-while run:
+while run
     pygame.time.delay(100)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
