@@ -1,10 +1,6 @@
 import pygame
 gained = 0
-white = (255, 255, 255)
-red = (255, 0, 0)
-green = (0, 255, 0)
-blue = (0, 0, 255)
-black = (0, 0, 0)
+color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0)}
 class Player(object):
     def __init__(self,x,y,radius,yvel,xvel, mass):
         self.x = x
@@ -22,9 +18,6 @@ class Player(object):
             self.x-= 5
         if keys[pygame.K_RIGHT]:
             self.x += 5
-        if keys[pygame.K_UP]:
-            if (player1.x >= platform2.rect.x and player1.x <= platform2.rect.x + 70 and player1.y <= platform2.rect.y - 10 and player1.y >= platform2.rect.y - 12) or (player1.x >= platform2.rect.x and player1.x <= platform2.rect.x + 70 and player1.y <= platform2.rect.y - 10 and player1.y >= platform2.rect.y - 12):
-                self.y -= 60
         if keys[pygame.K_DOWN]:
             if (player1.x >= platform1.rect.x and player1.x <= platform1.rect.x + 70 and player1.y <= platform1.rect.y - 10 and player1.y >= platform1.rect.y - 12) or (player1.x >= platform2.rect.x and player1.x <= platform2.rect.x + 70 and player1.y <= platform2.rect.y - 10 and player1.y >= platform2.rect.y - 12) :
                 self.y += 5
@@ -73,9 +66,9 @@ while run:
         if event.type == pygame.QUIT:
             run=False
     win.fill((0,0,0))
-    pygame.draw.rect(win,red,platform1.rect)
-    pygame.draw.rect(win,red,platform2.rect)
-    pygame.draw.circle(win,green,(player1.x,player1.y),player1.radius)
+    pygame.draw.rect(win,color_dict["red"],platform1.rect)
+    pygame.draw.rect(win,color_dict["red"],platform2.rect)
+    pygame.draw.circle(win,color_dict["green"],(player1.x,player1.y),player1.radius)
     platform1.moves()
     platform2.moves()
     player1.move()
