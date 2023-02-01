@@ -67,7 +67,7 @@ import pygame
 
 # pygame.quit()
 class Player(object):
-    def __init__(self):
+    def __init__(self,x,y,radius,vel):
         self.x = 200
         self.y = 200
         self.radius = 10
@@ -83,6 +83,7 @@ class Platform(object):
         
 platform1 = Platform(0,550,70,20)
 platform2 = Platform(530,550,70,20)
+player1 = Player()
 win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
 run=True
