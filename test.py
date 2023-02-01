@@ -79,6 +79,8 @@ class Platform(object):
         self.width = width
         self.height = height
         self.rect = pygame.Rect(self.x,self.y,self.width,self.height)
+    def moves(self):
+        
 platform1 = Platform(0,550,70,20)
 platform2 = Platform(530,550,70,20)
 win = pygame.display.set_mode((600, 600))
