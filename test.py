@@ -90,27 +90,27 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run=False
-        pygame.draw.rect(win,(255,0,0),platform1.rect)
-        pygame.draw.rect(win,(255,0,0),platform2.rect)
-        x += vel
-        x2 -= vel
-        cy += cyvel
-        
-        if x > 530:
-            vel *= -1
-        if x < 0:
-            vel *= -1
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
-            cx-=5
-        if keys[pygame.K_RIGHT]:
-            cx += 5
-        if keys[pygame.K_UP]:
-            cy-= 5
-            cy-=5
-            cy-=5
-        if keys[pygame.K_DOWN]:
-            cy += 5
-        pygame.display.update()
+    pygame.draw.rect(win,(255,0,0),platform1.rect)
+    pygame.draw.rect(win,(255,0,0),platform2.rect)
+    x += vel
+    x2 -= vel
+    cy += cyvel
+    
+    if x > 530:
+        vel *= -1
+    if x < 0:
+        vel *= -1
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        cx-=5
+    if keys[pygame.K_RIGHT]:
+        cx += 5
+    if keys[pygame.K_UP]:
+        cy-= 5
+        cy-=5
+        cy-=5
+    if keys[pygame.K_DOWN]:
+        cy += 5
+    pygame.display.update()
 
 pygame.quit()
