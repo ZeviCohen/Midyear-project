@@ -46,6 +46,7 @@ while run:
     pygame.display.update()
     x += vel
     x2 -= vel
+    cy += 5
     if x > 530:
         vel *= -1
     if x < 0:
