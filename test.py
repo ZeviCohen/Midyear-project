@@ -11,13 +11,13 @@ height=20
 vel=5
 x2 = 530
 y2 = 550
-=======
-x=41
-y=41
-width=40
-height=60
-vel=20
->>>>>>> 7252062a6370f7eca53081d683fa56010466519d
+# =======
+# x=41
+# y=41
+# width=40
+# height=60
+# vel=20
+# >>>>>>> 7252062a6370f7eca53081d683fa56010466519d
 
 run=True
 while run:
