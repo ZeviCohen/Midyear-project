@@ -57,7 +57,7 @@ while run:
     if keys[pygame.K_RIGHT]:
         cx += 5
     if keys[pygame.K_UP]:
-        cy-= 5
+        cy-= 15
     if keys[pygame.K_DOWN]:
         cy += 5
 
