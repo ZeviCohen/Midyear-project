@@ -16,12 +16,12 @@ class Player(object):
         self.x += self.xvel
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
-            self.x-= 5
+            self.x-= 10
         if keys[pygame.K_RIGHT]:
-            self.x += 5
+            self.x += 10
         if keys[pygame.K_UP]:
             if (player1.x >= platform2.rect.x and player1.x <= platform2.rect.x + 70 and player1.y <= platform2.rect.y - 10 and player1.y >= platform2.rect.y - 12) or (player1.x >= platform2.rect.x and player1.x <= platform2.rect.x + 70 and player1.y <= platform2.rect.y - 10 and player1.y >= platform2.rect.y - 12):
-                self.y -= 15
+                self.y -= 30
         if keys[pygame.K_DOWN]:
             if (player1.x >= platform1.rect.x and player1.x <= platform1.rect.x + 70 and player1.y <= platform1.rect.y - 10 and player1.y >= platform1.rect.y - 12) or (player1.x >= platform2.rect.x and player1.x <= platform2.rect.x + 70 and player1.y <= platform2.rect.y - 10 and player1.y >= platform2.rect.y - 12) :
                 self.y += 5
