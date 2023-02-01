@@ -73,20 +73,22 @@ class Player(object):
         self.radius = radius
         self.vel = vel
 class Platform(object):
-    def __init__(self,x,y,width,height):
+    def __init__(self,x,y,width,height,vel):
         self.x = x
         self.y = y
         self.width = width
         self.height = height
         self.rect = pygame.Rect(self.x,self.y,self.width,self.height)
-<<<<<<< HEAD
-    
-=======
+        self.vel = vel
     def moves(self):
-        
->>>>>>> f0a93bdbf96878f852401c8aebde13fb066e4fb5
-platform1 = Platform(0,550,70,20)
-platform2 = Platform(530,550,70,20)
+        self.rect.x += self.vel
+        if self.rect.x > 530:
+            self.vel *= -1
+        if self.rect.x < 0:
+            self.vel *= -1
+        pygame.display.update()
+platform1 = Platform(0,550,70,20, 5)
+platform2 = Platform(530,550,70,20, -5)
 player1 = Player(200,200,10,5)
 win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
@@ -96,8 +98,11 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run=False
+    win.fill((0,0,0))
     pygame.draw.rect(win,(255,0,0),platform1.rect)
     pygame.draw.rect(win,(255,0,0),platform2.rect)
+    platform1.moves()
+    platform2.moves()
     pygame.display.update()
 
 pygame.quit()
