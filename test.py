@@ -3,11 +3,13 @@ import pygame
 win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
 
-x=50
-y=50
-width=40
-height=60
+x=0
+y=550
+width=70
+height=20
 vel=5
+x2 = 530
+y2 = 550
 
 run=True
 while run:
@@ -15,17 +17,28 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run=False
-    keys= pygame.key.get_pressed()
-    if keys[pygame.K_LEFT] and x>vel:
-        x-=vel
-    if keys[pygame.K_RIGHT] and x < 600 - width:
-        x+= vel
-    if keys[pygame.K_UP]and y>=0:
-        y-= vel
-    if keys[pygame.K_DOWN]and y<=600 - height:
-        y+= vel
+    # keys= pygame.key.get_pressed()
+    # if keys[pygame.K_LEFT] and x>vel:
+    #     x-=vel
+    # if keys[pygame.K_RIGHT] and x < 600 - width:
+    #     x+= vel
+    # if keys[pygame.K_UP]and y>=0:
+    #     y-= vel
+    # if keys[pygame.K_DOWN]and y < 600 - height:
+    #     y+= vel
+    # win.fill((0,0,0))
+    # pygame.draw.rect(win, (255, 0 , 0), (x, y, width, height))
+    # pygame.display.update()
     win.fill((0,0,0))
-    pygame.draw.rect(win, (255, 0 , 0), (x, y, width, height))
+    pygame.draw.rect(win,(255,0,0), (x,y,width,height))
+    pygame.draw.rect(win,(255,0,0),(x2,y2,width,height))
+    pygame.draw.circle(win,(255,156,32),(300,300), (50))
     pygame.display.update()
+    x += vel
+    x2 -= vel
+    if x > 530:
+        vel *= -1
+    if x < 0:
+        vel *= -1
 
 pygame.quit()
