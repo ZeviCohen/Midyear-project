@@ -32,7 +32,7 @@ while run:
     win.fill((0,0,0))
     pygame.draw.rect(win,(255,0,0), (x,y,width,height))
     pygame.draw.rect(win,(255,0,0),(x2,y2,width,height))
-    pygame.draw.circle(win,(255,156,32),(300,300), (50))
+    pygame.draw.circle(win,(255,156,32),(300,300), (10))
     pygame.display.update()
     x += vel
     x2 -= vel
