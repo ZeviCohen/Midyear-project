@@ -34,6 +34,7 @@ class Player(object):
             player1.square.x += 5
             self.lastrecorded = 'RIGHT'
         if keys[pygame.K_DOWN]:
+<<<<<<< HEAD
             if (player1.square.x >= platform1.rect.x and player1.square.x <= platform1.rect.x + 70 and player1.square.y <= platform1.rect.y - 15 and player1.square.y >= platform1.rect.y - 18) or (player1.square.x >= platform2.rect.x and player1.square.x <= platform2.rect.x + 70 and player1.square.y <= platform2.rect.y - 15 and player1.square.y >= platform2.rect.y - 18) or (player1.square.x >= platform3.rect.x and player1.square.x <= platform3.rect.x + 300 and player1.square.y <= platform3.rect.y - 15 and player1.square.y >= platform3.rect.y - 18):
                 player1.square.y += 5
         if keys[pygame.K_a]:
@@ -60,6 +61,33 @@ class Player(object):
             while self.bulletx > 0:
                 pygame.draw.rect(win,(color_dict['white']),(self.bulletx,player1.square.y,self.bulletwidth,self.bulletheight))
                 self.bulletx += self.bulletvel
+=======
+            if (player1.square.x >= platform1.rect.x and player1.square.x <= platform1.rect.x + 70 and player1.square.y <= platform1.rect.y - 10 and player1.square.y >= platform1.rect.y - 12) or (player1.square.x >= platform2.rect.x and player1.square.x <= platform2.rect.x + 70 and player1.square.y <= platform2.rect.y - 10 and player1.square.y >= platform2.rect.y - 12):
+                self.square.y += 5
+    def jumpy(self):
+        #This still doesn't work but it is a start
+        keys = pygame.key.get_pressed()
+        vel=5
+        v = vel
+        m = self.m
+        if self.jump==False:
+            if keys[pygame.K_UP]:
+                if (player1.square.x >= platform1.rect.x and player1.square.x <= platform1.rect.x + 70 and player1.square.y <= platform1.rect.y - 10 and player1.square.y >= platform1.rect.y - 12) or (player1.square.x >= platform2.rect.x and player1.square.x <= platform2.rect.x + 70 and player1.square.y <= platform2.rect.y - 10 and player1.square.y >= platform2.rect.y - 12):
+                    self.jump= True
+        while self.jump == True:
+            F =(1 / 2)* m *(v**2)
+            self.square.y-= F
+            v-=1
+            if v<0:
+                m *= -1
+            if v == -vel-1:
+                self.jump = False
+                m = self.m
+                v = 5
+        pygame.time.delay(10)
+        pygame.display.update()
+                    
+>>>>>>> 07c924c310bbfcae0089309861f643f97fe8ed28
 class Platform(object):
     def __init__(self,x,y,width,height,vel):
         self.rect = pygame.Rect(x,y,width,height)
