@@ -105,18 +105,21 @@ player2 = Player(300,300,15,15,5,0,1, 5)
 # bullet = Bullet(player1.x + 20, player1.y,10,5,50,player1.lastrecorded)
 win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
-run=True
+run = True
 while run:
     pygame.time.delay(100)
+    #To let the user quit the window
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run=False
+    #Makes the background and all of the objects
     win.fill((0,0,0))
     pygame.draw.rect(win,color_dict["red"],platform1.rect)
     pygame.draw.rect(win,color_dict["red"],platform2.rect)
     pygame.draw.rect(win,color_dict["green"],(player1.square))
     pygame.draw.rect(win,color_dict['red'],(player2.square))
     pygame.draw.rect(win,color_dict['red'],platform3.rect)
+    #Makes the platforms move
     platform1.moves()
     platform2.moves()
     platform3.moves()
