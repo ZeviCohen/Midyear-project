@@ -1,7 +1,14 @@
 import pygame
 color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0)}
+# Class Bullet(object):
+#     def __init__(self,x,y,velocity,direction):
+#         self.width = 10
+#         self.height = 5
+#         self.bullet = pygame.Rect(x,y,self.width,self.height)
+#     def move(self):
+#         self.x += self.velocity
 class Player(object):
-    def __init__(self,x,y,width,height,yvel,xvel, mass):
+    def __init__(self,x,y,width,height,yvel,xvel, mass,isJump,Force):
         self.lastrecorded = None
         self.yvel = yvel
         self.xvel = xvel
@@ -14,6 +21,8 @@ class Player(object):
         self.bulletx = self.square.x + 20
         self.bullety = self.square.y
         self.ammo = 100
+        self.isJump = isJump
+        self.force = Force
     def move(self):
         self.square.y += self.yvel
         self.square.x += self.xvel
@@ -34,15 +43,16 @@ class Player(object):
         if keys[pygame.K_s]:
             if (player2.square.x >= platform1.rect.x and player2.square.x <= platform1.rect.x + 70 and player2.square.y <= platform1.rect.y - 15 and player2.square.y >= platform1.rect.y - 18) or (player2.square.x >= platform2.rect.x and player2.square.x <= platform2.rect.x + 70 and player2.square.y <= platform2.rect.y - 15 and player2.square.y >= platform2.rect.y - 18) or (player2.square.x >= platform3.rect.x and player2.square.x <= platform3.rect.x + 300 and player2.square.y <= platform3.rect.y - 15 and player2.square.y >= platform3.rect.y - 18):
                 player2.square.y += 5
+            pygame.display.update()
     def shoot(self):
         if self.lastrecorded == 'RIGHT' and self.ammo > 0:
             self.ammo -= 1
             self.bulletx = self.square.x + 20
-            self.bulletvel = 100
+            self.bulletvel = 50
+            pygame.draw.rect(win,(color_dict['white']),(self.bulletx,player1.square.y,self.bulletwidth,self.bulletheight))
             while self.bulletx < 600:
-                pygame.draw.rect(win,(color_dict['white']),(self.bulletx,player1.square.y,self.bulletwidth,self.bulletheight))
                 self.bulletx += self.bulletvel
-            pygame.display.update()
+                pygame.display.update()
         if self.lastrecorded == 'LEFT' and self.ammo > 0:
             self.ammo -= 1
             self.bulletx = self.square.x - 20
@@ -50,7 +60,6 @@ class Player(object):
             while self.bulletx > 0:
                 pygame.draw.rect(win,(color_dict['white']),(self.bulletx,player1.square.y,self.bulletwidth,self.bulletheight))
                 self.bulletx += self.bulletvel
-            pygame.display.update()
 class Platform(object):
     def __init__(self,x,y,width,height,vel):
         self.rect = pygame.Rect(x,y,width,height)
@@ -62,11 +71,13 @@ class Platform(object):
         if self.rect.x < 0:
             self.vel *= -1
         pygame.display.update()
+        
 platform1 = Platform(0,550,70,10, 5)
 platform2 = Platform(530,550,70,10, -5)
 platform3 = Platform(150,400,300,10,0)
-player1 = Player(300,300,15,15,5,0,1)
-player2 = Player(300,300,15,15,5,0,1)
+player1 = Player(300,300,15,15,5,0,1,False,5)
+player2 = Player(300,300,15,15,5,0,1,False,5)
+# bullet = Bullet(player1.x + 20, player1.y,10,5,50,player1.lastrecorded)
 win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
 run=True
@@ -84,8 +95,19 @@ while run:
     platform1.moves()
     platform2.moves()
     platform3.moves()
-    print(player1.ammo)
     keys = pygame.key.get_pressed()
+    if player1.isJump == False:
+	    if keys[pygame.K_UP]:
+		    player1.isJump = True
+    if player1.isJump:
+        F =(1 / 2)*player1.mass*(player1.Force**2)
+        player1.y-= 2*F
+        player1.Force -= 1
+        player1.mass = - 1
+        if player1.Force == -6:
+            player1.isJump = False
+            player1.mass = 1
+            player1.Force = 5
     if keys[pygame.K_SPACE]:
         player1.shoot()
     player1.move()
