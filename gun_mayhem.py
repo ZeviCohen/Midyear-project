@@ -8,11 +8,11 @@ color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "b
 #     def move(self):
 #         self.x += self.velocity
 class Player(object):
-    def __init__(self,x,y,width,height,yvel,xvel, mass,Force):
+    def __init__(self,x,y,width,height,yvel,xvel, mass, Force):
         self.lastrecorded = None
         self.yvel = yvel
         self.xvel = xvel
-        self.m = mass
+        self.mass = mass
         self.y = y
         self.square = pygame.Rect(x,y,width,height)
         self.bulletwidth = 10
@@ -67,7 +67,7 @@ class Player(object):
         keys = pygame.key.get_pressed()
         vel=5
         v = vel
-        m = self.m
+        m = self.mass
         if self.jump==False:
             if keys[pygame.K_UP]:
                 if (player1.square.x >= platform1.rect.x and player1.square.x <= platform1.rect.x + 70 and player1.square.y <= platform1.rect.y - 10 and player1.square.y >= platform1.rect.y - 12) or (player1.square.x >= platform2.rect.x and player1.square.x <= platform2.rect.x + 70 and player1.square.y <= platform2.rect.y - 10 and player1.square.y >= platform2.rect.y - 12):
@@ -80,7 +80,7 @@ class Player(object):
                 m *= -1
             if v == -vel-1:
                 self.jump = False
-                m = self.m
+                m = self.mass
                 v = 5
         pygame.time.delay(10)
         pygame.display.update()
@@ -128,13 +128,13 @@ while run:
 	    if keys[pygame.K_UP]:
 		    player1.isJump = True
     if player1.isJump:
-        F =(1 / 2)*player1.m*(player1.Force**2)
+        F =(1 / 2)*player1.mass*(player1.Force**2)
         player1.y-= 2*F
         player1.Force -= 1
-        player1.m = - 1
+        player1.mass = - 1
         if player1.Force == -6:
             player1.isJump = False
-            player1.m = 1
+            player1.mass = 1
             player1.Force = 5
     if keys[pygame.K_SPACE]:
         player1.shoot()
