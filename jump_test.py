@@ -8,14 +8,14 @@ pygame.init()
 
 # create the display surface object
 # of specific dimension..e(500, 500).
-win = pygame.display.set_mode((500, 500))
+win = pygame.display.set_mode((600, 600))
 
 # set the pygame window name
 pygame.display.set_caption("Jump Game")
 
 # object current co-ordinates
-x = 200
-y = 200
+x = 300
+y = 300
 
 # dimensions of the object
 width = 30
@@ -31,7 +31,7 @@ m = 1
 # Indicates pygame is running
 run = True
 
-# infinite loop
+# infinite loop 
 while run:
 
 	# completely fill the surface object
@@ -64,7 +64,6 @@ while run:
 			isjump = True
 			
 	if isjump :
-		# calculate force (F). F = 1 / 2 * mass * velocity ^ 2.
 		F =(1 / 2)*m*(v**2)
 		
 		# change in the y co-ordinate
