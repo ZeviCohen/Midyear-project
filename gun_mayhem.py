@@ -46,7 +46,7 @@ class Player(object):
         if self.lastrecorded == 'LEFT' and self.ammo > 0:
             self.ammo -= 1
             self.bulletx = self.square.x - 20
-            self.bulletvel = -100
+            self.bulletvel = -50
             while self.bulletx > 0:
                 pygame.draw.rect(win,(color_dict['white']),(self.bulletx,player1.square.y,self.bulletwidth,self.bulletheight))
                 self.bulletx += self.bulletvel
