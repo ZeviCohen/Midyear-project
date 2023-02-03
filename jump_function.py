@@ -8,7 +8,7 @@ color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "b
 #     def move(self):
 #         self.x += self.velocity
 class Player(object):
-    def __init__(self,x,y,width,height,yvel,xvel, mass, Force, jvel):
+    def __init__(self,x,y,width,height,yvel,xvel, mass, Force, jvel, player_num):
         self.lastrecorded = None
         self.yvel = yvel
         self.xvel = xvel
@@ -24,26 +24,30 @@ class Player(object):
         self.isJump = False
         self.Force = Force
         self.jvel = jvel
+        self.player_num = player_num
     def move(self):
         if self.isJump == False:
             self.square.y += self.yvel
-        self.square.x += self.xvel
-        if keys[pygame.K_LEFT]:
-            player1.square.x-= 5
-            self.lastrecorded = 'LEFT'
-        if keys[pygame.K_RIGHT]:
-            player1.square.x += 5
-            self.lastrecorded = 'RIGHT'
-        if keys[pygame.K_DOWN]:
-            if (player1.square.x >= platform1.rect.x and player1.square.x <= platform1.rect.x + 70 and player1.square.y <= platform1.rect.y - 15 and player1.square.y >= platform1.rect.y - 18) or (player1.square.x >= platform2.rect.x and player1.square.x <= platform2.rect.x + 70 and player1.square.y <= platform2.rect.y - 15 and player1.square.y >= platform2.rect.y - 18) or (player1.square.x >= platform3.rect.x and player1.square.x <= platform3.rect.x + 300 and player1.square.y <= platform3.rect.y - 15 and player1.square.y >= platform3.rect.y - 18):
-                player1.square.y += 5
-        if keys[pygame.K_a]:
-            player2.square.x-= 5
-        if keys[pygame.K_d]:
-            player2.square.x += 5
-        if keys[pygame.K_s]:
-            if (player2.square.x >= platform1.rect.x and player2.square.x <= platform1.rect.x + 70 and player2.square.y <= platform1.rect.y - 15 and player2.square.y >= platform1.rect.y - 18) or (player2.square.x >= platform2.rect.x and player2.square.x <= platform2.rect.x + 70 and player2.square.y <= platform2.rect.y - 15 and player2.square.y >= platform2.rect.y - 18) or (player2.square.x >= platform3.rect.x and player2.square.x <= platform3.rect.x + 300 and player2.square.y <= platform3.rect.y - 15 and player2.square.y >= platform3.rect.y - 18):
-                player2.square.y += 5
+        if self.player_num == 1:
+            if keys[pygame.K_LEFT]:
+                self.square.x-= 10
+                self.lastrecorded = 'LEFT'
+            if keys[pygame.K_RIGHT]:
+                self.square.x += 10
+                self.lastrecorded = 'RIGHT'
+            if keys[pygame.K_DOWN]:
+                if (self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + 70 and self.square.y <= platform1.rect.y - 15 and self.square.y >= platform1.rect.y - 18) or (self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + 70 and self.square.y <= platform2.rect.y - 15 and self.square.y >= platform2.rect.y - 18) or (self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + 300 and self.square.y <= platform3.rect.y - 15 and self.square.y >= platform3.rect.y - 18):
+                    self.square.y += 5
+                    self.yvel = 30
+        if self.player_num == 2:
+            if keys[pygame.K_a]:
+                self.square.x-= 10
+            if keys[pygame.K_d]:
+                self.square.x += 10
+            if keys[pygame.K_s]:
+                if (self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + 70 and self.square.y <= platform1.rect.y - 15 and self.square.y >= platform1.rect.y - 18) or (self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + 70 and self.square.y <= platform2.rect.y - 15 and self.square.y >= platform2.rect.y - 18) or (self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + 300 and self.square.y <= platform3.rect.y - 15 and self.square.y >= platform3.rect.y - 18):
+                    self.square.y += 5
+                    self.yvel = 30
         pygame.display.update()
     def shoot(self):
         if self.lastrecorded == 'RIGHT' and self.ammo > 0:
@@ -90,9 +94,9 @@ class Platform(object):
 platform1 = Platform(0,550,70,10, 5)
 platform2 = Platform(530,550,70,10, -5)
 platform3 = Platform(150,400,300,10,0)
-#Order goes as follows: x,y,width,height,yvel,xvel, mass, Force, jvel
-player1 = Player(300,300,15,15,30,0,1,5, 10)
-player2 = Player(300,300,15,15,5,0,1, 5,10)
+#Order goes as follows: x,y,width,height,yvel,xvel, mass, Force, jvel, player_num
+player1 = Player(300,300,15,15,30,0,1,5, 10, 1)
+player2 = Player(300,300,15,15,5,0,1, 5,10, 2)
 # bullet = Bullet(player1.x + 20, player1.y,10,5,50,player1.lastrecorded)
 win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
