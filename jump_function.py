@@ -1,5 +1,4 @@
 import pygame, math
-
 color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0)}
 # Class Bullet(object):
 #     def __init__(self,x,y,velocity,direction):
@@ -28,7 +27,6 @@ class Player(object):
     def move(self):
         self.square.y += self.yvel
         self.square.x += self.xvel
-        keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
             player1.square.x-= 5
             self.lastrecorded = 'LEFT'
