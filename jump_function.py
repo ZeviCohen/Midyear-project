@@ -66,6 +66,7 @@ class Player(object):
     def jumpy(self):
         #This kind of works
         if self.isJump == True:
+            self.yvel = 30
             if self.jvel>= 0:
                 F =(1 / 2)* self.mass *(self.jvel**2)
                 self.square.y-= F
@@ -90,7 +91,7 @@ platform1 = Platform(0,550,70,10, 5)
 platform2 = Platform(530,550,70,10, -5)
 platform3 = Platform(150,400,300,10,0)
 #Order goes as follows: x,y,width,height,yvel,xvel, mass, Force, jvel
-player1 = Player(300,300,15,15,5,0,1,5, 10)
+player1 = Player(300,300,15,15,30,0,1,5, 10)
 player2 = Player(300,300,15,15,5,0,1, 5,10)
 # bullet = Bullet(player1.x + 20, player1.y,10,5,50,player1.lastrecorded)
 win = pygame.display.set_mode((600, 600))
