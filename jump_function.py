@@ -39,7 +39,7 @@ class Player(object):
             if keys[pygame.K_DOWN]:
                 if (self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + 70 and self.square.y <= platform1.rect.y - 15 and self.square.y >= platform1.rect.y - 18) or (self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + 70 and self.square.y <= platform2.rect.y - 15 and self.square.y >= platform2.rect.y - 18) or (self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + 300 and self.square.y <= platform3.rect.y - 15 and self.square.y >= platform3.rect.y - 18):
                     self.square.y += 5
-                    self.yvel = 30
+                    self.yvel = 10
         if self.player_num == 2:
             if keys[pygame.K_a]:
                 self.square.x-= 10
@@ -48,7 +48,7 @@ class Player(object):
             if keys[pygame.K_s]:
                 if (self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + 70 and self.square.y <= platform1.rect.y - 15 and self.square.y >= platform1.rect.y - 18) or (self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + 70 and self.square.y <= platform2.rect.y - 15 and self.square.y >= platform2.rect.y - 18) or (self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + 300 and self.square.y <= platform3.rect.y - 15 and self.square.y >= platform3.rect.y - 18):
                     self.square.y += 5
-                    self.yvel = 30
+                    self.yvel = 10
         pygame.display.update()
     def shoot(self):
         if self.lastrecorded == 'RIGHT' and self.ammo > 0:
@@ -71,7 +71,7 @@ class Player(object):
     def jumpy(self):
         #This kind of works
         if self.isJump == True:
-            self.yvel = 30
+            self.yvel = 10
             if self.jvel>= 0:
                 F =(1 / 2)* self.mass *(self.jvel**2)
                 self.square.y-= F

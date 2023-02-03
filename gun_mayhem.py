@@ -95,6 +95,7 @@ class Player(object):
     def jumpy(self):
         #This kind of works
         if self.isJump == True:
+            self.yvel = 10
             if self.jvel>= 0:
                 F =(1 / 2)* self.mass *(self.jvel**2)
                 self.square.y-= F
@@ -134,7 +135,7 @@ while run:
     keys = pygame.key.get_pressed()
     update_window()
     #Code for player 1
-    if player1.jumpy == False:
+    if player1.isJump == False:
         if keys[pygame.K_UP] and player1.yvel == 0:
             #This still doesn't work but it is a start
             player1.isJump = True
