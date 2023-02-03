@@ -109,6 +109,7 @@ while run:
     win.fill((0,0,0))
     pygame.draw.rect(win,color_dict["red"],platform1.rect)
     pygame.draw.rect(win,color_dict["red"],platform2.rect)
+    pygame.draw.rect(win,color_dict['red'],platform3.rect)
     if player1.isJump == False:
         if keys[pygame.K_UP] and player1.yvel == 0:
             player1.isJump = True
@@ -117,7 +118,6 @@ while run:
     player1.jumpy()
     pygame.draw.rect(win,color_dict["green"],(player1.square))
     #pygame.draw.rect(win,color_dict['red'],(player2.square))
-    pygame.draw.rect(win,color_dict['red'],platform3.rect)
     #Makes the platforms move
     platform1.moves()
     platform2.moves()

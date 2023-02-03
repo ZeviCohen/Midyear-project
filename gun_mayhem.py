@@ -164,6 +164,7 @@ while run:
         else:
             player1.isJump = False
     player1.jumpy()
+    update_window()
     pygame.display.update()
     #Detecs if player is on platform or not(Platform Collision)
     if player1.square.x >= platform1.rect.x and player1.square.x <= platform1.rect.x + 70 and player1.square.y <= platform1.rect.y - 15 and player1.square.y >= platform1.rect.y - 18:
