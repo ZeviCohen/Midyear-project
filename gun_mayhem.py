@@ -48,7 +48,8 @@ class Player(object):
         self.isJump = False
         self.jvel = jvel
     def move(self):
-        self.square.y += self.yvel
+        if self.isJump == False:
+            self.square.y += self.yvel
         self.square.x += self.xvel
         move_keys = pygame.key.get_pressed()
         if move_keys[pygame.K_LEFT]:
@@ -91,15 +92,12 @@ class Player(object):
     def jumpy(self):
         #This kind of works
         if self.isJump == True:
-            if self.jvel>= -10:
-                if self.jvel<0:
-                    self.mass = -1 * abs(self.mass)
+            if self.jvel>= 0:
                 F =(1 / 2)* self.mass *(self.jvel**2)
                 self.square.y-= F
                 self.jvel-=1
             else:
                 self.isJump = False
-                self.mass = abs(self.mass)
                 self.jvel = 10
                     
 class Platform(object):

@@ -25,7 +25,8 @@ class Player(object):
         self.Force = Force
         self.jvel = jvel
     def move(self):
-        self.square.y += self.yvel
+        if self.isJump == False:
+            self.square.y += self.yvel
         self.square.x += self.xvel
         if keys[pygame.K_LEFT]:
             player1.square.x-= 5
@@ -43,7 +44,7 @@ class Player(object):
         if keys[pygame.K_s]:
             if (player2.square.x >= platform1.rect.x and player2.square.x <= platform1.rect.x + 70 and player2.square.y <= platform1.rect.y - 15 and player2.square.y >= platform1.rect.y - 18) or (player2.square.x >= platform2.rect.x and player2.square.x <= platform2.rect.x + 70 and player2.square.y <= platform2.rect.y - 15 and player2.square.y >= platform2.rect.y - 18) or (player2.square.x >= platform3.rect.x and player2.square.x <= platform3.rect.x + 300 and player2.square.y <= platform3.rect.y - 15 and player2.square.y >= platform3.rect.y - 18):
                 player2.square.y += 5
-            pygame.display.update()
+        pygame.display.update()
     def shoot(self):
         if self.lastrecorded == 'RIGHT' and self.ammo > 0:
             self.ammo -= 1
@@ -65,15 +66,12 @@ class Player(object):
     def jumpy(self):
         #This kind of works
         if self.isJump == True:
-            if self.jvel>= -10:
-                if self.jvel<0:
-                    self.mass = -1 * abs(self.mass)
+            if self.jvel>= 0:
                 F =(1 / 2)* self.mass *(self.jvel**2)
                 self.square.y-= F
                 self.jvel-=1
             else:
                 self.isJump = False
-                self.mass = abs(self.mass)
                 self.jvel = 10
                     
 class Platform(object):
