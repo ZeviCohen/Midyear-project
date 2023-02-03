@@ -28,6 +28,7 @@ class Player(object):
     def move(self):
         if self.isJump == False:
             self.square.y += self.yvel
+        self.square.x += self.xvel
         if self.player_num == 1:
             if keys[pygame.K_LEFT]:
                 self.square.x-= 10
