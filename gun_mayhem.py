@@ -118,6 +118,7 @@ class Platform(object):
 platform1 = Platform(0,550,70,10, 5)
 platform2 = Platform(530,550,70,10, -5)
 platform3 = Platform(150,400,300,10,0)
+#Order goes as follows: x,y,width,height,yvel,xvel, mass, jvel, player_num
 player1 = Player(300,300,15,15,5,0,1,10, 1)
 player2 = Player(300,300,15,15,5,0,1,10, 2)
 # bullet = Bullet(player1.x + 20, player1.y,10,5,50,player1.lastrecorded)
@@ -132,6 +133,7 @@ while run:
             run=False
     keys = pygame.key.get_pressed()
     update_window()
+    #Code for player 1
     if player1.jumpy == False:
         if keys[pygame.K_UP] and player1.yvel == 0:
             #This still doesn't work but it is a start
@@ -140,6 +142,8 @@ while run:
             player1.isJump = False
     player1.jumpy()
     pygame.draw.rect(win,color_dict["green"],(player1.square))
+    player1.move()
+    player2.move()
     #Makes the platforms move
     platform1.moves()
     platform2.moves()
@@ -163,8 +167,6 @@ while run:
                 pygame.draw.rect(win,(color_dict['white']),(player1.bulletx,player1.square.y,player1.bulletwidth,player1.bulletheight))
                 player1.bulletx += player1.bulletvel
                 pygame.display.update()
-    player1.move()
-    player2.move()
     pygame.display.update()
     #Detecs if player is on platform or not(Platform Collision)
     if player1.square.x >= platform1.rect.x and player1.square.x <= platform1.rect.x + 70 and player1.square.y <= platform1.rect.y - 15 and player1.square.y >= platform1.rect.y - 18:
