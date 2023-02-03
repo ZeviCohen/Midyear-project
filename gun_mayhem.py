@@ -8,8 +8,7 @@ def update_window():
     win.fill((0,0,0))
     pygame.draw.rect(win,color_dict["red"],platform1.rect)
     pygame.draw.rect(win,color_dict["red"],platform2.rect)
-    pygame.draw.rect(win,color_dict["green"],(player1.square))
-    pygame.draw.rect(win,color_dict['red'],(player2.square))
+    #pygame.draw.rect(win,color_dict['red'],(player2.square))
     pygame.draw.rect(win,color_dict['red'],platform3.rect)
 
 # Bullet Class
@@ -130,12 +129,20 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run=False
+    keys = pygame.key.get_pressed()
     update_window()
+    if player1.jumpy == False:
+        if keys[pygame.K_UP] and player1.yvel == 0:
+            #This still doesn't work but it is a start
+            player1.isJump = True
+        else:
+            player1.isJump = False
+    player1.jumpy()
+    pygame.draw.rect(win,color_dict["green"],(player1.square))
     #Makes the platforms move
     platform1.moves()
     platform2.moves()
     platform3.moves()
-    keys = pygame.key.get_pressed()
 
     if keys[pygame.K_SPACE]:
         if player1.lastrecorded == 'RIGHT' and player1.ammo > 0:
@@ -157,14 +164,6 @@ while run:
                 pygame.display.update()
     player1.move()
     player2.move()
-    if player1.jumpy == False:
-        if keys[pygame.K_UP] and player1.yvel == 0:
-            #This still doesn't work but it is a start
-            player1.isJump = True
-        else:
-            player1.isJump = False
-    player1.jumpy()
-    update_window()
     pygame.display.update()
     #Detecs if player is on platform or not(Platform Collision)
     if player1.square.x >= platform1.rect.x and player1.square.x <= platform1.rect.x + 70 and player1.square.y <= platform1.rect.y - 15 and player1.square.y >= platform1.rect.y - 18:
