@@ -23,17 +23,9 @@ class Gun ():
     def shoot(self):
         now = pygame.time.get_ticks()
         if now - self.last >= self.cooldown:
+            self.last = now
             self.ammo -= 1
             bullet_list.append(Bullet(self.owner, self.bulletvel))
-        #if self.lastrecorded == 'RIGHT' and self.ammo > 0:
-            #self.bullet = Bullet(self, self.bulletvel)
-            #while self.bulletx < 600:
-                #pygame.draw.rect(win,(color_dict['white']),(self.bulletx,self.square.y,self.bulletwidth,self.bulletheight))
-        #if self.lastrecorded == 'LEFT' and self.ammo > 0:
-            #while self.bulletx > 0:
-                #pygame.draw.rect(win,(color_dict['white']),(self.bulletx,self.square.y,self.bulletwidth,self.bulletheight))
-            #if (self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + 70 and self.square.y <= platform1.rect.y - 10 and self.square.y >= platform1.rect.y - 12) or (self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + 70 and self.square.y <= platform2.rect.y - 10 and self.square.y >= platform2.rect.y - 12):
-                #self.square.y += 5
 # Bullet Class
 class Bullet(object):
     #Constructor
@@ -131,7 +123,7 @@ class Platform(object):
         if self.rect.x < 0:
             self.vel *= -1
         pygame.display.update()
-        
+#Order goes as follows: x, y, width, height, vel
 platform1 = Platform(0,550,70,10, 5)
 platform2 = Platform(530,550,70,10, -5)
 platform3 = Platform(150,400,300,10,0)
@@ -139,7 +131,7 @@ platform3 = Platform(150,400,300,10,0)
 player1 = Player(300,300,15,15,10,0,1,10, 1, 1)
 player2 = Player(300,300,15,15,10,0,1,10, 2, 10)
 #Order goes as follows: owner, ammo, bulletvel, cooldown
-gun1 = Gun(player1, 100, 100, 3000)
+gun1 = Gun(player1, 100, 100, 300)
 win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
 run = True
