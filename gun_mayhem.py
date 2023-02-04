@@ -22,18 +22,16 @@ class Bullet(object):
         self.width = 10
         self.height = 5
         self.bullet = pygame.Rect(self.x,self.y,self.width,self.height)
-        pygame.display.update()
+        #pygame.display.update()
         self.move()
     def move(self):
         if self.owner.lastrecorded == 'LEFT':
             self.velocity *= -1
             while self.x > 0:
                 self.x += self.velocity
-                pygame.display.update()
         else:
             while self.x < 530:
                 self.x += self.velocity
-                pygame.display.update()
     def check_collision(self):
         if player2.square.x == self.x + self.width:
             player2.x += 1
