@@ -94,7 +94,7 @@ class Player(object):
                 self.square.y += 5
     def jumpy(self):
         #This kind of works
-        if self.isJump == True:
+        if self.isJump:
             if self.jvel>= 0:
                 F =(1 / 2)* self.mass *(self.jvel**2)
                 self.square.y-= F

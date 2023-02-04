@@ -64,8 +64,7 @@ while run:
 			isjump = True
 			
 	if isjump :
-		F =(1 / 2)*m*(v**2)
-		
+                                                 		
 		# change in the y co-ordinate
 		y-= 2*F
 		
