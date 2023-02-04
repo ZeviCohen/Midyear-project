@@ -22,10 +22,18 @@ class Gun ():
     #Shoot method(Outputs a bullet)
     def shoot(self):
         now = pygame.time.get_ticks()
-        if now - self.last >= self.cooldown:
+        #Checks for cooldown
+        if now - self.last >= self.cooldown and self.ammo > 0:
             self.last = now
             self.ammo -= 1
             bullet_list.append(Bullet(self.owner, self.bulletvel))
+        #Delays and then reloads the gun
+        elif self.ammo <= 0:
+            if now - self.last >= 3000:
+                self.last = now
+                self.ammo = 10
+                bullet_list.append(Bullet(self.owner, self.bulletvel))
+
 # Bullet Class
 class Bullet(object):
     #Constructor
@@ -129,8 +137,8 @@ platform3 = Platform(150,400,300,10,0)
 player1 = Player(300,300,15,15,10,0,1,10, 1, 1)
 player2 = Player(300,300,15,15,10,0,1,10, 2, 10)
 #Order goes as follows: owner, ammo, bulletvel, cooldown
-gun1 = Gun(player1, 100, 100, 400)
-gun2 = Gun(player2, 100, 100, 400)
+gun1 = Gun(player1, 10, 50, 400)
+gun2 = Gun(player2, 10, 50, 400)
 win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
 run = True
