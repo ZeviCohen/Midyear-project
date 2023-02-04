@@ -3,54 +3,79 @@ import pygame, math
 #Color Palette
 color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0)}
 
+bullet_list = []
+
 def update_window():
     #Makes the background and all of the objects
     win.fill((0,0,0))
     pygame.draw.rect(win,color_dict["red"],platform1.rect)
     pygame.draw.rect(win,color_dict["red"],platform2.rect)
-    #pygame.draw.rect(win,color_dict['red'],(player2.square))
     pygame.draw.rect(win,color_dict['red'],platform3.rect)
+
+class Gun ():
+    def __init__(self, owner, ammo, bulletvel, cooldown):
+        self.bulletvel = bulletvel
+        self.cooldown = cooldown
+        self.ammo = ammo
+        self.last = pygame.time.get_ticks()
+        self.owner = owner
+    #Shoot method(Outputs a bullet)
+    def shoot(self):
+        now = pygame.time.get_ticks()
+        #Checks for cooldown
+        if now - self.last >= self.cooldown and self.ammo > 0:
+            self.last = now
+            self.ammo -= 1
+            bullet_list.append(Bullet(self.owner, self.bulletvel))
+        #Delays and then reloads the gun
+        elif self.ammo <= 0:
+            if now - self.last >= 3000:
+                self.last = now
+                self.ammo = 10
+                bullet_list.append(Bullet(self.owner, self.bulletvel))
 
 # Bullet Class
 class Bullet(object):
     #Constructor
-    def __init__(self,owner,x,y,velocity,direction):
+    def __init__(self, owner, velocity):
         self.owner = owner
-        self.x = x
-        self.y = y
+        if self.owner.lastrecorded == 'LEFT':
+            self.x = self.owner.square.x - 20
+            self.direction = -1
+        if self.owner.lastrecorded == 'RIGHT' or self.owner.lastrecorded == None:
+            self.x = self.owner.square.x + 20
+            self.direction = 1
+        self.y = owner.square.y
         self.velocity = velocity
-        self.direction = direction
         self.width = 10
         self.height = 5
-        self.bullet = pygame.Rect(self.x,self.y,self.width,self.height)
-        self.move()
+        #self.bullet = pygame.Rect(self.x,self.y,10,5)
     def move(self):
-        if self.owner.lastrecorded == 'LEFT':
-            self.velocity *= -1
+        self.velocity = self.direction * abs(self.velocity)
         self.x += self.velocity
     def check_collision(self):
         pass
+        #if player2.square.x == self.x + self.width:
+            #player2.x += 1
 #Our player class
 class Player(object):
-    def __init__(self,x,y,width,height,yvel,xvel, mass, jvel, player_num):
+    def __init__(self,x,y,width,height,yvel,xvel, mass, jvel, player_num, lives):
         self.lastrecorded = None
         self.yvel = yvel
         self.xvel = xvel
         self.mass = mass
         self.y = y
         self.square = pygame.Rect(x,y,width,height)
-        self.bulletwidth = 10
-        self.bulletheight = 5
-        self.bulletvel = 100
-        self.bulletx = self.square.x + 20
-        self.bullety = self.square.y
         self.ammo = 100
         self.isJump = False
         self.jvel = jvel
         self.player_num = player_num
+        self.lives = lives
     def move(self):
         if self.isJump == False:
             self.square.y += self.yvel
+        self.square.x += self.xvel
+        #Checks for key presses(Player 1)
         if self.player_num == 1:
             if keys[pygame.K_LEFT]:
                 self.square.x-= 10
@@ -62,39 +87,26 @@ class Player(object):
                 if (self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + 70 and self.square.y <= platform1.rect.y - 15 and self.square.y >= platform1.rect.y - 18) or (self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + 70 and self.square.y <= platform2.rect.y - 15 and self.square.y >= platform2.rect.y - 18) or (self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + 300 and self.square.y <= platform3.rect.y - 15 and self.square.y >= platform3.rect.y - 18):
                     self.square.y += 5
                     self.yvel = 10
-        if self.player_num == 2:
+        #Checks for key presses(Player 2)
+        elif self.player_num == 2:
             if keys[pygame.K_a]:
                 self.square.x-= 10
+                self.lastrecorded = 'LEFT'
             if keys[pygame.K_d]:
                 self.square.x += 10
+                self.lastrecorded = 'RIGHT'
             if keys[pygame.K_s]:
                 if (self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + 70 and self.square.y <= platform1.rect.y - 15 and self.square.y >= platform1.rect.y - 18) or (self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + 70 and self.square.y <= platform2.rect.y - 15 and self.square.y >= platform2.rect.y - 18) or (self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + 300 and self.square.y <= platform3.rect.y - 15 and self.square.y >= platform3.rect.y - 18):
                     self.square.y += 5
                     self.yvel = 10
-        pygame.display.update()
-    #Shoot method(Outputs a bullet)
-    def shoot(self):
-        if self.lastrecorded == 'RIGHT' and self.ammo > 0:
-            self.ammo -= 1
-            self.bulletx = self.square.x + 20
-            self.bullet = Bullet(self, self.bulletx, self.square.y, self.bulletvel, self.lastrecorded)
-            self.bulletvel = 50
-            while self.bulletx < 600:
-                pygame.draw.rect(win,(color_dict['white']),(self.bulletx,player1.square.y,self.bulletwidth,self.bulletheight))
-                self.bulletx += self.bulletvel
-                pygame.display.update()
-        if self.lastrecorded == 'LEFT' and self.ammo > 0:
-            self.ammo -= 1
-            self.bulletx = self.square.x - 20
-            self.bulletvel = -50
-            while self.bulletx > 0:
-                pygame.draw.rect(win,(color_dict['white']),(self.bulletx,player1.square.y,self.bulletwidth,self.bulletheight))
-                self.bulletx += self.bulletvel
-            if (player1.square.x >= platform1.rect.x and player1.square.x <= platform1.rect.x + 70 and player1.square.y <= platform1.rect.y - 10 and player1.square.y >= platform1.rect.y - 12) or (player1.square.x >= platform2.rect.x and player1.square.x <= platform2.rect.x + 70 and player1.square.y <= platform2.rect.y - 10 and player1.square.y >= platform2.rect.y - 12):
-                self.square.y += 5
     def jumpy(self):
         #This kind of works
+<<<<<<< HEAD
         if self.isJump:
+=======
+        if self.isJump == True:
+            self.yvel = 10
+>>>>>>> bd6548b8360c5542b20c92621b12d53d510b685a
             if self.jvel>= 0:
                 F =(1 / 2)* self.mass *(self.jvel**2)
                 self.square.y-= F
@@ -102,7 +114,14 @@ class Player(object):
             else:
                 self.isJump = False
                 self.jvel = 10
-                    
+    def respawn(self):
+        pygame.time.delay(100)
+        self.square.y = 50
+        self.square.x = 300 - (self.square.width/2)
+        self.lives -= 1
+        #End of game
+        if self.lives == 0:
+            pygame.QUIT()
 class Platform(object):
     def __init__(self,x,y,width,height,vel):
         self.rect = pygame.Rect(x,y,width,height)
@@ -114,14 +133,16 @@ class Platform(object):
         if self.rect.x < 0:
             self.vel *= -1
         pygame.display.update()
-        
+#Order goes as follows: x, y, width, height, vel
 platform1 = Platform(0,550,70,10, 5)
 platform2 = Platform(530,550,70,10, -5)
 platform3 = Platform(150,400,300,10,0)
-#Order goes as follows: x,y,width,height,yvel,xvel, mass, jvel, player_num
-player1 = Player(300,300,15,15,5,0,1,10, 1)
-player2 = Player(300,300,15,15,5,0,1,10, 2)
-# bullet = Bullet(player1.x + 20, player1.y,10,5,50,player1.lastrecorded)
+#Order goes as follows: x,y,width,height,yvel,xvel, mass, jvel, player_num, lives
+player1 = Player(300,300,15,15,10,0,1,10, 1, 1)
+player2 = Player(300,300,15,15,10,0,1,10, 2, 10)
+#Order goes as follows: owner, ammo, bulletvel, cooldown
+gun1 = Gun(player1, 10, 50, 400)
+gun2 = Gun(player2, 10, 50, 400)
 win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
 run = True
@@ -134,40 +155,48 @@ while run:
     keys = pygame.key.get_pressed()
     update_window()
     #Code for player 1
-    if player1.jumpy == False:
+    if player1.isJump == False:
         if keys[pygame.K_UP] and player1.yvel == 0:
             #This still doesn't work but it is a start
             player1.isJump = True
         else:
             player1.isJump = False
+    #Player moves
     player1.jumpy()
     pygame.draw.rect(win,color_dict["green"],(player1.square))
     player1.move()
+    if keys[pygame.K_SPACE]:
+        gun1.shoot()
+    if keys[pygame.K_z]:
+        gun2.shoot()
+    for bullet in bullet_list:
+        if bullet.x > 600 or bullet.x < 0:
+            bullet_list.remove(bullet)
+        else:
+            if bullet.owner == player1:
+                color = color_dict['white']
+                pygame.draw.rect(win,color,(bullet.x, player1.square.y,bullet.width,bullet.height))
+            else:
+                color = color_dict['red']
+                pygame.draw.rect(win,color,(bullet.x, player2.square.y,bullet.width,bullet.height))
+            bullet.move()
+    if player2.isJump == False:
+        if keys[pygame.K_w] and player2.yvel == 0:
+            #This still doesn't work but it is a start
+            player2.isJump = True
+        else:
+            player2.isJump = False
+    player2.jumpy()
+    pygame.draw.rect(win,color_dict['red'],(player2.square))
     player2.move()
     #Makes the platforms move
     platform1.moves()
     platform2.moves()
     platform3.moves()
-
-    if keys[pygame.K_SPACE]:
-        if player1.lastrecorded == 'RIGHT' and player1.ammo > 0:
-            player1.ammo -= 1
-            player1.bulletx = player1.square.x + 20
-            player1.bullet = Bullet(player1, player1.bulletx, player1.square.y, player1.bulletvel, player1.lastrecorded)
-            player1.bulletvel = 50
-            while player1.bulletx < 600:
-                pygame.draw.rect(win,(color_dict['white']),(player1.bulletx,player1.square.y,player1.bulletwidth,player1.bulletheight))
-                player1.bulletx += player1.bulletvel
-                pygame.display.update()
-        elif player1.lastrecorded == 'LEFT' and player1.ammo > 0:
-            player1.ammo -= 1
-            player1.bulletx = player1.square.x - 20
-            player1.bulletvel = -50
-            while player1.bulletx > 0:
-                pygame.draw.rect(win,(color_dict['white']),(player1.bulletx,player1.square.y,player1.bulletwidth,player1.bulletheight))
-                player1.bulletx += player1.bulletvel
-                pygame.display.update()
-    pygame.display.update()
+    if player1.square.y > 600:
+        player1.respawn()
+    if player2.square.y > 600:
+        player2.respawn()
     #Detecs if player is on platform or not(Platform Collision)
     if player1.square.x >= platform1.rect.x and player1.square.x <= platform1.rect.x + 70 and player1.square.y <= platform1.rect.y - 15 and player1.square.y >= platform1.rect.y - 18:
         player1.yvel = 0
@@ -197,4 +226,5 @@ while run:
     else:
         player2.yvel = 5
         player2.xvel = 0
+    pygame.display.update()
 pygame.quit()
