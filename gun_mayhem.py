@@ -193,7 +193,6 @@ while run:
         player1.respawn()
     if player2.square.y > 600:
         player2.respawn()
-    pygame.display.update()
     #Detecs if player is on platform or not(Platform Collision)
     if player1.square.x >= platform1.rect.x and player1.square.x <= platform1.rect.x + 70 and player1.square.y <= platform1.rect.y - 15 and player1.square.y >= platform1.rect.y - 18:
         player1.yvel = 0
@@ -223,4 +222,5 @@ while run:
     else:
         player2.yvel = 5
         player2.xvel = 0
+    pygame.display.update()
 pygame.quit()
