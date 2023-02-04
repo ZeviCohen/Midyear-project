@@ -71,6 +71,7 @@ class Player(object):
         self.jvel = jvel
         self.player_num = player_num
         self.lives = lives
+        self.jumpcount = 0
     def move(self):
         if self.isJump == False:
             self.square.y += self.yvel
@@ -101,12 +102,8 @@ class Player(object):
                     self.yvel = 10
     def jumpy(self):
         #This kind of works
-<<<<<<< HEAD
         if self.isJump:
-=======
-        if self.isJump == True:
             self.yvel = 10
->>>>>>> bd6548b8360c5542b20c92621b12d53d510b685a
             if self.jvel>= 0:
                 F =(1 / 2)* self.mass *(self.jvel**2)
                 self.square.y-= F
@@ -156,8 +153,9 @@ while run:
     update_window()
     #Code for player 1
     if player1.isJump == False:
-        if keys[pygame.K_UP] and player1.yvel == 0:
+        if keys[pygame.K_UP] and player1.jumpcount < 2:
             #This still doesn't work but it is a start
+            player1.jumpcount += 1
             player1.isJump = True
         else:
             player1.isJump = False
@@ -181,8 +179,9 @@ while run:
                 pygame.draw.rect(win,color,(bullet.x, player2.square.y,bullet.width,bullet.height))
             bullet.move()
     if player2.isJump == False:
-        if keys[pygame.K_w] and player2.yvel == 0:
+        if keys[pygame.K_w] and player2.jumpcount < 2:
             #This still doesn't work but it is a start
+            player2.jumpcount += 1
             player2.isJump = True
         else:
             player2.isJump = False
@@ -213,16 +212,18 @@ while run:
     else:
         player1.yvel = 5
         player1.xvel = 0
-        player1.jumpcount = 0
     if player2.square.x >= platform1.rect.x and player2.square.x <= platform1.rect.x + 70 and player2.square.y <= platform1.rect.y - 15 and player2.square.y >= platform1.rect.y - 18:
         player2.yvel = 0
         player2.xvel = platform1.vel
+        player2.jumpcount = 0
     elif player2.square.x >= platform2.rect.x and player2.square.x <= platform2.rect.x + 70 and player2.square.y <= platform2.rect.y - 15 and player2.square.y >= platform2.rect.y - 18:
         player2.yvel = 0
         player2.xvel = platform2.vel
+        player2.jumpcount = 0
     elif player2.square.x >= platform3.rect.x and player2.square.x <= platform3.rect.x + 300 and player2.square.y <= platform3.rect.y - 15 and player2.square.y >= platform3.rect.y - 18:
         player2.yvel = 0
         player2.xvel = platform3.vel
+        player2.jumpcount = 0
     else:
         player2.yvel = 5
         player2.xvel = 0
