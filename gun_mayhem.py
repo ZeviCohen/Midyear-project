@@ -29,24 +29,22 @@ class Gun ():
 # Bullet Class
 class Bullet(object):
     #Constructor
-    def __init__(self,owner, velocity):
+    def __init__(self, owner, velocity):
         self.owner = owner
         if self.owner.lastrecorded == 'LEFT':
             self.x = self.owner.square.x - 20
+            self.direction = -1
         if self.owner.lastrecorded == 'RIGHT':
             self.x = self.owner.square.x + 20
+            self.direction = 1
         self.y = owner.square.y
         self.velocity = velocity
         self.width = 10
         self.height = 5
         #self.bullet = pygame.Rect(self.x,self.y,10,5)
     def move(self):
-        if self.owner.lastrecorded == 'LEFT':
-            self.velocity = -1 * abs(self.velocity)
-            self.x += self.velocity
-        elif self.owner.lastrecorded == 'RIGHT':
-            self.velocity = abs(self.velocity)
-            self.x += self.velocity
+        self.velocity = self.direction * abs(self.velocity)
+        self.x += self.velocity
     def check_collision(self):
         pass
         #if player2.square.x == self.x + self.width:
@@ -131,7 +129,8 @@ platform3 = Platform(150,400,300,10,0)
 player1 = Player(300,300,15,15,10,0,1,10, 1, 1)
 player2 = Player(300,300,15,15,10,0,1,10, 2, 10)
 #Order goes as follows: owner, ammo, bulletvel, cooldown
-gun1 = Gun(player1, 100, 100, 300)
+gun1 = Gun(player1, 100, 100, 400)
+gun2 = Gun(player2, 100, 100, 400)
 win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
 run = True
@@ -156,11 +155,18 @@ while run:
     player1.move()
     if keys[pygame.K_SPACE]:
         gun1.shoot()
+    if keys[pygame.K_z]:
+        gun2.shoot()
     for bullet in bullet_list:
         if bullet.x > 600 or bullet.x < 0:
             bullet_list.remove(bullet)
         else:
-            pygame.draw.rect(win,(color_dict['white']),(bullet.x, player1.square.y,bullet.width,bullet.height))
+            if bullet.owner == player1:
+                color = color_dict['white']
+                pygame.draw.rect(win,color,(bullet.x, player1.square.y,bullet.width,bullet.height))
+            else:
+                color = color_dict['red']
+                pygame.draw.rect(win,color,(bullet.x, player2.square.y,bullet.width,bullet.height))
             bullet.move()
     if player2.isJump == False:
         if keys[pygame.K_w] and player2.yvel == 0:
@@ -171,8 +177,6 @@ while run:
     player2.jumpy()
     pygame.draw.rect(win,color_dict['red'],(player2.square))
     player2.move()
-    if keys[pygame.K_z]:
-        player2.shoot()
     #Makes the platforms move
     platform1.moves()
     platform2.moves()
