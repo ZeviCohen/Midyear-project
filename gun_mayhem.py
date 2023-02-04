@@ -42,7 +42,7 @@ class Bullet(object):
         if self.owner.lastrecorded == 'LEFT':
             self.x = self.owner.square.x - 20
             self.direction = -1
-        if self.owner.lastrecorded == 'RIGHT':
+        if self.owner.lastrecorded == 'RIGHT' or self.owner.lastrecorded == None:
             self.x = self.owner.square.x + 20
             self.direction = 1
         self.y = owner.square.y
