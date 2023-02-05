@@ -84,15 +84,15 @@ class Player(object):
         if self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + 70 and self.square.y <= platform1.rect.y - 10 and self.square.y >= platform1.rect.y - 20:
             self.xvel = platform1.vel
             self.jumpcount = 0
-            self.yvel = 5
+            self.yvel = 0
         elif self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + 70 and self.square.y <= platform2.rect.y - 10 and self.square.y >= platform2.rect.y - 20:
             self.xvel = platform2.vel
             self.jumpcount = 0
-            self.yvel = 5
+            self.yvel = 0
         elif self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + 300 and self.square.y <= platform3.rect.y - 15 and self.square.y >= platform3.rect.y - 17:
             self.xvel = platform3.vel
             self.jumpcount = 0
-            self.yvel = 5
+            self.yvel = 0
         else:
             self.xvel = 0
             self.yvel = 5            
