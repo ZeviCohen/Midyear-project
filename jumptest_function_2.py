@@ -98,7 +98,7 @@ class Player(object):
             self.square.y = (platform3.rect.y - self.square.height)
         else:
             self.xvel = 0
-            self.yvel = 5            
+            self.yvel = 5 [platform3]           
                     
 class Platform(object):
     def __init__(self,x,y,width,height,vel):
