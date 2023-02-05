@@ -133,7 +133,7 @@ class Player(object):
         if self.lives == 0:
             pygame.QUIT()
     def gravity(self):
-        if self.isgravity == True:
+        if self.isgravity:
             if self.touching_platform == False:
                 self.square.y += 10
             else:
@@ -144,14 +144,17 @@ class Player(object):
             self.xvel = platform1.vel
             self.jumpcount = 0
             self.touching_platform = True
+            self.isgravity = False
         elif self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + 70 and self.square.y <= platform2.rect.y - 10 and self.square.y >= platform2.rect.y - 20:
             self.xvel = platform2.vel
             self.jumpcount = 0
             self.touching_platform = True
-        elif self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + 300 and self.square.y <= platform3.rect.y - 15 and self.square.y >= platform3.rect.y - 25:
+            self.isgravity = False
+        elif self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + 300 and self.square.y <= platform3.rect.y - 15 and self.square.y >= platform3.rect.y - 17:
             self.xvel = platform3.vel
             self.jumpcount = 0
             self.touching_platform = True
+            self.isgravity = False
         else:
             self.xvel = 0
             self.touching_platform = False
