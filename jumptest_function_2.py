@@ -58,14 +58,14 @@ class Player(object):
     def jumpy(self):
         #This kind of works
         if self.isJump == True:
-            self.yvel = 10
+            self.yvel = 5
             if self.jvel>= 0:
                 F =(1 / 2)* self.mass *(self.jvel**2)
                 self.square.y-= F
                 self.jvel-=1
             else:
                 self.isJump = False
-                self.jvel = 10
+                self.jvel = 8
     def shot(self):
         if player1.bulletvel < 0:
             if player1.bulletx > player1.square.x and player1.bulletx <= player1.square.x + player1.square.width and player1.bullety >= player1.square.y and player1.bullety <= player1.square.y + player1.square.height:
@@ -81,18 +81,21 @@ class Player(object):
                 player1.square.x -= 50
     def check_for_platform(self,platform1,platform2,platform3):
         #Detecs if player is on platform or not(Platform Collision)
-        if self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + 70 and self.square.y <= platform1.rect.y - 10 and self.square.y >= platform1.rect.y - 20:
+        if self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + 70 and self.square.y <= platform1.rect.y - 10 and self.square.y >= platform1.rect.y - 30:
             self.xvel = platform1.vel
             self.jumpcount = 0
             self.yvel = 0
-        elif self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + 70 and self.square.y <= platform2.rect.y - 10 and self.square.y >= platform2.rect.y - 20:
+            self.square.y = (platform1.rect.y - self.square.height)
+        elif self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + 70 and self.square.y <= platform2.rect.y - 10 and self.square.y >= platform2.rect.y - 30:
             self.xvel = platform2.vel
             self.jumpcount = 0
             self.yvel = 0
-        elif self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + 300 and self.square.y <= platform3.rect.y - 15 and self.square.y >= platform3.rect.y - 17:
+            self.square.y = (platform2.rect.y - self.square.height)
+        elif self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + 300 and self.square.y <= platform3.rect.y - 15 and self.square.y >= platform3.rect.y - 20:
             self.xvel = platform3.vel
             self.jumpcount = 0
             self.yvel = 0
+            self.square.y = (platform3.rect.y - self.square.height)
         else:
             self.xvel = 0
             self.yvel = 5            
@@ -113,8 +116,8 @@ platform1 = Platform(0,550,70,10, 5)
 platform2 = Platform(530,550,70,10, -5)
 platform3 = Platform(150,400,300,10,0)
 #Order goes as follows: x,y,width,height,yvel,xvel, mass, Force, jvel, player_num
-player1 = Player(300,300,15,15,30,0,1,5, 10, 1)
-player2 = Player(300,300,15,15,5,0,1, 5,10, 2)
+player1 = Player(300,300,15,15,30,0,1,5, 8, 1)
+player2 = Player(300,300,15,15,5,0,1, 5, 8, 2)
 # bullet = Bullet(player1.x + 20, player1.y,10,5,50,player1.lastrecorded)
 win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
@@ -132,11 +135,17 @@ while run:
     pygame.draw.rect(win,color_dict["red"],platform2.rect)
     pygame.draw.rect(win,color_dict['red'],platform3.rect)
     if player1.isJump == False:
-        if keys[pygame.K_UP] and player1.jumpcount < 2:
-            player1.jumpcount += 1
-            player1.isJump = True
+        if keys[pygame.K_UP]:
+            if player1.jumpcount == 0:
+                player1.jvel = 8
+                player1.jumpcount += 1
+                player1.isJump = True
+            elif player1.jumpcount == 1:
+                player1.jvel = 8
+                player1.jumpcount += 1
+                player1.isJump = True
         else:
-            player1.isJump = False 
+            player1.isJump = False
     if player2.isJump == False:
         if keys[pygame.K_w] and player2.jumpcount < 2:
             player2.jumpcount += 1
