@@ -50,7 +50,6 @@ class Player(object):
             if keys[pygame.K_s]:
                 if (self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + platform1.rect.width and self.square.y <= platform1.rect.y and self.square.y >= platform1.rect.y - 20) or (self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + platform2.rect.width and self.square.y <= platform2.rect.y and self.square.y >= platform2.rect.y - 20) or (self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + platform3.rect.width and self.square.y <= platform3.rect.y and self.square.y >= platform3.rect.y - 20):
                     self.square.y += 5
-                    self.yvel = 10
         pygame.display.update()
     def shoot(self):
         pass
