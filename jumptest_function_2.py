@@ -81,11 +81,11 @@ class Player(object):
                 player1.square.x -= 50
     def check_for_platform(self,platform1,platform2,platform3):
         #Detecs if player is on platform or not(Platform Collision)
-        if self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + 70 and self.square.y <= platform1.rect.y - 10 and self.square.y >= platform1.rect.y - 20:
+        if self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + 70 and self.square.y <= platform1.rect.y - 15 and self.square.y >= platform1.rect.y - 17:
             self.xvel = platform1.vel
             self.jumpcount = 0
             self.yvel = 0
-        elif self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + 70 and self.square.y <= platform2.rect.y - 10 and self.square.y >= platform2.rect.y - 20:
+        elif self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + 70 and self.square.y <= platform2.rect.y - 15 and self.square.y >= platform2.rect.y - 17:
             self.xvel = platform2.vel
             self.jumpcount = 0
             self.yvel = 0
