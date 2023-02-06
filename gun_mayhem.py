@@ -92,6 +92,18 @@ class Player(object):
             if keys[pygame.K_DOWN]:
                 if self.touching_platform == True:
                     self.square.y += 5
+            #Jumps
+            if self.isJump == False:
+                if keys[pygame.K_UP]:
+                    if self.jumpcount == 0:
+                        if self.touching_platform == True:
+                            self.jvel = 8
+                            self.isJump = True
+                            self.touching_platform = False
+            elif self.jumpcount == 1.125:
+                if keys[pygame.K_UP]:
+                    self.jvel = 6
+                    self.jumpcount += 1
         #Checks for key presses(Player 2)
         elif self.player_num == 2:
             if keys[pygame.K_a]:
@@ -103,6 +115,17 @@ class Player(object):
             if keys[pygame.K_s]:
                 if (self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + platform1.rect.width and self.square.y <= platform1.rect.y and self.square.y >= platform1.rect.y - 20) or (self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + platform2.rect.width and self.square.y <= platform2.rect.y and self.square.y >= platform2.rect.y - 20) or (self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + platform3.rect.width and self.square.y <= platform3.rect.y and self.square.y >= platform3.rect.y - 20):
                     self.square.y += 5
+            if self.isJump == False:
+                if keys[pygame.K_w]:
+                    if self.jumpcount == 0:
+                        if self.touching_platform == True:
+                            self.jvel = 8
+                            self.isJump = True
+                            self.touching_platform = False
+            elif self.jumpcount == 1.125:
+                if keys[pygame.K_w]:
+                    self.jvel = 6
+                    self.jumpcount += 1
     def jumpy(self):
         #This kind of works
         if self.isJump:
@@ -190,44 +213,19 @@ while run:
     platform2.moves()
     platform3.moves()
     #Actions of both players
-    #moves
+    #Moves and Jumps
     player1.move()
     player2.move()
-    #Jumps
-    if player1.isJump == False:
-        if keys[pygame.K_UP]:
-            if player1.jumpcount == 0:
-                if player1.touching_platform == True:
-                    player1.jvel = 8
-                    player1.isJump = True
-                    player1.touching_platform = False
-    elif player1.jumpcount == 1.125:
-        if keys[pygame.K_UP]:
-            player1.jvel = 6
-            player1.jumpcount += 1
     player1.jumpy()
-    if player2.isJump == False:
-        if keys[pygame.K_w]:
-            if player2.jumpcount == 0:
-                player2.jvel = 8
-                player2.jumpcount += 1
-                player2.isJump = True
-            elif player2.jumpcount == 1:
-                player2.jvel = 8
-                player2.jumpcount += 1
-                player2.isJump = True
     player2.jumpy()
     #respawn
     if player1.square.y > 600:
         player1.respawn()
     if player2.square.y > 600:
         player2.respawn()
-    #check for platform collision
+    #Check for platform collision
     player1.check_for_platform(platform1, platform2, platform3)
     player2.check_for_platform(platform1, platform2, platform3)
-    #Gravity
-    #player1.gravity()
-    #player2.gravity()
     #Shoots
     if keys[pygame.K_SPACE]:
         gun1.shoot()
