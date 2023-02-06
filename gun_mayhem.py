@@ -18,8 +18,7 @@ def update_window():
     pygame.draw.rect(win,color_dict['red'],(player2.square))
 
 class Gun ():
-    def __init__(self, owner, ammo, bulletvel, cooldown, bullet_kb):
-        self.bulletvel = bulletvel
+    def __init__(self, owner, ammo, cooldown, bullet_kb):
         self.cooldown = cooldown
         self.ammo = ammo
         self.last = pygame.time.get_ticks()
@@ -32,19 +31,20 @@ class Gun ():
         if now - self.last >= self.cooldown and self.ammo > 0:
             self.last = now
             self.ammo -= 1
-            bullet_list.append(Bullet(self.owner, self.bulletvel))
+            bullet_list.append(Bullet(self.owner, self.bullet_kb))
         #Delays and then reloads the gun
         elif self.ammo <= 0:
             if now - self.last >= 3000:
                 self.last = now
                 self.ammo = 10
-                bullet_list.append(Bullet(self.owner, self.bulletvel))
+                bullet_list.append(Bullet(self.owner, self.bullet_kb))
 
 # Bullet Class
 class Bullet(object):
     #Constructor
-    def __init__(self, owner, velocity, bullet_kb):
+    def __init__(self, owner, bullet_kb):
         self.owner = owner
+        #Defines the direction of the bullet
         if self.owner.lastrecorded == 'LEFT':
             self.x = self.owner.square.x - 20
             self.direction = -1
@@ -52,14 +52,21 @@ class Bullet(object):
             self.x = self.owner.square.x + 20
             self.direction = 1
         self.y = owner.square.y
-        self.velocity = velocity
+        self.velocity = 50
         self.width = 10
         self.height = 5
         self.kb = bullet_kb
     def move(self):
         self.velocity = self.direction * abs(self.velocity)
         self.x += self.velocity
-    def check_collision(self):
+    def check_collision(self, enemy):
+        if abs(enemy.square.x - self.owner.square.x) > 100:
+            if self.owner.player_num == 1:
+                if enemy.square.x < self.x and enemy.square.x + 15 > self.x:
+                    enemy.square.x += self.kb * self.direction
+            if self.owner.player_num == 2:
+                if enemy.square.x < self.x and enemy.square.x + 15 > self.x:
+                    enemy.square.x += self.kb * self.direction
         pass
         #if player2.square.x == self.x + self.width:
             #player2.x += 1
@@ -103,10 +110,14 @@ class Player(object):
                             self.jvel = 8
                             self.isJump = True
                             self.touching_platform = False
+                        else:
+                            self.jvel = 6
+                            self.isJump = True
+                            self.jumpcount = 2
             elif self.jumpcount == 1.125:
                 if keys[pygame.K_UP]:
                     self.jvel = 6
-                    self.jumpcount += 1
+                    self.jumpcount = 2
         #Checks for key presses(Player 2)
         elif self.player_num == 2:
             if keys[pygame.K_a]:
@@ -129,7 +140,7 @@ class Player(object):
             elif self.jumpcount == 1.125:
                 if keys[pygame.K_w]:
                     self.jvel = 6
-                    self.jumpcount += 1
+                    self.jumpcount = 2
 
     def jumpy(self):
         #This kind of works
@@ -198,9 +209,9 @@ platform3 = Platform(150,400,300,10,0)
 #Order goes as follows: x,y,width,height,yvel,xvel, mass, jvel, player_num, lives
 player1 = Player(300,100,15,15,10,0,1,8, 1, 10)
 player2 = Player(300,100,15,15,10,0,1,8, 2, 10)
-#Order goes as follows: owner, ammo, bulletvel, cooldown
-gun1 = Gun(player1, 10, 50, 400)
-gun2 = Gun(player2, 10, 50, 400)
+#Order goes as follows: owner, ammo, bulletvel, cooldown, bullet_kb
+gun1 = Gun(player1, 10, 400, 50)
+gun2 = Gun(player2, 10, 400, 50)
 
 #Sets up the window
 win = pygame.display.set_mode((600, 600))
@@ -244,11 +255,13 @@ while run:
             bullet_list.remove(bullet)
         else:
             if bullet.owner == player1:
-                color = color_dict['white']
+                color = color_dict['green']
                 pygame.draw.rect(win,color,(bullet.x, bullet.y,bullet.width,bullet.height))
+                bullet.check_collision(player2)
             else:
                 color = color_dict['red']
                 pygame.draw.rect(win,color,(bullet.x, bullet.y,bullet.width,bullet.height))
+                bullet.check_collision(player2)
             bullet.move()
     pygame.display.update()
 pygame.quit()
