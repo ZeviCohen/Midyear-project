@@ -239,10 +239,10 @@ while run:
         else:
             if bullet.owner == player1:
                 color = color_dict['white']
-                pygame.draw.rect(win,color,(bullet.x, player1.square.y,bullet.width,bullet.height))
+                pygame.draw.rect(win,color,(bullet.x, bullet.y,bullet.width,bullet.height))
             else:
                 color = color_dict['red']
-                pygame.draw.rect(win,color,(bullet.x, player2.square.y,bullet.width,bullet.height))
+                pygame.draw.rect(win,color,(bullet.x, bullet.y,bullet.width,bullet.height))
             bullet.move()
     pygame.display.update()
 pygame.quit()
