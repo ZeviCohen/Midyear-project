@@ -18,12 +18,13 @@ def update_window():
     pygame.draw.rect(win,color_dict['red'],(player2.square))
 
 class Gun ():
-    def __init__(self, owner, ammo, bulletvel, cooldown):
+    def __init__(self, owner, ammo, bulletvel, cooldown, bullet_kb):
         self.bulletvel = bulletvel
         self.cooldown = cooldown
         self.ammo = ammo
         self.last = pygame.time.get_ticks()
         self.owner = owner
+        self.bullet_kb = bullet_kb
     #Shoot method(Outputs a bullet)
     def shoot(self):
         now = pygame.time.get_ticks()
@@ -42,7 +43,7 @@ class Gun ():
 # Bullet Class
 class Bullet(object):
     #Constructor
-    def __init__(self, owner, velocity):
+    def __init__(self, owner, velocity, bullet_kb):
         self.owner = owner
         if self.owner.lastrecorded == 'LEFT':
             self.x = self.owner.square.x - 20
@@ -54,6 +55,7 @@ class Bullet(object):
         self.velocity = velocity
         self.width = 10
         self.height = 5
+        self.kb = bullet_kb
     def move(self):
         self.velocity = self.direction * abs(self.velocity)
         self.x += self.velocity
@@ -116,6 +118,7 @@ class Player(object):
             if keys[pygame.K_s]:
                 if (self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + platform1.rect.width and self.square.y <= platform1.rect.y and self.square.y >= platform1.rect.y - 20) or (self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + platform2.rect.width and self.square.y <= platform2.rect.y and self.square.y >= platform2.rect.y - 20) or (self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + platform3.rect.width and self.square.y <= platform3.rect.y and self.square.y >= platform3.rect.y - 20):
                     self.square.y += 5
+            #Jumps
             if self.isJump == False:
                 if keys[pygame.K_w]:
                     if self.jumpcount == 0:
