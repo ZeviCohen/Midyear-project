@@ -77,6 +77,7 @@ class Player(object):
         self.lives = lives
         self.jumpcount = 0
         self.touching_platform = False
+
     def move(self):
         if self.isJump == False:
             self.square.y += self.yvel
@@ -126,6 +127,7 @@ class Player(object):
                 if keys[pygame.K_w]:
                     self.jvel = 6
                     self.jumpcount += 1
+
     def jumpy(self):
         #This kind of works
         if self.isJump:
@@ -140,12 +142,14 @@ class Player(object):
             else:
                 self.isJump = False
                 self.jvel = 8
+
     def respawn(self):
         pygame.time.delay(100)
         self.square.y = 50
         self.square.x = 300 - (self.square.width/2)
         self.lives -= 1
         self.isJump = False
+
     def check_for_platform(self, platform1, platform2, platform3):
         #Detecs if player is on platform or not(Platform Collision)
         if self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + platform1.rect.width and self.square.y <= platform1.rect.y and self.square.y >= platform1.rect.y - 30:
@@ -169,6 +173,7 @@ class Player(object):
         else:
             self.xvel = 0
             self.yvel = 15
+
 class Platform(object):
     def __init__(self,x,y,width,height,vel):
         self.rect = pygame.Rect(x,y,width,height)
