@@ -52,21 +52,24 @@ class Bullet(object):
             self.x = self.owner.square.x + 20
             self.direction = 1
         self.y = owner.square.y
-        self.velocity = 20
+        self.velocity = 10
         self.width = 10
         self.height = 5
         self.kb = bullet_kb
+        self.hit_once = False
     def move(self):
         self.velocity = self.direction * abs(self.velocity)
         self.x += self.velocity
     def check_collision(self, enemy):
         if abs(enemy.square.x - self.owner.square.x) > 50:
             if self.owner.player_num == 1:
-                if enemy.square.x < self.x and enemy.square.x + 15 > self.x and self.y == enemy.square.y:
+                if enemy.square.x < self.x and enemy.square.x + 15 > self.x and self.y == enemy.square.y and self.hit_once == False:
                     enemy.square.x += self.kb * self.direction
+                    self.hit_once = True
             if self.owner.player_num == 2:
-                if enemy.square.x < self.x and enemy.square.x + 15 > self.x and self.y == enemy.square.y:
+                if enemy.square.x < self.x and enemy.square.x + 15 > self.x and self.y == enemy.square.y and self.hit_once == False:
                     enemy.square.x += self.kb * self.direction
+                    self.hit_once = True
         pass
         #if player2.square.x == self.x + self.width:
             #player2.x += 1
