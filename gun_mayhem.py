@@ -52,7 +52,7 @@ class Bullet(object):
             self.x = self.owner.square.x + 20
             self.direction = 1
         self.y = owner.square.y
-        self.velocity = 50
+        self.velocity = 20
         self.width = 10
         self.height = 5
         self.kb = bullet_kb
@@ -60,12 +60,12 @@ class Bullet(object):
         self.velocity = self.direction * abs(self.velocity)
         self.x += self.velocity
     def check_collision(self, enemy):
-        if abs(enemy.square.x - self.owner.square.x) > 100:
+        if abs(enemy.square.x - self.owner.square.x) > 50:
             if self.owner.player_num == 1:
-                if enemy.square.x < self.x and enemy.square.x + 15 > self.x:
+                if enemy.square.x < self.x and enemy.square.x + 15 > self.x and self.y == enemy.square.y:
                     enemy.square.x += self.kb * self.direction
             if self.owner.player_num == 2:
-                if enemy.square.x < self.x and enemy.square.x + 15 > self.x:
+                if enemy.square.x < self.x and enemy.square.x + 15 > self.x and self.y == enemy.square.y:
                     enemy.square.x += self.kb * self.direction
         pass
         #if player2.square.x == self.x + self.width:
@@ -110,13 +110,9 @@ class Player(object):
                             self.jvel = 8
                             self.isJump = True
                             self.touching_platform = False
-                        else:
-                            self.jvel = 6
-                            self.isJump = True
-                            self.jumpcount = 2
             elif self.jumpcount == 1.125:
                 if keys[pygame.K_UP]:
-                    self.jvel = 6
+                    self.jvel = 4
                     self.jumpcount = 2
         #Checks for key presses(Player 2)
         elif self.player_num == 2:
@@ -139,7 +135,7 @@ class Player(object):
                             self.touching_platform = False
             elif self.jumpcount == 1.125:
                 if keys[pygame.K_w]:
-                    self.jvel = 6
+                    self.jvel = 4
                     self.jumpcount = 2
 
     def jumpy(self):
@@ -155,7 +151,7 @@ class Player(object):
                 self.jvel-=1
             else:
                 self.isJump = False
-                self.jvel = 8
+                self.jvel = 6
 
     def respawn(self):
         pygame.time.delay(100)
@@ -261,7 +257,7 @@ while run:
             else:
                 color = color_dict['red']
                 pygame.draw.rect(win,color,(bullet.x, bullet.y,bullet.width,bullet.height))
-                bullet.check_collision(player2)
+                bullet.check_collision(player1)
             bullet.move()
     pygame.display.update()
 pygame.quit()
