@@ -42,7 +42,7 @@ class Gun ():
 # Bullet Class
 class Bullet(object):
     #Constructor
-    def __init__(self, owner, bullet_kb):
+    def __init__(self, owner, bullet_xkb):
         self.owner = owner
         #Defines the direction of the bullet
         if self.owner.lastrecorded == 'LEFT':
@@ -52,27 +52,21 @@ class Bullet(object):
             self.x = self.owner.square.x + 20
             self.direction = 1
         self.y = owner.square.y
-        self.velocity = 10
+        self.velocity = 20
         self.width = 10
         self.height = 5
-        self.kb = bullet_kb
+        self.xkb = bullet_xkb
+        self.ykb = 6
         self.hit_once = False
     def move(self):
         self.velocity = self.direction * abs(self.velocity)
         self.x += self.velocity
     def check_collision(self, enemy):
-        if abs(enemy.square.x - self.owner.square.x) > 50:
-            if self.owner.player_num == 1:
-                if enemy.square.x < self.x and enemy.square.x + 15 > self.x and self.y == enemy.square.y and self.hit_once == False:
-                    enemy.square.x += self.kb * self.direction
-                    self.hit_once = True
-            if self.owner.player_num == 2:
-                if enemy.square.x < self.x and enemy.square.x + 15 > self.x and self.y == enemy.square.y and self.hit_once == False:
-                    enemy.square.x += self.kb * self.direction
-                    self.hit_once = True
-        pass
-        #if player2.square.x == self.x + self.width:
-            #player2.x += 1
+        if (self.x + self.width >= enemy.square.x) and (self.x <= enemy.square.x + enemy.square.width) and (self.y + self.height >= enemy.square.y) and (self.y <= enemy.square.y + enemy.square.height):
+            enemy.hit = True
+            self.hit_once = True
+            enemy.ishit = True
+        enemy.shot(self)
 #Our player class
 class Player(object):
     def __init__(self,x,y,width,height,yvel,xvel, mass, jvel, player_num, lives):
@@ -89,6 +83,7 @@ class Player(object):
         self.lives = lives
         self.jumpcount = 0
         self.touching_platform = False
+        self.ishit = False
 
     def move(self):
         if self.isJump == False:
@@ -115,7 +110,7 @@ class Player(object):
                             self.touching_platform = False
             elif self.jumpcount == 1.125:
                 if keys[pygame.K_UP]:
-                    self.jvel = 4
+                    self.jvel = 6
                     self.jumpcount = 2
         #Checks for key presses(Player 2)
         elif self.player_num == 2:
@@ -138,7 +133,7 @@ class Player(object):
                             self.touching_platform = False
             elif self.jumpcount == 1.125:
                 if keys[pygame.K_w]:
-                    self.jvel = 4
+                    self.jvel = 6
                     self.jumpcount = 2
 
     def jumpy(self):
@@ -163,6 +158,7 @@ class Player(object):
         self.square.x = 300 - (self.square.width/2)
         self.lives -= 1
         self.isJump = False
+        self.ishit = False
 
     def check_for_platform(self, platform1, platform2, platform3):
         #Detecs if player is on platform or not(Platform Collision)
@@ -187,6 +183,16 @@ class Player(object):
         else:
             self.xvel = 0
             self.yvel = 15
+    def shot(self, bullet):
+        if self.ishit:
+            if bullet.ykb >= -6:
+                if bullet.ykb >= 0:
+                    F = (self.mass ** -1) *(bullet.ykb**2)
+                elif bullet.ykb < 0:
+                    F = (self.mass**-1) * -1 * (bullet.ykb**2)
+                self.square.y-= F
+                bullet.ykb -= 1
+            self.square.x += (bullet.xkb * bullet.direction)
 
 class Platform(object):
     def __init__(self,x,y,width,height,vel):
@@ -251,7 +257,7 @@ while run:
     if keys[pygame.K_z]:
         gun2.shoot()
     for bullet in bullet_list:
-        if bullet.x > 600 or bullet.x < 0:
+        if bullet.x > 600 or bullet.x < 0 or bullet.owner.ishit == True:
             bullet_list.remove(bullet)
         else:
             if bullet.owner == player1:
