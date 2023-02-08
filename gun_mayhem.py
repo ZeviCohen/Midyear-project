@@ -145,10 +145,11 @@ class Player(object):
         #This kind of works
         if self.isJump:
             if self.touching_platform == False:
-                if self.jvel >= 0:
+                if se lf.jvel >= 0:
                     F =(1 / 2)* self.mass *(self.jvel**2)
                     self.jumpcount += 0.125
                 elif self.jvel < 0:
+                    self.isJump = False
                     F = (1/2) * self.mass * -1 * (self.jvel**2)
                 self.square.y-= F
                 self.jvel-=1
@@ -177,7 +178,7 @@ class Player(object):
             self.yvel = 0
             self.square.y = (platform2.rect.y - self.square.height)
             self.touching_platform = True
-        elif self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + platform3.rect.width and self.square.y+self.square.height <= platform3.rect.y and self.square.y + self.square.height >= platform3.rect.y - 37:
+        elif self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + platform3.rect.width and self.square.y+self.square.height <= platform3.rect.y and self.square.y + self.square.height >= platform3.rect.y - 37 and self.isJump == False:
             self.xvel = platform3.vel
             self.jumpcount = 0
             self.yvel = 0
