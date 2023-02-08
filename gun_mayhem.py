@@ -62,7 +62,6 @@ class Bullet(object):
         self.x += self.velocity
     def check_collision(self, enemy):
         if (self.x + self.width >= enemy.square.x) and (self.x <= enemy.square.x + enemy.square.width) and (self.y + self.height >= enemy.square.y) and (self.y <= enemy.square.y + enemy.square.height):
-            enemy.hit = True
             self.hit_once = True
             enemy.ishit = True
         enemy.shot(self)
@@ -260,12 +259,10 @@ while run:
             bullet_list.remove(bullet)
         else:
             if bullet.owner == player1:
-                color = color_dict['green']
-                pygame.draw.rect(win,color,(bullet.x, bullet.y,bullet.width,bullet.height))
                 bullet.check_collision(player2)
+                pygame.draw.rect(win,color_dict['green'],(bullet.x, bullet.y,bullet.width,bullet.height))
             else:
-                color = color_dict['red']
-                pygame.draw.rect(win,color,(bullet.x, bullet.y,bullet.width,bullet.height))
+                pygame.draw.rect(win,color_dict['red'],(bullet.x, bullet.y,bullet.width,bullet.height))
                 bullet.check_collision(player1)
             bullet.move()
     pygame.display.update()
