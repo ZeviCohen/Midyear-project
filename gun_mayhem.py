@@ -1,5 +1,4 @@
 import pygame, math
-
 # copy of previous platform detection code: (self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + 70 and self.square.y <= platform1.rect.y - 15 and self.square.y >= platform1.rect.y - 18) or (self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + 70 and self.square.y <= platform2.rect.y - 15 and self.square.y >= platform2.rect.y - 18) or (self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + 300 and self.square.y <= platform3.rect.y - 15 and self.square.y >= platform3.rect.y - 18)
 #Color Palette
 color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0)}
@@ -56,7 +55,7 @@ class Bullet(object):
         self.width = 10
         self.height = 5
         self.xkb = bullet_xkb
-        self.ykb = 6
+        self.ykb = 4
         self.hit_once = False
     def move(self):
         self.velocity = self.direction * abs(self.velocity)
@@ -140,7 +139,7 @@ class Player(object):
         #This kind of works
         if self.isJump:
             if self.touching_platform == False:
-                if se lf.jvel >= 0:
+                if self.jvel >= 0:
                     F =(1 / 2)* self.mass *(self.jvel**2)
                     self.jumpcount += 0.125
                 elif self.jvel < 0:
@@ -216,8 +215,8 @@ platform3 = Platform(150,400,300,10,0)
 player1 = Player(300,100,15,15,10,0,1,8, 1, 10)
 player2 = Player(300,100,15,15,10,0,1,8, 2, 10)
 #Order goes as follows: owner, ammo, bulletvel, cooldown, bullet_kb
-gun1 = Gun(player1, 10, 400, 50)
-gun2 = Gun(player2, 10, 400, 50)
+gun1 = Gun(player1, 10, 400, 5)
+gun2 = Gun(player2, 10, 400, 5)
 
 #Sets up the window
 win = pygame.display.set_mode((600, 600))
