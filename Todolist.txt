@@ -1,0 +1,5 @@
+To do
+- Fix bugs
+- Import images
+- Create loot system
+- Create choice of guns
