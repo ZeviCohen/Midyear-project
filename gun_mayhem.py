@@ -107,9 +107,9 @@ class Player(object):
                             self.jvel = 6
                             self.isJump = True
                             self.touching_platform = False
-            elif self.jumpcount == 1.125:
+            elif self.jumpcount == 1:
                 if keys[pygame.K_UP]:
-                    self.jvel = 4
+                    self.jvel = 5
                     self.jumpcount = 2
                     self.isJump = True
         #Checks for key presses(Player 2)
@@ -132,10 +132,11 @@ class Player(object):
                             self.jvel = 6
                             self.isJump = True
                             self.touching_platform = False
-            elif self.jumpcount == 1.125:
+            elif self.jumpcount == 1:
                 if keys[pygame.K_w]:
-                    self.jvel = 4
+                    self.jvel = 5
                     self.jumpcount = 2
+                    self.isJump = True
 
     def jumpy(self):
         #This kind of works
@@ -143,7 +144,8 @@ class Player(object):
             if self.touching_platform == False:
                 if self.jvel >= 0:
                     F =(1 / 2)* self.mass *(self.jvel**2)
-                    self.jumpcount += 0.125
+                    if self.jvel == 0:
+                        self.jumpcount += 1
                 elif self.jvel < 0:
                     F = (1/2) * self.mass * -1 * (self.jvel**2)
                 self.square.y-= F
@@ -166,21 +168,21 @@ class Player(object):
             self.xvel = platform1.vel
             self.jumpcount = 0
             self.yvel = 0
-            if (self.isJump == True and self.jvel <= -4) or self.isJump == False:
+            if (self.isJump == True and self.jvel <= -6) or self.isJump == False:
                 self.square.y = (platform1.rect.y - self.square.height)
                 self.touching_platform = True
         elif self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + platform2.rect.width and self.square.y <= platform2.rect.y and self.square.y >= platform2.rect.y - 30:
             self.xvel = platform2.vel
             self.jumpcount = 0
             self.yvel = 0
-            if (self.isJump == True and self.jvel <= -4) or self.isJump == False:
+            if (self.isJump == True and self.jvel <= -6) or self.isJump == False:
                 self.square.y = (platform2.rect.y - self.square.height)
                 self.touching_platform = True
         elif self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + platform3.rect.width and self.square.y+self.square.height <= platform3.rect.y and self.square.y + self.square.height >= platform3.rect.y - 30:
             self.xvel = platform3.vel
             self.jumpcount = 0
             self.yvel = 0
-            if (self.isJump == True and self.jvel <= -4) or self.isJump == False:
+            if (self.isJump == True and self.jvel <= -6) or self.isJump == False:
                 self.square.y = (platform3.rect.y - self.square.height)
                 self.touching_platform = True
         else:
