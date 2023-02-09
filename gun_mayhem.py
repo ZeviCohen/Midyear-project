@@ -221,8 +221,8 @@ platform3 = Platform(150,450,300,10,0)
 player1 = Player(300,100,15,15,10,0,1,8, 1, 10)
 player2 = Player(300,100,15,15,10,0,1,8, 2, 10)
 #Order goes as follows: owner, ammo, bulletvel, cooldown, bullet_kb
-gun1 = Gun(player1, 10, 400, 5)
-gun2 = Gun(player2, 10, 400, 5)
+gun1 = Gun(player1, 10, 400, 10)
+gun2 = Gun(player2, 10, 400, 10)
 
 #Sets up the window
 win = pygame.display.set_mode((600, 600))
