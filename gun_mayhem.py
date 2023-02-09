@@ -57,7 +57,7 @@ class Bullet(object):
         self.width = 10
         self.height = 5
         self.xkb = bullet_xkb
-        self.ykb = 4
+        self.ykb = 15
         self.hit_once = False
     def move(self):
         self.velocity = self.direction * abs(self.velocity)
@@ -192,14 +192,12 @@ class Player(object):
             self.yvel = 15
     def shot(self, bullet):
         if self.ishit:
-            if bullet.ykb >= -4:
-                if bullet.ykb >= 0:
-                    F = (self.mass ** -1) *(bullet.ykb**2)
-                elif bullet.ykb < 0:
-                    F = (self.mass**-1) * -1 * (bullet.ykb**2)
-                self.square.y-= F
+            if bullet.ykb > 0:
+                self.square.y -= bullet.ykb
                 bullet.ykb -= 1
-            self.square.x += (bullet.xkb * bullet.direction)
+                self.square.x += (bullet.xkb * bullet.direction)
+            else:
+                self.ishit = False
 
 class Platform(object):
     def __init__(self,x,y,width,height,vel):
