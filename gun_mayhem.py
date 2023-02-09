@@ -43,12 +43,14 @@ class Bullet(object):
     #Constructor
     def __init__(self, owner, bullet_xkb):
         self.owner = owner
+        #Generates a bullet with distance from the owner
+        self.bullet_spawn_distance = 30
         #Defines the direction of the bullet
         if self.owner.lastrecorded == 'LEFT':
-            self.x = self.owner.square.x - 20
+            self.x = self.owner.square.x - self.bullet_spawn_distance
             self.direction = -1
         if self.owner.lastrecorded == 'RIGHT' or self.owner.lastrecorded == None:
-            self.x = self.owner.square.x + 20
+            self.x = self.owner.square.x + self.bullet_spawn_distance
             self.direction = 1
         self.y = owner.square.y
         self.velocity = 20
