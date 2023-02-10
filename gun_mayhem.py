@@ -48,11 +48,7 @@ class Bullet(object):
         self.bullet_spawn_distance = 30
         #Defines the direction of the bullet
         if self.owner.lastrecorded == 'LEFT':
-<<<<<<< HEAD
-            self.x = self.ownerx.square.x - 20
-=======
             self.x = self.owner.square.x - self.bullet_spawn_distance
->>>>>>> f44dc48cabb26046a84af334b2a46f5c77ddf961
             self.direction = -1
         if self.owner.lastrecorded == 'RIGHT' or self.owner.lastrecorded == None:
             self.x = self.owner.square.x + self.bullet_spawn_distance
