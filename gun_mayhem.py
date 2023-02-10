@@ -57,16 +57,26 @@ class Bullet(object):
         self.width = 10
         self.height = 5
         self.xkb = bullet_xkb
-        self.ykb = 15
-        self.hit_once = False
+        self.ykb = 30
+        self.hit_enemy = False
     def move(self):
         self.velocity = self.direction * abs(self.velocity)
         self.x += self.velocity
     def check_collision(self, enemy):
         if (self.x + self.width >= enemy.square.x) and (self.x <= enemy.square.x + enemy.square.width) and (self.y + self.height >= enemy.square.y) and (self.y <= enemy.square.y + enemy.square.height):
-            self.hit_once = True
             enemy.ishit = True
-        enemy.shot(self)
+            self.hit_enemy = True
+            self.shot(enemy)
+    def shot(self, enemy):
+        if enemy.ishit:
+            if self.ykb > 0:
+                enemy.square.y -= self.ykb
+                self.ykb -= 1
+                enemy.square.x += (self.xkb * self.direction)
+            else:
+                enemy.ishit = False
+                enemy.yvel = 10
+
 #Our player class
 class Player(object):
     def __init__(self,x,y,width,height,yvel,xvel, mass, jvel, player_num, lives):
@@ -190,14 +200,6 @@ class Player(object):
         else:
             self.xvel = 0
             self.yvel = 15
-    def shot(self, bullet):
-        if self.ishit:
-            if bullet.ykb > 0:
-                self.square.y -= bullet.ykb
-                bullet.ykb -= 1
-                self.square.x += (bullet.xkb * bullet.direction)
-            else:
-                self.ishit = False
 
 class Platform(object):
     def __init__(self,x,y,width,height,vel):
@@ -221,8 +223,8 @@ platform3 = Platform(150,450,300,10,0)
 player1 = Player(300,100,15,15,10,0,1,8, 1, 10)
 player2 = Player(300,100,15,15,10,0,1,8, 2, 10)
 #Order goes as follows: owner, ammo, bulletvel, cooldown, bullet_kb
-gun1 = Gun(player1, 10, 400, 10)
-gun2 = Gun(player2, 10, 400, 10)
+gun1 = Gun(player1, 10, 400, 50)
+gun2 = Gun(player2, 10, 400, 50)
 
 #Sets up the window
 win = pygame.display.set_mode((600, 600))
@@ -262,7 +264,7 @@ while run:
     if keys[pygame.K_z]:
         gun2.shoot()
     for bullet in bullet_list:
-        if bullet.x > 600 or bullet.x < 0 or bullet.owner.ishit == True:
+        if bullet.x > 600 or bullet.x < 0 or bullet.hit_enemy == True:
             bullet_list.remove(bullet)
         else:
             if bullet.owner == player1:
