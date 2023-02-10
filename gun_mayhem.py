@@ -5,7 +5,7 @@ color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "b
 pygame.init()
 bullet_list = []
 scrn = pygame.display.set_mode((600, 600))
-player1image = pygame.image.load("Meowth-Pokemon-PNG-Transparent-Image.png").convert()
+player1image = pygame.image.load("Images/Meowth-Pokemon-PNG-Transparent-Image.png").convert()
 def update_window():
     #Makes the background and all of the objects
     win.fill((0,0,0))
