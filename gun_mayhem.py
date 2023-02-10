@@ -2,9 +2,10 @@ import pygame, math
 # copy of previous platform detection code: (self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + 70 and self.square.y <= platform1.rect.y - 15 and self.square.y >= platform1.rect.y - 18) or (self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + 70 and self.square.y <= platform2.rect.y - 15 and self.square.y >= platform2.rect.y - 18) or (self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + 300 and self.square.y <= platform3.rect.y - 15 and self.square.y >= platform3.rect.y - 18)
 #Color Palette
 color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0)}
-
+pygame.init()
 bullet_list = []
-
+scrn = pygame.display.set_mode((600, 600))
+player1image = pygame.image.load("Meowth-Pokemon-PNG-Transparent-Image.png").convert()
 def update_window():
     #Makes the background and all of the objects
     win.fill((0,0,0))
@@ -45,7 +46,7 @@ class Bullet(object):
         self.owner = owner
         #Defines the direction of the bullet
         if self.owner.lastrecorded == 'LEFT':
-            self.x = self.owner.square.x - 20
+            self.x = self.ownerx.square.x - 20
             self.direction = -1
         if self.owner.lastrecorded == 'RIGHT' or self.owner.lastrecorded == None:
             self.x = self.owner.square.x + 20
@@ -223,6 +224,7 @@ pygame.display.set_caption("This is pygame")
 run = True
 
 #Main
+pygame.display.flip()
 while run:
     pygame.time.delay(100)
     #To let the user quit the window
@@ -232,6 +234,7 @@ while run:
     keys = pygame.key.get_pressed()
     update_window()
     #Makes the platforms move
+    scrn.blit(player1image, (500, 500))
     platform1.moves()
     platform2.moves()
     platform3.moves()
