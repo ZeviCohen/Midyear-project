@@ -1,15 +1,13 @@
 import pygame, math
 # copy of previous platform detection code: (self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + 70 and self.square.y <= platform1.rect.y - 15 and self.square.y >= platform1.rect.y - 18) or (self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + 70 and self.square.y <= platform2.rect.y - 15 and self.square.y >= platform2.rect.y - 18) or (self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + 300 and self.square.y <= platform3.rect.y - 15 and self.square.y >= platform3.rect.y - 18)
 #Color Palette
-color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0)}
+color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0), "sky_blue":(138, 206, 251)}
 pygame.init()
 bullet_list = []
 scrn = pygame.display.set_mode((600, 600))
-player1image = pygame.image.load("Meowth-Pokemon-PNG-Transparent-Image.png").convert()
 def update_window():
-    #Makes the background and all of the objects
-    win.fill((0,0,0))
-    #Draws the platforms
+
+    # Draws the platforms
     pygame.draw.rect(win,color_dict["red"],platform1.rect)
     pygame.draw.rect(win,color_dict["red"],platform2.rect)
     pygame.draw.rect(win,color_dict['red'],platform3.rect)
@@ -241,9 +239,22 @@ while run:
         if event.type == pygame.QUIT:
             run=False
     keys = pygame.key.get_pressed()
+    #Makes the background and all of the objects
+    now = pygame.time.get_ticks()
+    last = 0
+    if now - last == 100:
+        if day_or_night == "day":
+            day_or_night = "night"
+            last = pygame.time.get_ticks()
+        if day_or_night == "night":
+            day_or_night = "day"
+            last = pygame.time.get_ticks()
+    if day_or_night == "day":
+        win.fill(color_dict["sky_blue"])
+    else:
+        win.fill(color_dict["black"])
     update_window()
     #Makes the platforms move
-    scrn.blit(player1image, (500, 500))
     platform1.moves()
     platform2.moves()
     platform3.moves()
