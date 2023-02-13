@@ -1,12 +1,18 @@
 import pygame, math
-color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0)}
-# Class Bullet(object):
-#     def __init__(self,x,y,velocity,direction):
-#         self.width = 10
-#         self.height = 5
-#         self.bullet = pygame.Rect(x,y,self.width,self.height)
-#     def move(self):
-#         self.x += self.velocity
+color_dict = {
+    "white":(255, 255, 255),
+    "red":(255, 0, 0),
+    "green":(0, 255, 0),
+    "blue":(0, 0, 255), 
+    "black":(0, 0, 0)
+    }
+class Bullet(object):
+    def __init__(self,x,y,velocity,direction):
+        self.width = 10
+        self.height = 5
+        self.bullet = pygame.Rect(x,y,self.width,self.height)
+    def move(self):
+        self.x += self.velocity
 class Player(object):
     def __init__(self,x,y,width,height,yvel,xvel, mass, Force, jvel, player_num):
         self.lastrecorded = None
