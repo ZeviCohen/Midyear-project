@@ -272,13 +272,11 @@ class Upgrade(object):
 #Order goes as follows: x, y, width, height, vel
 platform1 = Platform(0,550,70,10, 5)
 platform2 = Platform(530,550,70,10, -5)
-platform3 = Platform(150,400,300,10,0)
+platform3 = Platform(150,450,300,10,0)
 #Order goes as follows: x,y,width,height,yvel,xvel, mass, jvel, player_num, lives
 player1 = Player(300,100,15,15,10,0,1,8, 1, 10)
 player2 = Player(300,100,15,15,10,0,1,8, 2, 10)
 #Order goes as follows: owner, ammo, bulletvel, cooldown, bullet_kb
-gun1 = Gun(player1, 10, 400, 5)
-gun2 = Gun(player2, 10, 400, 5)
 gun1 = Gun(player1, 10, 400, 50)
 player1.gun = gun1
 gun2 = Gun(player2, 10, 400, 50)
@@ -307,7 +305,7 @@ while run:
     keys = pygame.key.get_pressed()
     update_window()
     #Makes the platforms move
-    scrn.blit(player1image, (player1.square.x, player1.square.y))
+    scrn.blit(player1image, (500, 500))
     platform1.moves()
     platform2.moves()
     platform3.moves()
@@ -332,7 +330,7 @@ while run:
         player2.gun.shoot()
     #Bullet code
     for bullet in bullet_list:
-        if bullet.x > 600 or bullet.x < 0 or bullet.owner.ishit:
+        if bullet.x > 600 or bullet.x < 0 or bullet.hit_enemy == True:
             bullet_list.remove(bullet)
         else:
             if bullet.owner == player1:
