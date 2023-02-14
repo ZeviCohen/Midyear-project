@@ -347,10 +347,10 @@ while run:
     for upgrade in upgrade_list:
         upgrade.check_for_platform(platform1, platform2, platform3)
         upgrade.move()
-        pygame.draw.circle(upgrade.x, upgrade.y, upgrade.width, upgrade.height)
-        if :
+        pygame.draw.circle(win, color_dict["blue"], (upgrade.x, upgrade.y, upgrade.width, upgrade.height))
+        if (upgrade.x<=player1.square.x+player1.square.width) and (upgrade.x + upgrade.width >= player1.square.x) and (upgrade.y <= player1.square.y+ player1.square.height) and (upgrade.y + upgrade.width >= player1.square.y):
             player1.upgraded()
-        if :
+        elif (upgrade.x<=player2.square.x+player2.square.width) and (upgrade.x + upgrade.width >= player2.square.x) and (upgrade.y <= player2.square.y+ player2.square.height) and (upgrade.y + upgrade.width >= player2.square.y):
             player2.upgraded()
         upgrade_list.remove(upgrade)
     #Gunbox code
@@ -361,10 +361,10 @@ while run:
     for gunbox in gun_list:
         gunbox.check_for_platform(platform1, platform2, platform3)
         gunbox.move()
-        pygame.draw.rect(gunbox.x, gunbox.y, gunbox.width, gunbox.height)
-        if :
+        pygame.draw.rect(win, color_dict["blue"], (gunbox.x, gunbox.y, gunbox.width, gunbox.height))
+        if (gunbox.x<=player1.square.x+player1.square.width) and (gunbox.x + gunbox.width >= player1.square.x) and (gunbox.y <= player1.square.y+ player1.square.height) and (gunbox.y + gunbox.width >= player1.square.y):
             gunbox.choose_random_gun(player1)
-        else:
+        elif (gunbox.x<=player2.square.x+player2.square.width) and (gunbox.x + gunbox.width >= player2.square.x) and (gunbox.y <= player2.square.y+ player2.square.height) and (gunbox.y + gunbox.width >= player2.square.y):
             gunbox.choose_random_gun(player2)
         gunbox_list.remove(gunbox)
     pygame.display.update()
