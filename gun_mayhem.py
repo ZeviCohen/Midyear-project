@@ -305,7 +305,7 @@ while run:
     keys = pygame.key.get_pressed()
     update_window()
     #Makes the platforms move
-    scrn.blit(player1image, (500, 500))
+    scrn.blit(player1image, (player1.square.x, player1.square.y))
     platform1.moves()
     platform2.moves()
     platform3.moves()
