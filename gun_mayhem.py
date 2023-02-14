@@ -5,7 +5,7 @@ color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "b
 pygame.init()
 bullet_list = []
 scrn = pygame.display.set_mode((600, 600))
-player1image = pygame.image.load("Meowth-Pokemon-PNG-Transparent-Image.png").convert()
+player1image = pygame.image.load("Images/Meowth-Pokemon-PNG-Transparent-Image.png").convert()
 def update_window():
     #Makes the background and all of the objects
     win.fill((0,0,0))
@@ -46,7 +46,11 @@ class Bullet(object):
         self.owner = owner
         #Defines the direction of the bullet
         if self.owner.lastrecorded == 'LEFT':
+<<<<<<< HEAD
             self.x = self.owner.square.x - 20
+=======
+            self.x = self.owner.square.x - self.bullet_spawn_distance
+>>>>>>> 8005e7009160d32c73dda71337ce1ae323fac1ee
             self.direction = -1
         if self.owner.lastrecorded == 'RIGHT' or self.owner.lastrecorded == None:
             self.x = self.owner.square.x + 20
