@@ -177,6 +177,7 @@ class Player(object):
         self.square.x = 300 - (self.square.width/2)
         self.lives -= 1
         self.isJump = False
+        self.jumpcount = 2
         self.ishit = False
 
     def check_for_platform(self, platform1, platform2, platform3):
@@ -278,7 +279,7 @@ player2 = Player(300,100,15,15,10,0,1,8, 2, 10)
 gun1 = Gun(player1, 10, 400, 50)
 player1.gun = gun1
 gun2 = Gun(player2, 10, 400, 50)
-player1.gun = gun2
+player2.gun = gun2
 
 #Sets up the window
 win = pygame.display.set_mode((600, 600))
@@ -339,11 +340,11 @@ while run:
     #Upgrade code
     upgrade_last = pygame.time.get_ticks()
     if upgrade_now - upgrade_last >= 500:
+        upgrade_now = upgrade_last
         randchance = math.random.ranint(1,2)
         if randchance == 1:
             upgrade = Upgrade()
             upgrade_list.append(upgrade)
-        upgrade_now = upgrade_last
     for upgrade in upgrade_list:
         upgrade.check_for_platform(platform1, platform2, platform3)
         upgrade.move()
@@ -356,6 +357,7 @@ while run:
     #Gunbox code
     gunbox_last = pygame.time.get_ticks()
     if gunbox_now-gunbox_last >= 300:
+        gunbox_now = gunbox_last
         gunbox = Upgrade()
         gunbox_list.append(gunbox)
     for gunbox in gun_list:
