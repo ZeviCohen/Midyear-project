@@ -3,6 +3,18 @@ import pygame, math
 #Color Palette
 color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0)}
 pygame.init()
+#Gun List:
+    #Sub machine gun
+    #Sniper
+    #Shotgun
+    #Assault rifle
+    #Light machine gun
+    #Special
+        #Minigun
+        #Dematerializer
+    #Handguns
+    #RPG
+#Gun_list's keys are players and their values are guns[default_gun, current_gun]
 gun_list = []
 bullet_list = []
 upgrade_list = []
@@ -104,18 +116,20 @@ class Player(object):
             if keys[pygame.K_DOWN]:
                 if self.touching_platform == True:
                     self.square.y += 5
+                    self.jumpcount = 2
             #Jumps
             if self.isJump == False:
                 if keys[pygame.K_UP]:
                     if self.jumpcount == 0:
                         if self.touching_platform == True:
-                            self.jvel = 8
+                            self.jvel = 6
                             self.isJump = True
                             self.touching_platform = False
-            elif self.jumpcount == 1.125:
+            elif self.jumpcount == 1:
                 if keys[pygame.K_UP]:
-                    self.jvel = 6
+                    self.jvel = 5
                     self.jumpcount = 2
+                    self.isJump = True
         #Checks for key presses(Player 2)
         elif self.player_num == 2:
             if keys[pygame.K_a]:
@@ -127,18 +141,20 @@ class Player(object):
             if keys[pygame.K_s]:
                 if self.touching_platform==True:
                     self.square.y += 5
+                    self.jumpcount = 2
             #Jumps
             if self.isJump == False:
                 if keys[pygame.K_w]:
                     if self.jumpcount == 0:
                         if self.touching_platform == True:
-                            self.jvel = 8
+                            self.jvel = 6
                             self.isJump = True
                             self.touching_platform = False
-            elif self.jumpcount == 1.125:
+            elif self.jumpcount == 1:
                 if keys[pygame.K_w]:
-                    self.jvel = 6
+                    self.jvel = 5
                     self.jumpcount = 2
+                    self.isJump = True
 
     def jumpy(self):
         #This kind of works
@@ -146,9 +162,9 @@ class Player(object):
             if self.touching_platform == False:
                 if self.jvel >= 0:
                     F =(1 / 2)* self.mass *(self.jvel**2)
-                    self.jumpcount += 0.125
+                    if self.jvel == 0:
+                        self.jumpcount += 1
                 elif self.jvel < 0:
-                    self.isJump = False
                     F = (1/2) * self.mass * -1 * (self.jvel**2)
                 self.square.y-= F
                 self.jvel-=1
@@ -167,37 +183,30 @@ class Player(object):
 
     def check_for_platform(self, platform1, platform2, platform3):
         #Detecs if player is on platform or not(Platform Collision)
-        if self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + platform1.rect.width and self.square.y <= platform1.rect.y and self.square.y >= platform1.rect.y - 37:
+        if self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + platform1.rect.width and self.square.y <= platform1.rect.y and self.square.y >= platform1.rect.y - 30:
             self.xvel = platform1.vel
             self.jumpcount = 0
             self.yvel = 0
-            self.square.y = (platform1.rect.y - self.square.height)
-            self.touching_platform = True
-        elif self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + platform2.rect.width and self.square.y <= platform2.rect.y and self.square.y >= platform2.rect.y - 37:
+            if (self.isJump == True and self.jvel <= -6) or self.isJump == False:
+                self.square.y = (platform1.rect.y - self.square.height)
+                self.touching_platform = True
+        elif self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + platform2.rect.width and self.square.y <= platform2.rect.y and self.square.y >= platform2.rect.y - 30:
             self.xvel = platform2.vel
             self.jumpcount = 0
             self.yvel = 0
-            self.square.y = (platform2.rect.y - self.square.height)
-            self.touching_platform = True
-        elif self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + platform3.rect.width and self.square.y+self.square.height <= platform3.rect.y and self.square.y + self.square.height >= platform3.rect.y - 37 and self.isJump == False:
+            if (self.isJump == True and self.jvel <= -6) or self.isJump == False:
+                self.square.y = (platform2.rect.y - self.square.height)
+                self.touching_platform = True
+        elif self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + platform3.rect.width and self.square.y+self.square.height <= platform3.rect.y and self.square.y + self.square.height >= platform3.rect.y - 30:
             self.xvel = platform3.vel
             self.jumpcount = 0
             self.yvel = 0
-            self.square.y = (platform3.rect.y - self.square.height)
-            self.touching_platform = True
+            if (self.isJump == True and self.jvel <= -6) or self.isJump == False:
+                self.square.y = (platform3.rect.y - self.square.height)
+                self.touching_platform = True
         else:
             self.xvel = 0
             self.yvel = 15
-    def shot(self, bullet):
-        if self.ishit:
-            if bullet.ykb >= -6:
-                if bullet.ykb >= 0:
-                    F = (self.mass ** -1) *(bullet.ykb**2)
-                elif bullet.ykb < 0:
-                    F = (self.mass**-1) * -1 * (bullet.ykb**2)
-                self.square.y-= F
-                bullet.ykb -= 1
-            self.square.x += (bullet.xkb * bullet.direction)
     def upgraded(self, upgrade):
         if self.upgrade.power == 1:
             pass
@@ -256,7 +265,7 @@ class Upgrade(object):
             self.y = (platform3.rect.y - self.height)
     def choose_random_gun(self, player):
             random_gun_index = math.random.randint(0, 10)
-            gun = gun_list[random_gun_index]
+            gun = gun_list [random_gun_index]
             player.gun = gun
 
 #Creates all of the objects
