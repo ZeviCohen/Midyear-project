@@ -6,6 +6,7 @@ pygame.init()
 gun_list = []
 bullet_list = []
 upgrade_list = []
+gunbox_list = []
 scrn = pygame.display.set_mode((600, 600))
 player1image = pygame.image.load("Images/Meowth-Pokemon-PNG-Transparent-Image.png").convert()
 def update_window():
@@ -97,6 +98,7 @@ class Player(object):
         self.jumpcount = 0
         self.touching_platform = False
         self.ishit = False
+        self.gun = None
 
     def move(self):
         if self.isJump == False:
@@ -259,31 +261,10 @@ class Upgrade(object):
         elif self.x >= platform3.rect.x and self.x <= platform3.rect.x + platform3.rect.width and self.y + self.height <= platform3.rect.y and self.y + self.height >= platform3.rect.y - 30:
             self.yvel = 0
             self.y = (platform3.rect.y - self.height)
-
-class Gunbox(object):
-    def __init__(self):
-        self.x = math.random.randint(20, 580)
-        self.y = 50
-        self.height = 15
-        self.width = 15
-        self.yvel = 10
-    def move(self):
-        self.y += self.yvel
-    def check_for_platform(self, platform1, platform2, platform3):
-        #Detecs if player is on platform or not(Platform Collision)
-        if self.x >= platform1.rect.x and self.x <= platform1.rect.x + platform1.rect.width and self.y + self.height <= platform1.rect.y and self.y + self.height>= platform1.rect.y - 30:
-            self.yvel = 0
-            self.y = (platform1.rect.y - self.height)
-        elif self.x >= platform2.rect.x and self.x <= platform2.rect.x + platform2.rect.width and self.y + self.height<= platform2.rect.y and self.y + self.height >= platform2.rect.y - 30:
-            self.yvel = 0
-            self.y = (platform2.rect.y - self.height)
-        elif self.x >= platform3.rect.x and self.x <= platform3.rect.x + platform3.rect.width and self.y + self.height <= platform3.rect.y and self.y + self.height >= platform3.rect.y - 30:
-            self.yvel = 0
-            self.y = (platform3.rect.y - self.height)
     def choose_random_gun(self, player):
-        random_gun_index = math.random.randint(0, 10)
-        gun1 = gun_list[random_gun_index]
-        gun1.owner = player
+            random_gun_index = math.random.randint(0, 10)
+            gun = gun_list[random_gun_index]
+            player.gun = gun
 
 #Creates all of the objects
 #Order goes as follows: x, y, width, height, vel
@@ -295,7 +276,9 @@ player1 = Player(300,100,15,15,10,0,1,8, 1, 10)
 player2 = Player(300,100,15,15,10,0,1,8, 2, 10)
 #Order goes as follows: owner, ammo, bulletvel, cooldown, bullet_kb
 gun1 = Gun(player1, 10, 400, 50)
+player1.gun = gun1
 gun2 = Gun(player2, 10, 400, 50)
+player1.gun = gun2
 
 #Sets up the window
 win = pygame.display.set_mode((600, 600))
@@ -304,6 +287,8 @@ run = True
 
 #Code for upgrade timer
 upgrade_now = pygame.time.get_ticks()
+#Code for gunbox timer
+gunbox_now = pygame.time.get_ticks()
 
 #Main
 pygame.display.flip()
@@ -336,9 +321,9 @@ while run:
     player2.check_for_platform(platform1, platform2, platform3)
     #Shoots
     if keys[pygame.K_SPACE]:
-        gun1.shoot()
+        player1.gun.shoot()
     if keys[pygame.K_z]:
-        gun2.shoot()
+        player2.gun.shoot()
     #Bullet code
     for bullet in bullet_list:
         if bullet.x > 600 or bullet.x < 0 or bullet.hit_enemy == True:
@@ -364,6 +349,23 @@ while run:
         upgrade.move()
         pygame.draw.circle(upgrade.x, upgrade.y, upgrade.width, upgrade.height)
         if :
-            upgrade_list.remove(upgrade)
+            player1.upgraded()
+        if :
+            player2.upgraded()
+        upgrade_list.remove(upgrade)
+    #Gunbox code
+    gunbox_last = pygame.time.get_ticks()
+    if gunbox_now-gunbox_last >= 300:
+        gunbox = Upgrade()
+        gunbox_list.append(gunbox)
+    for gunbox in gun_list:
+        gunbox.check_for_platform(platform1, platform2, platform3)
+        gunbox.move()
+        pygame.draw.rect(gunbox.x, gunbox.y, gunbox.width, gunbox.height)
+        if :
+            gunbox.choose_random_gun(player1)
+        else:
+            gunbox.choose_random_gun(player2)
+        gunbox_list.remove(gunbox)
     pygame.display.update()
 pygame.quit()
