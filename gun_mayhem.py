@@ -239,18 +239,13 @@ class Platform(object):
         pygame.display.update()
 
 class Upgrade(object):
-    def __init__(self, powerId = 0):
+    def __init__(self):
         self.x = math.random.randint(20, 580)
         self.y = 50
         self.height = 15
         self.width = 15
         self.yvel = 10
-        #If powerId is 0, the upgrade is a powerup. Else, it is a gun.
-        self.powerId = powerId
-        if self.powerId == 0:
-            self.choose_powerup()
-        else:
-            self.decide_gun()
+        self.powerId = math.random.randint(1, 10)
     def move(self):
         self.y += self.yvel
     def check_for_platform(self, platform1, platform2, platform3):
@@ -264,10 +259,32 @@ class Upgrade(object):
         elif self.x >= platform3.rect.x and self.x <= platform3.rect.x + platform3.rect.width and self.y + self.height <= platform3.rect.y and self.y + self.height >= platform3.rect.y - 30:
             self.yvel = 0
             self.y = (platform3.rect.y - self.height)
-    def choose_powerup(self):
-        pass     
-    def decide_gun(self):
-        pass   
+
+class Gunbox(object):
+    def __init__(self):
+        self.x = math.random.randint(20, 580)
+        self.y = 50
+        self.height = 15
+        self.width = 15
+        self.yvel = 10
+    def move(self):
+        self.y += self.yvel
+    def check_for_platform(self, platform1, platform2, platform3):
+        #Detecs if player is on platform or not(Platform Collision)
+        if self.x >= platform1.rect.x and self.x <= platform1.rect.x + platform1.rect.width and self.y + self.height <= platform1.rect.y and self.y + self.height>= platform1.rect.y - 30:
+            self.yvel = 0
+            self.y = (platform1.rect.y - self.height)
+        elif self.x >= platform2.rect.x and self.x <= platform2.rect.x + platform2.rect.width and self.y + self.height<= platform2.rect.y and self.y + self.height >= platform2.rect.y - 30:
+            self.yvel = 0
+            self.y = (platform2.rect.y - self.height)
+        elif self.x >= platform3.rect.x and self.x <= platform3.rect.x + platform3.rect.width and self.y + self.height <= platform3.rect.y and self.y + self.height >= platform3.rect.y - 30:
+            self.yvel = 0
+            self.y = (platform3.rect.y - self.height)
+    def choose_random_gun(self, player):
+        random_gun_index = math.random.randint(0, 10)
+        gun1 = gun_list[random_gun_index]
+        gun1.owner = player
+
 #Creates all of the objects
 #Order goes as follows: x, y, width, height, vel
 platform1 = Platform(0,550,70,10, 5)
