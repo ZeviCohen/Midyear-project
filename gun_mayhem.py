@@ -3,7 +3,10 @@ import pygame, math
 #Color Palette
 color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0)}
 pygame.init()
+gun_list = []
 bullet_list = []
+upgrade_list = []
+gunbox_list = []
 scrn = pygame.display.set_mode((600, 600))
 player1image = pygame.image.load("Images/Meowth-Pokemon-PNG-Transparent-Image.png").convert()
 def update_window():
@@ -87,6 +90,7 @@ class Player(object):
         self.jumpcount = 0
         self.touching_platform = False
         self.ishit = False
+        self.gun = None
 
     def move(self):
         if self.isJump == False:
@@ -124,7 +128,7 @@ class Player(object):
                 self.square.x += 10
                 self.lastrecorded = 'RIGHT'
             if keys[pygame.K_s]:
-                if (self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + platform1.rect.width and self.square.y <= platform1.rect.y and self.square.y >= platform1.rect.y - 20) or (self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + platform2.rect.width and self.square.y <= platform2.rect.y and self.square.y >= platform2.rect.y - 20) or (self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + platform3.rect.width and self.square.y <= platform3.rect.y and self.square.y >= platform3.rect.y - 20):
+                if self.touching_platform==True:
                     self.square.y += 5
             #Jumps
             if self.isJump == False:
@@ -161,6 +165,7 @@ class Player(object):
         self.square.x = 300 - (self.square.width/2)
         self.lives -= 1
         self.isJump = False
+        self.jumpcount = 2
         self.ishit = False
 
     def check_for_platform(self, platform1, platform2, platform3):
@@ -186,6 +191,7 @@ class Player(object):
         else:
             self.xvel = 0
             self.yvel = 15
+<<<<<<< HEAD
     def shot(self, bullet):
         if self.ishit:
             if bullet.ykb >= -6:
@@ -196,6 +202,30 @@ class Player(object):
                 self.square.y-= F
                 bullet.ykb -= 1
             self.square.x += (bullet.xkb * bullet.direction)
+=======
+    def upgraded(self, upgrade):
+        if self.upgrade.power == 1:
+            pass
+        if self.upgrade.power == 2:
+            pass
+        if self.upgrade.power == 3:
+            pass
+        if self.upgrade.power == 4:
+            pass
+        if self.upgrade.power == 5:
+            pass
+        if self.upgrade.power == 6:
+            pass
+        if self.upgrade.power == 7:
+            pass
+        if self.upgrade.power == 8:
+            pass
+        if self.upgrade.power == 9:
+            pass
+        if self.upgrade.power == 10:
+            pass
+
+>>>>>>> 690f2bbb6bb593bf88346d282687a0196be2669b
 
 class Platform(object):
     def __init__(self,x,y,width,height,vel):
@@ -209,6 +239,31 @@ class Platform(object):
             self.vel *= -1
         pygame.display.update()
 
+class Upgrade(object):
+    def __init__(self):
+        self.x = math.random.randint(20, 580)
+        self.y = 50
+        self.height = 15
+        self.width = 15
+        self.yvel = 10
+        self.powerId = math.random.randint(1, 10)
+    def move(self):
+        self.y += self.yvel
+    def check_for_platform(self, platform1, platform2, platform3):
+        #Detecs if player is on platform or not(Platform Collision)
+        if self.x >= platform1.rect.x and self.x <= platform1.rect.x + platform1.rect.width and self.y + self.height <= platform1.rect.y and self.y + self.height>= platform1.rect.y - 30:
+            self.yvel = 0
+            self.y = (platform1.rect.y - self.height)
+        elif self.x >= platform2.rect.x and self.x <= platform2.rect.x + platform2.rect.width and self.y + self.height<= platform2.rect.y and self.y + self.height >= platform2.rect.y - 30:
+            self.yvel = 0
+            self.y = (platform2.rect.y - self.height)
+        elif self.x >= platform3.rect.x and self.x <= platform3.rect.x + platform3.rect.width and self.y + self.height <= platform3.rect.y and self.y + self.height >= platform3.rect.y - 30:
+            self.yvel = 0
+            self.y = (platform3.rect.y - self.height)
+    def choose_random_gun(self, player):
+            random_gun_index = math.random.randint(0, 10)
+            gun = gun_list[random_gun_index]
+            player.gun = gun
 
 #Creates all of the objects
 #Order goes as follows: x, y, width, height, vel
@@ -219,8 +274,15 @@ platform3 = Platform(150,400,300,10,0)
 player1 = Player(300,100,15,15,10,0,1,8, 1, 10)
 player2 = Player(300,100,15,15,10,0,1,8, 2, 10)
 #Order goes as follows: owner, ammo, bulletvel, cooldown, bullet_kb
+<<<<<<< HEAD
 gun1 = Gun(player1, 10, 400, 5)
 gun2 = Gun(player2, 10, 400, 5)
+=======
+gun1 = Gun(player1, 10, 400, 50)
+player1.gun = gun1
+gun2 = Gun(player2, 10, 400, 50)
+player2.gun = gun2
+>>>>>>> 690f2bbb6bb593bf88346d282687a0196be2669b
 
 #Sets up the window
 win = pygame.display.set_mode((600, 600))
@@ -228,6 +290,15 @@ pygame.display.set_caption("This is pygame")
 pygame.display.flip()
 player1image = pygame.transform.scale(player1image, DEFAULT_IMAGE_SIZE)
 run = True
+<<<<<<< HEAD
+=======
+
+#Code for upgrade timer
+upgrade_now = pygame.time.get_ticks()
+#Code for gunbox timer
+gunbox_now = pygame.time.get_ticks()
+
+>>>>>>> 690f2bbb6bb593bf88346d282687a0196be2669b
 #Main
 pygame.display.flip()
 while run:
@@ -259,9 +330,10 @@ while run:
     player2.check_for_platform(platform1, platform2, platform3)
     #Shoots
     if keys[pygame.K_SPACE]:
-        gun1.shoot()
+        player1.gun.shoot()
     if keys[pygame.K_z]:
-        gun2.shoot()
+        player2.gun.shoot()
+    #Bullet code
     for bullet in bullet_list:
         if bullet.x > 600 or bullet.x < 0 or bullet.owner.ishit:
             bullet_list.remove(bullet)
@@ -273,5 +345,37 @@ while run:
                 pygame.draw.rect(win,color_dict['red'],(bullet.x, bullet.y,bullet.width,bullet.height))
                 bullet.check_collision(player1)
             bullet.move()
+    #Upgrade code
+    upgrade_last = pygame.time.get_ticks()
+    if upgrade_now - upgrade_last >= 500:
+        upgrade_now = upgrade_last
+        randchance = math.random.ranint(1,2)
+        if randchance == 1:
+            upgrade = Upgrade()
+            upgrade_list.append(upgrade)
+    for upgrade in upgrade_list:
+        upgrade.check_for_platform(platform1, platform2, platform3)
+        upgrade.move()
+        pygame.draw.circle(win, color_dict["blue"], (upgrade.x, upgrade.y, upgrade.width, upgrade.height))
+        if (upgrade.x<=player1.square.x+player1.square.width) and (upgrade.x + upgrade.width >= player1.square.x) and (upgrade.y <= player1.square.y+ player1.square.height) and (upgrade.y + upgrade.width >= player1.square.y):
+            player1.upgraded()
+        elif (upgrade.x<=player2.square.x+player2.square.width) and (upgrade.x + upgrade.width >= player2.square.x) and (upgrade.y <= player2.square.y+ player2.square.height) and (upgrade.y + upgrade.width >= player2.square.y):
+            player2.upgraded()
+        upgrade_list.remove(upgrade)
+    #Gunbox code
+    gunbox_last = pygame.time.get_ticks()
+    if gunbox_now-gunbox_last >= 300:
+        gunbox_now = gunbox_last
+        gunbox = Upgrade()
+        gunbox_list.append(gunbox)
+    for gunbox in gun_list:
+        gunbox.check_for_platform(platform1, platform2, platform3)
+        gunbox.move()
+        pygame.draw.rect(win, color_dict["blue"], (gunbox.x, gunbox.y, gunbox.width, gunbox.height))
+        if (gunbox.x<=player1.square.x+player1.square.width) and (gunbox.x + gunbox.width >= player1.square.x) and (gunbox.y <= player1.square.y+ player1.square.height) and (gunbox.y + gunbox.width >= player1.square.y):
+            gunbox.choose_random_gun(player1)
+        elif (gunbox.x<=player2.square.x+player2.square.width) and (gunbox.x + gunbox.width >= player2.square.x) and (gunbox.y <= player2.square.y+ player2.square.height) and (gunbox.y + gunbox.width >= player2.square.y):
+            gunbox.choose_random_gun(player2)
+        gunbox_list.remove(gunbox)
     pygame.display.update()
 pygame.quit()
