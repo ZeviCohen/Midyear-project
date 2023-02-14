@@ -49,11 +49,8 @@ class Bullet(object):
         self.owner = owner
         #Defines the direction of the bullet
         if self.owner.lastrecorded == 'LEFT':
-<<<<<<< HEAD
             self.x = self.owner.square.x - 20
-=======
             self.x = self.owner.square.x - self.bullet_spawn_distance
->>>>>>> 8005e7009160d32c73dda71337ce1ae323fac1ee
             self.direction = -1
         if self.owner.lastrecorded == 'RIGHT' or self.owner.lastrecorded == None:
             self.x = self.owner.square.x + 20
@@ -191,7 +188,6 @@ class Player(object):
         else:
             self.xvel = 0
             self.yvel = 15
-<<<<<<< HEAD
     def shot(self, bullet):
         if self.ishit:
             if bullet.ykb >= -6:
@@ -202,7 +198,6 @@ class Player(object):
                 self.square.y-= F
                 bullet.ykb -= 1
             self.square.x += (bullet.xkb * bullet.direction)
-=======
     def upgraded(self, upgrade):
         if self.upgrade.power == 1:
             pass
@@ -225,7 +220,6 @@ class Player(object):
         if self.upgrade.power == 10:
             pass
 
->>>>>>> 690f2bbb6bb593bf88346d282687a0196be2669b
 
 class Platform(object):
     def __init__(self,x,y,width,height,vel):
@@ -274,15 +268,12 @@ platform3 = Platform(150,400,300,10,0)
 player1 = Player(300,100,15,15,10,0,1,8, 1, 10)
 player2 = Player(300,100,15,15,10,0,1,8, 2, 10)
 #Order goes as follows: owner, ammo, bulletvel, cooldown, bullet_kb
-<<<<<<< HEAD
 gun1 = Gun(player1, 10, 400, 5)
 gun2 = Gun(player2, 10, 400, 5)
-=======
 gun1 = Gun(player1, 10, 400, 50)
 player1.gun = gun1
 gun2 = Gun(player2, 10, 400, 50)
 player2.gun = gun2
->>>>>>> 690f2bbb6bb593bf88346d282687a0196be2669b
 
 #Sets up the window
 win = pygame.display.set_mode((600, 600))
@@ -290,15 +281,12 @@ pygame.display.set_caption("This is pygame")
 pygame.display.flip()
 player1image = pygame.transform.scale(player1image, DEFAULT_IMAGE_SIZE)
 run = True
-<<<<<<< HEAD
-=======
 
 #Code for upgrade timer
 upgrade_now = pygame.time.get_ticks()
 #Code for gunbox timer
 gunbox_now = pygame.time.get_ticks()
 
->>>>>>> 690f2bbb6bb593bf88346d282687a0196be2669b
 #Main
 pygame.display.flip()
 while run:
