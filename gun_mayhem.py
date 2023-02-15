@@ -52,29 +52,39 @@ class Bullet(object):
     #Constructor
     def __init__(self, owner, bullet_xkb):
         self.owner = owner
+        #Generates a bullet with distance from the owner
+        self.bullet_spawn_distance = 30
         #Defines the direction of the bullet
         if self.owner.lastrecorded == 'LEFT':
-            self.x = self.owner.square.x - 20
             self.x = self.owner.square.x - self.bullet_spawn_distance
             self.direction = -1
         if self.owner.lastrecorded == 'RIGHT' or self.owner.lastrecorded == None:
-            self.x = self.owner.square.x + 20
+            self.x = self.owner.square.x + self.bullet_spawn_distance
             self.direction = 1
         self.y = owner.square.y
         self.velocity = 20
         self.width = 10
         self.height = 5
         self.xkb = bullet_xkb
-        self.ykb = 4
-        self.hit_once = False
+        self.ykb = 30
+        self.hit_enemy = False
     def move(self):
         self.velocity = self.direction * abs(self.velocity)
         self.x += self.velocity
     def check_collision(self, enemy):
-        if (self.x + self.width >= enemy.square.x) and (self.x <= enemy.square.x + enemy.square.width) and (self.y + self.height >= enemy.square.y) and (self.y <= enemy.square.y + enemy.square.height):
-            self.hit_once = True
+        if (self.x + self.width >= enemy.square.x) and (self.x <= enemy.square.x + enemy.square.width) and (self.y + self.height >= enemy.square.y) and (self.y <= enemy.square.y + enemy.square.height) and self.hit_enemy == False:
             enemy.ishit = True
-        enemy.shot(self)
+            self.hit_enemy = True
+            enemy.bullet = self
+    def shot(self, enemy):
+        if enemy.ishit:
+            if self.ykb > 0:
+                enemy.square.y -= self.ykb
+                self.ykb -= 1
+                enemy.square.x += (self.xkb * self.direction)
+            else:
+                enemy.ishit = False
+                enemy.yvel = 10
 #Our player class
 class Player(object):
     def __init__(self,x,y,width,height,yvel,xvel, mass, jvel, player_num, lives):
@@ -94,6 +104,7 @@ class Player(object):
         self.ishit = False
         self.gun = None
         self.maingun = None
+        self.bullet = None
 
     def move(self):
         if self.isJump == False:
@@ -271,7 +282,7 @@ class Upgrade(object):
             random_gun_index = math.random.randint(0, 10)
             gun = gun_list[random_gun_index]
             gun.owner = player
-            player.lastgun = player.gun
+            player.mainngun = player.gun
             player.gun = gun
 
 #Creates all of the objects
@@ -283,10 +294,12 @@ platform3 = Platform(150,450,300,10,0)
 player1 = Player(300,100,15,15,10,0,1,8, 1, 10)
 player2 = Player(300,100,15,15,10,0,1,8, 2, 10)
 #Order goes as follows: owner, ammo, bulletvel, cooldown, bullet_kb
-gun1 = Gun(player1, 10, 400, 50, 1)
-player1.gun = gun1
-gun2 = Gun(player2, 10, 400, 50, 1)
-player2.gun = gun2
+maingun1 = Gun(player1, 10, 400, 50, 1)
+player1.maingun = maingun1
+player1.gun = maingun1
+maingun2 = Gun(player2, 10, 400, 50, 1)
+player2.maingun = maingun2
+player2.gun = maingun2
 
 #Gun List:
 gun_1 = Gun(None, 50, 400, 10, 3)#Sub machine gun
@@ -353,9 +366,11 @@ while run:
                 bullet.check_collision(player2)
                 pygame.draw.rect(win,color_dict['green'],(bullet.x, bullet.y,bullet.width,bullet.height))
             else:
-                pygame.draw.rect(win,color_dict['red'],(bullet.x, bullet.y,bullet.width,bullet.height))
                 bullet.check_collision(player1)
+                pygame.draw.rect(win,color_dict['red'],(bullet.x, bullet.y,bullet.width,bullet.height))
             bullet.move()
+    player1.shot(player1.bullet)
+    player2.shot(player2.bullet)
     #Upgrade code
     upgrade_last = pygame.time.get_ticks()
     if upgrade_now - upgrade_last >= 500:
@@ -370,9 +385,10 @@ while run:
         pygame.draw.circle(win, color_dict["blue"], (upgrade.x, upgrade.y, upgrade.width, upgrade.height))
         if (upgrade.x<=player1.square.x+player1.square.width) and (upgrade.x + upgrade.width >= player1.square.x) and (upgrade.y <= player1.square.y+ player1.square.height) and (upgrade.y + upgrade.width >= player1.square.y):
             player1.upgraded()
+            upgrade_list.remove(upgrade)
         elif (upgrade.x<=player2.square.x+player2.square.width) and (upgrade.x + upgrade.width >= player2.square.x) and (upgrade.y <= player2.square.y+ player2.square.height) and (upgrade.y + upgrade.width >= player2.square.y):
             player2.upgraded()
-        upgrade_list.remove(upgrade)
+            upgrade_list.remove(upgrade)
     #Gunbox code
     gunbox_last = pygame.time.get_ticks()
     if gunbox_now-gunbox_last >= 300:
@@ -385,8 +401,9 @@ while run:
         pygame.draw.rect(win, color_dict["blue"], (gunbox.x, gunbox.y, gunbox.width, gunbox.height))
         if (gunbox.x<=player1.square.x+player1.square.width) and (gunbox.x + gunbox.width >= player1.square.x) and (gunbox.y <= player1.square.y+ player1.square.height) and (gunbox.y + gunbox.width >= player1.square.y):
             gunbox.choose_random_gun(player1)
+            gunbox_list.remove(gunbox)
         elif (gunbox.x<=player2.square.x+player2.square.width) and (gunbox.x + gunbox.width >= player2.square.x) and (gunbox.y <= player2.square.y+ player2.square.height) and (gunbox.y + gunbox.width >= player2.square.y):
             gunbox.choose_random_gun(player2)
-        gunbox_list.remove(gunbox)
+            gunbox_list.remove(gunbox)
     pygame.display.update()
 pygame.quit()
