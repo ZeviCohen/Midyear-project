@@ -1,5 +1,6 @@
 To do
-- Fix bugs
 - Import images
-- Create loot system
+- Create loot system(guns and upgrades)
 - Create choice of guns
+- Sound Effects
+- Music
