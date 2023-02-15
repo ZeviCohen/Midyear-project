@@ -21,14 +21,12 @@ def update_window():
     pygame.draw.rect(win,color_dict['red'],(player2.square))
 DEFAULT_IMAGE_SIZE = (15,15)
 class Gun ():
-    def __init__(self, owner, ammo, cooldown, bullet_kb, gunid):
+    def __init__(self, owner, ammo, cooldown, bullet_kb):
         self.cooldown = cooldown
         self.ammo = ammo
         self.last = pygame.time.get_ticks()
         self.owner = owner
         self.bullet_kb = bullet_kb
-        #GunID of 0 is main gun and GunID of 1 is special gun
-        self.gunid = gunid
     #Shoot method(Outputs a bullet)
     def shoot(self):
         now = pygame.time.get_ticks()
@@ -81,7 +79,7 @@ class Bullet(object):
             if self.ykb > 0:
                 enemy.square.y -= self.ykb
                 self.ykb -= 1
-                enemy.square.x += (self.xkb * self.direction)
+                enemy.square.x += 1/4 * (self.xkb * self.direction)
             else:
                 enemy.ishit = False
                 enemy.yvel = 10
@@ -214,7 +212,7 @@ class Player(object):
             self.yvel = 15
     def shot(self, bullet):
         if self.ishit:
-            if bullet.ykb >= -6:
+            if bullet.ykb >= -5:
                 if bullet.ykb >= 0:
                     F = (self.mass ** -1) *(bullet.ykb**2)
                 elif bullet.ykb < 0:
@@ -293,23 +291,23 @@ platform3 = Platform(150,450,300,10,0)
 #Order goes as follows: x,y,width,height,yvel,xvel, mass, jvel, player_num, lives
 player1 = Player(300,100,15,15,10,0,1,8, 1, 10)
 player2 = Player(300,100,15,15,10,0,1,8, 2, 10)
-#Order goes as follows: owner, ammo, cooldown, bullet_kb, gunID
-maingun1 = Gun(player1, 10, 400, 10, 0)
+#Order goes as follows: owner, ammo, cooldown, bullet_kb
+maingun1 = Gun(player1, 10, 10, 2)
 player1.maingun = maingun1
 player1.gun = maingun1
-maingun2 = Gun(player2, 10, 400, 10, 0)
+maingun2 = Gun(player2, 10, 10, 2)
 player2.maingun = maingun2
 player2.gun = maingun2
 
 #Gun List:
-gun_1 = Gun(None, 50, 400, 10, 3)#Sub machine gun
-gun_2 = Gun(None, 5, 400, 100, 10)#Sniper
-gun_3 = Gun(None, 5, 400, 100, 10)#Shotgun
-gun_4 = Gun(None, 30, 400, 35, 3)#Assault rifle
-gun_5 = Gun(None, 50, 400, 10, 3)#Light machine gun
+gun_1 = Gun(None, 50, 10, 3)#Sub machine gun
+gun_2 = Gun(None, 5, 100, 10)#Sniper
+gun_3 = Gun(None, 5, 100, 10)#Shotgun
+gun_4 = Gun(None, 30, 35, 3)#Assault rifle
+gun_5 = Gun(None, 50, 10, 3)#Light machine gun
 #Special
-gun_6 = Gun(None, 100, 400, 0, 3)#Minigun
-gun_7 = Gun(None, 3, 400, 150, 4)#Dematerializer
+gun_6 = Gun(None, 100, 0, 3)#Minigun
+gun_7 = Gun(None, 3, 150, 4)#Dematerializer
 #Gun_list stores all the special guns that arrive in lootboxes
 #Sets up the window
 win = pygame.display.set_mode((600, 600))
