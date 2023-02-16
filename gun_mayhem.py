@@ -129,6 +129,11 @@ class Player(object):
                             self.jvel = 6
                             self.isJump = True
                             self.touching_platform = False
+                        else:
+                            self.jvel = 5
+                            self.isJump = True
+                            self.touching_platform = False
+                            self.jumpcount = 2
             elif self.jumpcount == 1:
                 if keys[pygame.K_UP]:
                     self.jvel = 5
@@ -153,6 +158,10 @@ class Player(object):
                         if self.touching_platform == True:
                             self.jvel = 6
                             self.isJump = True
+                            self.touching_platform = False
+                        else:
+                            self.jvel = 5
+                            self.isjump = True
                             self.touching_platform = False
             elif self.jumpcount == 1:
                 if keys[pygame.K_w]:
@@ -211,6 +220,7 @@ class Player(object):
         else:
             self.xvel = 0
             self.yvel = 15
+            self.touching_platform = False
     def shot(self, bullet):
         if self.ishit:
             if bullet.ykb >= -5:
