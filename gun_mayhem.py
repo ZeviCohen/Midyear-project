@@ -21,12 +21,13 @@ def update_window():
     pygame.draw.rect(win,color_dict['red'],(player2.square))
 DEFAULT_IMAGE_SIZE = (15,15)
 class Gun ():
-    def __init__(self, owner, ammo, cooldown, bullet_kb):
+    def __init__(self, owner, ammo, cooldown, bullet_kb, gunid):
         self.cooldown = cooldown
         self.ammo = ammo
         self.last = pygame.time.get_ticks()
         self.owner = owner
         self.bullet_kb = bullet_kb
+        self.gunid = gunid
     #Shoot method(Outputs a bullet)
     def shoot(self):
         now = pygame.time.get_ticks()
@@ -128,6 +129,11 @@ class Player(object):
                             self.jvel = 6
                             self.isJump = True
                             self.touching_platform = False
+                        else:
+                            self.jvel = 5
+                            self.isJump = True
+                            self.touching_platform = False
+                            self.jumpcount = 2
             elif self.jumpcount == 1:
                 if keys[pygame.K_UP]:
                     self.jvel = 5
@@ -152,6 +158,10 @@ class Player(object):
                         if self.touching_platform == True:
                             self.jvel = 6
                             self.isJump = True
+                            self.touching_platform = False
+                        else:
+                            self.jvel = 5
+                            self.isjump = True
                             self.touching_platform = False
             elif self.jumpcount == 1:
                 if keys[pygame.K_w]:
@@ -210,6 +220,7 @@ class Player(object):
         else:
             self.xvel = 0
             self.yvel = 15
+            self.touching_platform = False
     def shot(self, bullet):
         if self.ishit:
             if bullet.ykb >= -5:
@@ -292,22 +303,22 @@ platform3 = Platform(150,450,300,10,0)
 player1 = Player(300,100,15,15,10,0,1,8, 1, 10)
 player2 = Player(300,100,15,15,10,0,1,8, 2, 10)
 #Order goes as follows: owner, ammo, cooldown, bullet_kb
-maingun1 = Gun(player1, 10, 10, 2)
+maingun1 = Gun(player1, 10, 10, 5, 0)
 player1.maingun = maingun1
 player1.gun = maingun1
-maingun2 = Gun(player2, 10, 10, 2)
+maingun2 = Gun(player2, 10, 10, 5, 0)
 player2.maingun = maingun2
 player2.gun = maingun2
 
 #Gun List:
-gun_1 = Gun(None, 50, 10, 3)#Sub machine gun
-gun_2 = Gun(None, 5, 100, 10)#Sniper
-gun_3 = Gun(None, 5, 100, 10)#Shotgun
-gun_4 = Gun(None, 30, 35, 3)#Assault rifle
-gun_5 = Gun(None, 50, 10, 3)#Light machine gun
+gun_1 = Gun(None, 50, 10, 3, 1)#Sub machine gun
+gun_2 = Gun(None, 5, 100, 10, 1)#Sniper
+gun_3 = Gun(None, 5, 100, 10, 1)#Shotgun
+gun_4 = Gun(None, 30, 35, 3, 1)#Assault rifle
+gun_5 = Gun(None, 50, 10, 3, 1)#Light machine gun
 #Special
-gun_6 = Gun(None, 100, 0, 3)#Minigun
-gun_7 = Gun(None, 3, 150, 4)#Dematerializer
+gun_6 = Gun(None, 100, 0, 3, 1)#Minigun
+gun_7 = Gun(None, 3, 150, 4, 1)#Dematerializer
 #Gun_list stores all the special guns that arrive in lootboxes
 #Sets up the window
 win = pygame.display.set_mode((600, 600))
