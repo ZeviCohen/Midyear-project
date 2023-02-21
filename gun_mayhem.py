@@ -6,7 +6,9 @@ pygame.init()
 gun_list = []
 bullet_list = []
 upgrade_list = []
+upgrade_used_list = []
 gunbox_list = []
+gunbox_used_list = []
 scrn = pygame.display.set_mode((600, 600))
 player1image = pygame.image.load("Images/Meowth-Pokemon-PNG-Transparent-Image.png").convert()
 def update_window():
@@ -22,7 +24,6 @@ def update_window():
     #Draws the players
     pygame.draw.rect(win,color_dict["green"],(player1.square))
     pygame.draw.rect(win,color_dict['red'],(player2.square))
-DEFAULT_IMAGE_SIZE = (15,15)
 class Gun ():
     def __init__(self, owner, ammo, cooldown, bullet_kb, gunid):
         self.cooldown = cooldown
@@ -92,7 +93,7 @@ class Player(object):
         self.jvel = jvel
         self.player_num = player_num
         self.lives = lives
-        self.jumpcount = 0
+        self.jumpcount = 2
         self.touching_platform = False
         self.ishit = False
         self.gun = None
@@ -190,21 +191,21 @@ class Player(object):
 
     def check_for_platform(self, platform1, platform2, platform3):
         #Detecs if player is on platform or not(Platform Collision)
-        if self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + platform1.rect.width and self.square.y + self.square.height <= platform1.rect.y and self.square.y + self.square.height >= platform1.rect.y - 30:
+        if self.square.x + self.square.width >= platform1.rect.x and self.square.x <= platform1.rect.x + platform1.rect.width and self.square.y + self.square.height <= platform1.rect.y and self.square.y + self.square.height >= platform1.rect.y - 30:
             self.xvel = platform1.vel
             self.jumpcount = 0
             self.yvel = 0
             if (self.isJump == True and self.jvel <= -6) or self.isJump == False:
                 self.square.y = (platform1.rect.y - self.square.height)
                 self.touching_platform = True
-        elif self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + platform2.rect.width and self.square.y + self.square.height <= platform2.rect.y and self.square.y + self.square.height >= platform2.rect.y - 30:
+        elif self.square.x + self.square.width >= platform2.rect.x and self.square.x <= platform2.rect.x + platform2.rect.width and self.square.y + self.square.height <= platform2.rect.y and self.square.y + self.square.height >= platform2.rect.y - 30:
             self.xvel = platform2.vel
             self.jumpcount = 0
             self.yvel = 0
             if (self.isJump == True and self.jvel <= -6) or self.isJump == False:
                 self.square.y = (platform2.rect.y - self.square.height)
                 self.touching_platform = True
-        elif self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + platform3.rect.width and self.square.y+self.square.height <= platform3.rect.y and self.square.y + self.square.height >= platform3.rect.y - 30:
+        elif self.square.x + self.square.width >= platform3.rect.x and self.square.x <= platform3.rect.x + platform3.rect.width and self.square.y+self.square.height <= platform3.rect.y and self.square.y + self.square.height >= platform3.rect.y - 30:
             self.xvel = platform3.vel
             self.jumpcount = 0
             self.yvel = 0
@@ -272,10 +273,32 @@ class Upgrade(object):
         self.height = 15
         self.yvel = 10
         self.powerId = random.randint(1, 10)
+        if self.powerId == 1:
+            self.image = pygame.image.load("Images/speed_power.png").convert()
+        if self.powerId == 2:
+            self.image = pygame.image.load("Images/speed_power.png").convert()
+        if self.powerId == 3:
+            self.image = pygame.image.load("Images/speed_power.png").convert()
+        if self.powerId == 4:
+            self.image = pygame.image.load("Images/speed_power.png").convert()
+        if self.powerId == 5:
+            self.image = pygame.image.load("Images/speed_power.png").convert()
+        if self.powerId == 6:
+            self.image = pygame.image.load("Images/speed_power.png").convert()
+        if self.powerId == 7:
+            self.image = pygame.image.load("Images/speed_power.png").convert()
+        if self.powerId == 8:
+            self.image = pygame.image.load("Images/speed_power.png").convert()
+        if self.powerId == 9:
+            self.image = pygame.image.load("Images/speed_power.png").convert()
+        if self.powerId == 10:
+            self.image = pygame.image.load("Images/speed_power.png").convert()
         self.radius = 10
         self.platform = platform
         #True means getting bigger while false means getting smaller
         self.radius_change_state = True
+        self.owner = None
+        self.last = None
     def move(self):
         self.y += self.yvel
     def check_for_platform(self, platform1, platform2, platform3):
@@ -361,7 +384,7 @@ while run:
     keys = pygame.key.get_pressed()
     update_window()
     #Makes the platforms move
-    scrn.blit(player1image, (player1.square.x, player1.square.y))
+    win.blit(player1image, (player1.square.x, player1.square.y))
     platform1.moves()
     platform2.moves()
     #Actions of both players
@@ -424,12 +447,22 @@ while run:
         upgrade.radius_change()
         upgrade.platform_move()
         pygame.draw.circle(win, color_dict["blue"], (upgrade.x, upgrade.y), upgrade.radius)
+        upgrade.image = pygame.transform.scale(upgrade.image, (upgrade.width, upgrade.height))
+        scrn.blit(upgrade.image, (upgrade.x, upgrade.y))
         if (upgrade.x<=player1.square.x+player1.square.width) and (upgrade.x + upgrade.width >= player1.square.x) and (upgrade.y <= player1.square.y+ player1.square.height) and (upgrade.y + upgrade.width >= player1.square.y):
-            player1.upgraded(upgrade)
+            upgrade.owner = player1
+            upgrade.last = pygame.time.get_ticks()
             upgrade_list.remove(upgrade)
+            upgrade_used_list.append(upgrade)
         elif (upgrade.x<=player2.square.x+player2.square.width) and (upgrade.x + upgrade.width >= player2.square.x) and (upgrade.y <= player2.square.y+ player2.square.height) and (upgrade.y + upgrade.width >= player2.square.y):
-            player2.upgraded(upgrade)
+            upgrade.owner = player2
+            upgrade.last = pygame.time.get_ticks()
             upgrade_list.remove(upgrade)
+            upgrade_used_list.append(upgrade)
+    for upgrade in upgrade_used_list:
+        upgrade.owner.upgraded(upgrade)
+        if upgrade_now - upgrade.last >= 3000:
+            upgrade_used_list.remove(upgrade)
     #Gunbox code
     gunbox_now = pygame.time.get_ticks()
     if gunbox_now - gunbox_last >= 300:
