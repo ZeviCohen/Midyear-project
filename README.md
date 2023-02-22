@@ -1,2 +1,2 @@
 Created by: Zevi, Nikhil, Goktug
-Name of project:
+Name of project: Gone Mayhem

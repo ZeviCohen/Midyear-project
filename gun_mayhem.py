@@ -10,7 +10,7 @@ upgrade_list = []
 upgrade_used_list = []
 gunbox_list = []
 gunbox_used_list = []
-scrn = pygame.display.set_mode((600, 600))
+win = pygame.display.set_mode((600, 600))
 player1image = pygame.image.load("Images/Meowth-Pokemon-PNG-Transparent-Image.png").convert()
 def update_window():
 
@@ -189,8 +189,8 @@ class Player(object):
         self.jumpcount = 2
         self.ishit = False
 
-    def check_for_platform(self, platform1, platform2, platform3):
-        #Detecs if player is on platform or not(Platform Collision)
+    def check_for_platform(self, platform1, platform2, platform3, platform4, platform5, platform6):
+        #Detects if player is on platform or not(Platform Collision)
         if self.square.x + self.square.width >= platform1.rect.x and self.square.x <= platform1.rect.x + platform1.rect.width and self.square.y + self.square.height <= platform1.rect.y and self.square.y + self.square.height >= platform1.rect.y - 30:
             self.xvel = platform1.vel
             self.jumpcount = 0
@@ -211,6 +211,27 @@ class Player(object):
             self.yvel = 0
             if (self.isJump == True and self.jvel <= -6) or self.isJump == False:
                 self.square.y = (platform3.rect.y - self.square.height)
+                self.touching_platform = True
+        elif self.square.x + self.square.width >= platform4.rect.x and self.square.x <= platform4.rect.x + platform4.rect.width and self.square.y+self.square.height <= platform4.rect.y and self.square.y + self.square.height >= platform4.rect.y - 30:
+            self.xvel = platform4.vel
+            self.jumpcount = 0
+            self.yvel = 0
+            if (self.isJump == True and self.jvel <= -6) or self.isJump == False:
+                self.square.y = (platform4.rect.y - self.square.height)
+                self.touching_platform = True
+        elif self.square.x + self.square.width >= platform5.rect.x and self.square.x <= platform5.rect.x + platform5.rect.width and self.square.y+self.square.height <= platform5.rect.y and self.square.y + self.square.height >= platform5.rect.y - 30:
+            self.xvel = platform5.vel
+            self.jumpcount = 0
+            self.yvel = 0
+            if (self.isJump == True and self.jvel <= -6) or self.isJump == False:
+                self.square.y = (platform5.rect.y - self.square.height)
+                self.touching_platform = True
+        elif self.square.x + self.square.width >= platform6.rect.x and self.square.x <= platform6.rect.x + platform6.rect.width and self.square.y+self.square.height <= platform6.rect.y and self.square.y + self.square.height >= platform6.rect.y - 30:
+            self.xvel = platform6.vel 
+            self.jumpcount = 0
+            self.yvel = 0
+            if (self.isJump == True and self.jvel <= -6) or self.isJump == False:
+                self.square.y = (platform6.rect.y - self.square.height)
                 self.touching_platform = True
         else:
             self.xvel = 0
@@ -265,6 +286,7 @@ class Upgrade(object):
         if gunbox_check:
             self.y = 500
             self.x = random.randint(20, 580)
+            self.image = pygame.image.load("Images/Gunbox.png").convert()
         else:
             self.y = platform.rect.y - platform.rect.height
             num1 = platform.rect.x
@@ -336,10 +358,10 @@ class Upgrade(object):
 #Order goes as follows: x, y, width, height, vel
 platform1 = Platform(0,550,70,10, 5)
 platform2 = Platform(530,550,70,10, -5)
-platform3 = Platform(150,510,300,10,0)
-platform4 = Platform(20,470,100,10,0)
-platform5 = Platform(500,470,100,10,0)
-platform6 = Platform(150,430,300,10,0)
+platform3 = Platform(150,500,300,10,0)
+platform4 = Platform(20,450,100,10,0)
+platform5 = Platform(500,450,100,10,0)
+platform6 = Platform(150,400,300,10,0)
 #Order goes as follows: x,y,width,height,yvel,xvel, mass, jvel, player_num, lives
 player1 = Player(300,100,18,35,10,0,1,8, 1, 10)
 player2 = Player(300,100,18,35,10,0,1,8, 2, 10)
@@ -413,10 +435,8 @@ while run:
     if player2.square.y > 600:
         player2.respawn()
     #Check for platform collision
-    player1.check_for_platform(platform1, platform2, platform3)
-    player2.check_for_platform(platform1, platform2, platform3)
-    player1.check_for_platform(platform4, platform5, platform6)
-    player2.check_for_platform(platform4, platform5, platform6)
+    player1.check_for_platform(platform1, platform2, platform3, platform4, platform5, platform6)
+    player2.check_for_platform(platform1, platform2, platform3, platform4, platform5, platform6)
     #Shoots
     if keys[pygame.K_SPACE]:
         player1.gun.shoot()
@@ -437,9 +457,8 @@ while run:
     player1.shot(player1.bullet)
     player2.shot(player2.bullet)
     #Upgrade code
-    upgrade_now = pygame.time.get_ticks()
-    if upgrade_now - upgrade_last >= 10000:
-        upgrade_last = upgrade_now
+    if now - upgrade_last >= 10000:
+        upgrade_last = now
         if len(upgrade_list) < 2:
             randchance = random.randint(1,2)
             if randchance == 1:
@@ -462,7 +481,7 @@ while run:
         upgrade.platform_move()
         pygame.draw.circle(win, color_dict["blue"], (upgrade.x, upgrade.y), upgrade.radius)
         upgrade.image = pygame.transform.scale(upgrade.image, (upgrade.width, upgrade.height))
-        scrn.blit(upgrade.image, (upgrade.x, upgrade.y))
+        win.blit(upgrade.image, (upgrade.x, upgrade.y))
         if (upgrade.x<=player1.square.x+player1.square.width) and (upgrade.x + upgrade.width >= player1.square.x) and (upgrade.y <= player1.square.y+ player1.square.height) and (upgrade.y + upgrade.width >= player1.square.y):
             upgrade.owner = player1
             upgrade.last = pygame.time.get_ticks()
@@ -475,12 +494,11 @@ while run:
             upgrade_used_list.append(upgrade)
     for upgrade in upgrade_used_list:
         upgrade.owner.upgraded(upgrade)
-        if upgrade_now - upgrade.last >= 3000:
+        if now - upgrade.last >= 3000:
             upgrade_used_list.remove(upgrade)
     #Gunbox code
-    gunbox_now = pygame.time.get_ticks()
-    if gunbox_now - gunbox_last >= 300:
-        gunbox_last = gunbox_now
+    if now - gunbox_last >= 300:
+        gunbox_last = now
         gunbox = Upgrade(None, True)
         gunbox_list.append(gunbox)
     for gunbox in gun_list:
@@ -488,6 +506,8 @@ while run:
         gunbox.check_for_platform(platform4, platform5, platform6)
         gunbox.move()
         pygame.draw.rect(win, color_dict["blue"], (gunbox.x, gunbox.y, gunbox.width, gunbox.height))
+        gunbox.image = pygame.transform.scale(gunbox.image, (gunbox.width, gunbox.height))
+        win.blit(gunbox.image, (gunbox.x, gunbox.y))
         if (gunbox.x<=player1.square.x+player1.square.width) and (gunbox.x + gunbox.width >= player1.square.x) and (gunbox.y <= player1.square.y+ player1.square.height) and (gunbox.y + gunbox.width >= player1.square.y):
             gunbox.choose_random_gun(player1)
             gunbox_list.remove(gunbox)
