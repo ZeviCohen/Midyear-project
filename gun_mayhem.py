@@ -143,7 +143,7 @@ class Player(object):
                 self.square.x += 10
                 self.lastrecorded = 'RIGHT'
             if keys[pygame.K_s]:
-                if self.touching_platform==True:
+                if (self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + platform1.rect.width and self.square.y <= platform1.rect.y and self.square.y >= platform1.rect.y - 20) or (self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + platform2.rect.width and self.square.y <= platform2.rect.y and self.square.y >= platform2.rect.y - 20) or (self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + platform3.rect.width and self.square.y <= platform3.rect.y and self.square.y >= platform3.rect.y - 20):
                     self.square.y += 5
                     self.jumpcount = 2
             #Jumps
@@ -186,7 +186,6 @@ class Player(object):
         self.square.x = 300 - (self.square.width/2)
         self.lives -= 1
         self.isJump = False
-        self.jumpcount = 2
         self.ishit = False
 
     def check_for_platform(self, platform1, platform2, platform3, platform4, platform5, platform6):
@@ -420,7 +419,8 @@ while run:
         win.fill(color_dict["black"])
     update_window()
     #Makes the platforms move
-    win.blit(player1image, (player1.square.x, player1.square.y))
+    scrn.blit(player1image, (player1.square.x, player1.square.y))
+    scrn.blit(player1image, (player1.square.x, player1.square.y))
     platform1.moves()
     platform2.moves()
     #Actions of both players
@@ -439,10 +439,9 @@ while run:
     player2.check_for_platform(platform1, platform2, platform3, platform4, platform5, platform6)
     #Shoots
     if keys[pygame.K_SPACE]:
-        player1.gun.shoot()
+        gun1.shoot()
     if keys[pygame.K_z]:
-        player2.gun.shoot()
-    #Bullet code
+        gun2.shoot()
     for bullet in bullet_list:
         if bullet.x > 600 or bullet.x < 0 or bullet.hit_enemy == True:
             bullet_list.remove(bullet)
