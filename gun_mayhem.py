@@ -3,12 +3,25 @@ import pygame, math
 #Color Palette
 color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0)}
 pygame.init()
+#Gun List:
+    #Sub machine gun
+    #Sniper
+    #Shotgun
+    #Assault rifle
+    #Light machine gun
+    #Special
+        #Minigun
+        #Dematerializer
+    #Handguns
+    #RPG
+#Gun_list's keys are players and their values are guns[default_gun, current_gun]
+gun_list = []
 bullet_list = []
 scrn = pygame.display.set_mode((600, 600))
 player1image = pygame.image.load("Images/Meowth-Pokemon-PNG-Transparent-Image.png").convert()
 def update_window():
     #Makes the background and all of the objects
-    win.fill((0,0,0))
+    win.fill((color_dict['blue']))
     #Draws the platforms
     pygame.draw.rect(win,color_dict["red"],platform1.rect)
     pygame.draw.rect(win,color_dict["red"],platform2.rect)
@@ -99,18 +112,20 @@ class Player(object):
             if keys[pygame.K_DOWN]:
                 if self.touching_platform == True:
                     self.square.y += 5
+                    self.jumpcount = 2
             #Jumps
             if self.isJump == False:
                 if keys[pygame.K_UP]:
                     if self.jumpcount == 0:
                         if self.touching_platform == True:
-                            self.jvel = 8
+                            self.jvel = 6
                             self.isJump = True
                             self.touching_platform = False
-            elif self.jumpcount == 1.125:
+            elif self.jumpcount == 1:
                 if keys[pygame.K_UP]:
-                    self.jvel = 6
+                    self.jvel = 5
                     self.jumpcount = 2
+                    self.isJump = True
         #Checks for key presses(Player 2)
         elif self.player_num == 2:
             if keys[pygame.K_a]:
@@ -122,18 +137,20 @@ class Player(object):
             if keys[pygame.K_s]:
                 if (self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + platform1.rect.width and self.square.y <= platform1.rect.y and self.square.y >= platform1.rect.y - 20) or (self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + platform2.rect.width and self.square.y <= platform2.rect.y and self.square.y >= platform2.rect.y - 20) or (self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + platform3.rect.width and self.square.y <= platform3.rect.y and self.square.y >= platform3.rect.y - 20):
                     self.square.y += 5
+                    self.jumpcount = 2
             #Jumps
             if self.isJump == False:
                 if keys[pygame.K_w]:
                     if self.jumpcount == 0:
                         if self.touching_platform == True:
-                            self.jvel = 8
+                            self.jvel = 6
                             self.isJump = True
                             self.touching_platform = False
-            elif self.jumpcount == 1.125:
+            elif self.jumpcount == 1:
                 if keys[pygame.K_w]:
-                    self.jvel = 6
+                    self.jvel = 5
                     self.jumpcount = 2
+                    self.isJump = True
 
     def jumpy(self):
         #This kind of works
@@ -141,9 +158,9 @@ class Player(object):
             if self.touching_platform == False:
                 if self.jvel >= 0:
                     F =(1 / 2)* self.mass *(self.jvel**2)
-                    self.jumpcount += 0.125
+                    if self.jvel == 0:
+                        self.jumpcount += 1
                 elif self.jvel < 0:
-                    self.isJump = False
                     F = (1/2) * self.mass * -1 * (self.jvel**2)
                 self.square.y-= F
                 self.jvel-=1
@@ -161,37 +178,52 @@ class Player(object):
 
     def check_for_platform(self, platform1, platform2, platform3):
         #Detecs if player is on platform or not(Platform Collision)
-        if self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + platform1.rect.width and self.square.y <= platform1.rect.y and self.square.y >= platform1.rect.y - 37:
+        if self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + platform1.rect.width and self.square.y <= platform1.rect.y and self.square.y >= platform1.rect.y - 30:
             self.xvel = platform1.vel
             self.jumpcount = 0
             self.yvel = 0
-            self.square.y = (platform1.rect.y - self.square.height)
-            self.touching_platform = True
-        elif self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + platform2.rect.width and self.square.y <= platform2.rect.y and self.square.y >= platform2.rect.y - 37:
+            if (self.isJump == True and self.jvel <= -6) or self.isJump == False:
+                self.square.y = (platform1.rect.y - self.square.height)
+                self.touching_platform = True
+        elif self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + platform2.rect.width and self.square.y <= platform2.rect.y and self.square.y >= platform2.rect.y - 30:
             self.xvel = platform2.vel
             self.jumpcount = 0
             self.yvel = 0
-            self.square.y = (platform2.rect.y - self.square.height)
-            self.touching_platform = True
-        elif self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + platform3.rect.width and self.square.y+self.square.height <= platform3.rect.y and self.square.y + self.square.height >= platform3.rect.y - 37 and self.isJump == False:
+            if (self.isJump == True and self.jvel <= -6) or self.isJump == False:
+                self.square.y = (platform2.rect.y - self.square.height)
+                self.touching_platform = True
+        elif self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + platform3.rect.width and self.square.y+self.square.height <= platform3.rect.y and self.square.y + self.square.height >= platform3.rect.y - 30:
             self.xvel = platform3.vel
             self.jumpcount = 0
             self.yvel = 0
-            self.square.y = (platform3.rect.y - self.square.height)
-            self.touching_platform = True
+            if (self.isJump == True and self.jvel <= -6) or self.isJump == False:
+                self.square.y = (platform3.rect.y - self.square.height)
+                self.touching_platform = True
         else:
             self.xvel = 0
             self.yvel = 15
-    def shot(self, bullet):
-        if self.ishit:
-            if bullet.ykb >= -6:
-                if bullet.ykb >= 0:
-                    F = (self.mass ** -1) *(bullet.ykb**2)
-                elif bullet.ykb < 0:
-                    F = (self.mass**-1) * -1 * (bullet.ykb**2)
-                self.square.y-= F
-                bullet.ykb -= 1
-            self.square.x += (bullet.xkb * bullet.direction)
+    def upgraded(self, upgrade):
+        if self.upgrade.power == 1:
+            pass
+        if self.upgrade.power == 2:
+            pass
+        if self.upgrade.power == 3:
+            pass
+        if self.upgrade.power == 4:
+            pass
+        if self.upgrade.power == 5:
+            pass
+        if self.upgrade.power == 6:
+            pass
+        if self.upgrade.power == 7:
+            pass
+        if self.upgrade.power == 8:
+            pass
+        if self.upgrade.power == 9:
+            pass
+        if self.upgrade.power == 10:
+            pass
+
 
 class Platform(object):
     def __init__(self,x,y,width,height,vel):
@@ -205,18 +237,45 @@ class Platform(object):
             self.vel *= -1
         pygame.display.update()
 
+class Upgrade(object):
+    def __init__(self):
+        self.x = math.random.randint(20, 580)
+        self.y = 50
+        self.height = 15
+        self.width = 15
+        self.yvel = 10
+        self.powerId = math.random.randint(1, 10)
+    def move(self):
+        self.y += self.yvel
+    def check_for_platform(self, platform1, platform2, platform3):
+        #Detecs if player is on platform or not(Platform Collision)
+        if self.x >= platform1.rect.x and self.x <= platform1.rect.x + platform1.rect.width and self.y + self.height <= platform1.rect.y and self.y + self.height>= platform1.rect.y - 30:
+            self.yvel = 0
+            self.y = (platform1.rect.y - self.height)
+        elif self.x >= platform2.rect.x and self.x <= platform2.rect.x + platform2.rect.width and self.y + self.height<= platform2.rect.y and self.y + self.height >= platform2.rect.y - 30:
+            self.yvel = 0
+            self.y = (platform2.rect.y - self.height)
+        elif self.x >= platform3.rect.x and self.x <= platform3.rect.x + platform3.rect.width and self.y + self.height <= platform3.rect.y and self.y + self.height >= platform3.rect.y - 30:
+            self.yvel = 0
+            self.y = (platform3.rect.y - self.height)
+    def choose_random_gun(self, player):
+            random_gun_index = math.random.randint(0, 10)
+            gun = gun_list [random_gun_index]
+            player.gun = gun
 
 #Creates all of the objects
 #Order goes as follows: x, y, width, height, vel
 platform1 = Platform(0,550,70,10, 5)
 platform2 = Platform(530,550,70,10, -5)
-platform3 = Platform(150,400,300,10,0)
+platform3 = Platform(150,450,300,10,0)
 #Order goes as follows: x,y,width,height,yvel,xvel, mass, jvel, player_num, lives
 player1 = Player(300,100,15,15,10,0,1,8, 1, 10)
 player2 = Player(300,100,15,15,10,0,1,8, 2, 10)
 #Order goes as follows: owner, ammo, bulletvel, cooldown, bullet_kb
-gun1 = Gun(player1, 10, 400, 5)
-gun2 = Gun(player2, 10, 400, 5)
+gun1 = Gun(player1, 10, 400, 50)
+player1.gun = gun1
+gun2 = Gun(player2, 10, 400, 50)
+player2.gun = gun2
 
 #Sets up the window
 win = pygame.display.set_mode((600, 600))
@@ -235,7 +294,7 @@ while run:
     keys = pygame.key.get_pressed()
     update_window()
     #Makes the platforms move
-    scrn.blit(player1image, (player1.square.x, player1.square.y))
+    scrn.blit(player1image, (500, 500))
     platform1.moves()
     platform2.moves()
     platform3.moves()
@@ -259,7 +318,7 @@ while run:
     if keys[pygame.K_z]:
         gun2.shoot()
     for bullet in bullet_list:
-        if bullet.x > 600 or bullet.x < 0 or bullet.owner.ishit:
+        if bullet.x > 600 or bullet.x < 0 or bullet.hit_enemy == True:
             bullet_list.remove(bullet)
         else:
             if bullet.owner == player1:
