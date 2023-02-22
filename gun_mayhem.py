@@ -419,8 +419,8 @@ while run:
         win.fill(color_dict["black"])
     update_window()
     #Makes the platforms move
-    scrn.blit(player1image, (player1.square.x, player1.square.y))
-    scrn.blit(player1image, (player1.square.x, player1.square.y))
+    win.blit(player1image, (player1.square.x, player1.square.y))
+    win.blit(player1image, (player1.square.x, player1.square.y))
     platform1.moves()
     platform2.moves()
     #Actions of both players
