@@ -334,7 +334,7 @@ class Upgrade(object):
             self.yvel = 0
             self.y = (platform3.rect.y - self.height)
     def choose_random_gun(self, player):
-            random_gun_index = math.random.randint(0, 10)
+            random_gun_index = math.random.randint(0, 6)
             gun = gun_list[random_gun_index]
             gun.owner = player
             player.mainngun = player.gun
@@ -382,6 +382,7 @@ gun_5 = Gun(None, 50, 200, 3, 1)#Light machine gun
 gun_6 = Gun(None, 100, 100, 3, 1)#Minigun
 gun_7 = Gun(None, 3, 750, 4, 1)#Dematerializer
 #Gun_list stores all the special guns that arrive in lootboxes
+gun_list = [gun_1, gun_2, gun_3, gun_4, gun_5, gun_6, gun_7]
 #Sets up the window
 win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
@@ -439,9 +440,9 @@ while run:
     player2.check_for_platform(platform1, platform2, platform3, platform4, platform5, platform6)
     #Shoots
     if keys[pygame.K_SPACE]:
-        gun1.shoot()
+        maingun1.shoot()
     if keys[pygame.K_z]:
-        gun2.shoot()
+        maingun2.shoot()
     for bullet in bullet_list:
         if bullet.x > 600 or bullet.x < 0 or bullet.hit_enemy == True:
             bullet_list.remove(bullet)
@@ -507,9 +508,11 @@ while run:
         pygame.draw.rect(win, color_dict["blue"], (gunbox.x, gunbox.y, gunbox.width, gunbox.height))
         gunbox.image = pygame.transform.scale(gunbox.image, (gunbox.width, gunbox.height))
         win.blit(gunbox.image, (gunbox.x, gunbox.y))
+        #Player 1 chooses
         if (gunbox.x<=player1.square.x+player1.square.width) and (gunbox.x + gunbox.width >= player1.square.x) and (gunbox.y <= player1.square.y+ player1.square.height) and (gunbox.y + gunbox.width >= player1.square.y):
             gunbox.choose_random_gun(player1)
             gunbox_list.remove(gunbox)
+        #Player 2 chooses
         elif (gunbox.x<=player2.square.x+player2.square.width) and (gunbox.x + gunbox.width >= player2.square.x) and (gunbox.y <= player2.square.y+ player2.square.height) and (gunbox.y + gunbox.width >= player2.square.y):
             gunbox.choose_random_gun(player2)
             gunbox_list.remove(gunbox)
