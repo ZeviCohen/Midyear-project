@@ -69,7 +69,7 @@ class Bullet(object):
         self.width = 10
         self.height = 5
         self.xkb = bullet_xkb
-        self.ykb = 5
+        self.ykb = 5.3
         self.hit_enemy = False
     def move(self):
         self.velocity = self.direction * abs(self.velocity)
@@ -238,12 +238,15 @@ class Player(object):
             self.touching_platform = False
     def shot(self, bullet):
         if self.ishit:
+            self.isJump = False
             if bullet.ykb >= 0:
-                F = (self.mass ** -1) *(bullet.ykb**2)
+                self.yvel = 0
+                F = (self.mass ** -1) * (bullet.ykb**2)
                 self.square.y-= F
                 bullet.ykb -= 1
             else:
                 self.yvel = 10
+                self.ishit = False
             self.square.x += (bullet.xkb * bullet.direction)
     def upgraded(self, upgrade):
         if upgrade.powerId == 1:
@@ -355,12 +358,12 @@ class Upgrade(object):
 
 #Creates all of the objects
 #Order goes as follows: x, y, width, height, vel
-platform1 = Platform(0,550,70,10, 5)
-platform2 = Platform(530,550,70,10, -5)
-platform3 = Platform(150,500,300,10,0)
-platform4 = Platform(20,450,100,10,0)
-platform5 = Platform(500,450,100,10,0)
-platform6 = Platform(150,400,300,10,0)
+platform1 = Platform(0,450,70,10, 5)
+platform2 = Platform(530,450,70,10, -5)
+platform3 = Platform(150,400,300,10,0)
+platform4 = Platform(20,350,100,10,0)
+platform5 = Platform(500,350,100,10,0)
+platform6 = Platform(150,300,300,10,0)
 #Order goes as follows: x,y,width,height,yvel,xvel, mass, jvel, player_num, lives
 player1 = Player(300,100,18,35,10,0,1,8, 1, 10)
 player2 = Player(300,100,18,35,10,0,1,8, 2, 10)
@@ -439,9 +442,9 @@ while run:
     player2.check_for_platform(platform1, platform2, platform3, platform4, platform5, platform6)
     #Shoots
     if keys[pygame.K_SPACE]:
-        gun1.shoot()
+        player1.gun.shoot()
     if keys[pygame.K_z]:
-        gun2.shoot()
+        player2.gun.shoot()
     for bullet in bullet_list:
         if bullet.x > 600 or bullet.x < 0 or bullet.hit_enemy == True:
             bullet_list.remove(bullet)
