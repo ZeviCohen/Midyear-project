@@ -4,7 +4,6 @@ import pygame, math, random
 color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0), "sky_blue":(138, 206, 251)}
 day_or_night = "day"
 pygame.init()
-gun_list = []
 bullet_list = []
 upgrade_list = []
 upgrade_used_list = []
@@ -12,6 +11,7 @@ gunbox_list = []
 gunbox_used_list = []
 win = pygame.display.set_mode((600, 600))
 player1image = pygame.image.load("Images/Meowth-Pokemon-PNG-Transparent-Image.png").convert()
+platform3image = pygame.image.load("Images/download.png").convert()
 def update_window():
 
     # Draws the platforms
@@ -284,9 +284,10 @@ class Platform(object):
 
 class Upgrade(object):
     def __init__(self, platform, gunbox_check):
+        self.platform = platform
         self.width = 15
         if gunbox_check:
-            self.y = 500
+            self.y = 100
             self.x = random.randint(20, 580)
             self.image = pygame.image.load("Images/Gunbox.png").convert()
         else:
@@ -318,7 +319,6 @@ class Upgrade(object):
         if self.powerId == 10:
             self.image = pygame.image.load("Images/speed_power.png").convert()
         self.radius = 10
-        self.platform = platform
         #True means getting bigger while false means getting smaller
         self.radius_change_state = True
         self.owner = None
@@ -330,14 +330,17 @@ class Upgrade(object):
         if self.x >= platform1.rect.x and self.x <= platform1.rect.x + platform1.rect.width and self.y + self.height <= platform1.rect.y and self.y + self.height>= platform1.rect.y - 45:
             self.yvel = 0
             self.y = (platform1.rect.y - self.height)
+            self.platform = platform1
         elif self.x >= platform2.rect.x and self.x <= platform2.rect.x + platform2.rect.width and self.y + self.height<= platform2.rect.y and self.y + self.height >= platform2.rect.y - 45:
             self.yvel = 0
             self.y = (platform2.rect.y - self.height)
+            self.platform = platform2
         elif self.x >= platform3.rect.x and self.x <= platform3.rect.x + platform3.rect.width and self.y + self.height <= platform3.rect.y and self.y + self.height >= platform3.rect.y - 45:
             self.yvel = 0
             self.y = (platform3.rect.y - self.height)
+            self.platform = platform3
     def choose_random_gun(self, player):
-            random_gun_index = math.random.randint(0, 10)
+            random_gun_index = random.randint(0, 6)
             gun = gun_list[random_gun_index]
             gun.owner = player
             player.mainngun = player.gun
@@ -368,28 +371,31 @@ platform6 = Platform(150,300,300,10,0)
 player1 = Player(300,100,18,35,10,0,1,8, 1, 10)
 player2 = Player(300,100,18,35,10,0,1,8, 2, 10)
 #Order goes as follows: owner, ammo, cooldown, bullet_kb, gunid
-maingun1 = Gun(player1, 10, 400, 10, 0)
+maingun1 = Gun(player1, 10, 400, 18, 0)
 player1.maingun = maingun1
 player1.gun = maingun1
-maingun2 = Gun(player2, 10, 400, 10, 0)
+maingun2 = Gun(player2, 10, 400, 18, 0)
 player2.maingun = maingun2
 player2.gun = maingun2
 
 #Gun List:
-gun_1 = Gun(None, 50, 200, 3, 1)#Sub machine gun
-gun_2 = Gun(None, 5, 500, 10, 1)#Sniper
-gun_3 = Gun(None, 5, 500, 10, 1)#Shotgun
-gun_4 = Gun(None, 30, 250, 3, 1)#Assault rifle
-gun_5 = Gun(None, 50, 200, 3, 1)#Light machine gun
+#Order goes as follows: owner, ammo, cooldown, bullet_kb, gunid
+gun_1 = Gun(None, 50, 200, 25, 1)#Sub machine gun
+gun_2 = Gun(None, 5, 500, 35, 1)#Sniper
+gun_3 = Gun(None, 5, 500, 35, 1)#Shotgun
+gun_4 = Gun(None, 30, 250, 25, 1)#Assault rifle
+gun_5 = Gun(None, 50, 200, 25, 1)#Light machine gun
 #Special
-gun_6 = Gun(None, 100, 100, 3, 1)#Minigun
+gun_6 = Gun(None, 100, 100, 25, 1)#Minigun
 gun_7 = Gun(None, 3, 750, 4, 1)#Dematerializer
 #Gun_list stores all the special guns that arrive in lootboxes
+gun_list = [gun_1, gun_2, gun_3, gun_4, gun_5, gun_6, gun_7]
 #Sets up the window
 win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
 pygame.display.flip()
 player1image = pygame.transform.scale(player1image, (player1.square.width, player1.square.height))
+platform3image = pygame.transform.scale(platform3image, (platform3.rect.width, platform3.rect.height))
 run = True
 
 #Code for upgrade timer
@@ -423,7 +429,7 @@ while run:
     update_window()
     #Makes the platforms move
     win.blit(player1image, (player1.square.x, player1.square.y))
-    win.blit(player1image, (player1.square.x, player1.square.y))
+    win.blit(platform3image, (platform3.rect.x, platform3.rect.y))
     platform1.moves()
     platform2.moves()
     #Actions of both players
@@ -499,14 +505,16 @@ while run:
         if now - upgrade.last >= 3000:
             upgrade_used_list.remove(upgrade)
     #Gunbox code
-    if now - gunbox_last >= 300:
+    if now - gunbox_last >= 7500:
         gunbox_last = now
         gunbox = Upgrade(None, True)
         gunbox_list.append(gunbox)
-    for gunbox in gun_list:
+    for gunbox in gunbox_list:
         gunbox.check_for_platform(platform1, platform2, platform3)
         gunbox.check_for_platform(platform4, platform5, platform6)
         gunbox.move()
+        if gunbox.platform != None:
+            gunbox.platform_move()
         pygame.draw.rect(win, color_dict["blue"], (gunbox.x, gunbox.y, gunbox.width, gunbox.height))
         gunbox.image = pygame.transform.scale(gunbox.image, (gunbox.width, gunbox.height))
         win.blit(gunbox.image, (gunbox.x, gunbox.y))
