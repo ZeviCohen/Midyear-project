@@ -1,7 +1,7 @@
 import pygame, math, random
 # copy of previous platform detection code: (self.square.x >= platform1.rect.x and self.square.x <= platform1.rect.x + 70 and self.square.y <= platform1.rect.y - 15 and self.square.y >= platform1.rect.y - 18) or (self.square.x >= platform2.rect.x and self.square.x <= platform2.rect.x + 70 and self.square.y <= platform2.rect.y - 15 and self.square.y >= platform2.rect.y - 18) or (self.square.x >= platform3.rect.x and self.square.x <= platform3.rect.x + 300 and self.square.y <= platform3.rect.y - 15 and self.square.y >= platform3.rect.y - 18)
 #Color Palette
-color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0), "sky_blue":(138, 206, 251)}
+color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0), "sky_blue":(138, 206, 251), "olive_green": (95, 107, 47), "coral": (255, 127, 150)}
 day_or_night = "day"
 pygame.init()
 bullet_list = []
@@ -9,6 +9,7 @@ upgrade_list = []
 upgrade_used_list = []
 gunbox_list = []
 gunbox_used_list = []
+font = pygame.font.SysFont("comicsansms", 17)
 win = pygame.display.set_mode((600, 600))
 player1image = pygame.image.load("Images/Meowth-Pokemon-PNG-Transparent-Image.png").convert()
 platform3image = pygame.image.load("Images/download.png").convert()
@@ -285,19 +286,22 @@ class Platform(object):
 class Upgrade(object):
     def __init__(self, platform, gunbox_check):
         self.platform = platform
-        self.width = 15
+        self.width = 30
+        self.height = 30
+        self.yvel = 10
+        #Default powerID(stays 0 if upgrade is gunbox)
+        self.powerId = 0
         if gunbox_check:
             self.y = 100
             self.x = random.randint(20, 580)
-            self.image = pygame.image.load("Images/Gunbox.png").convert()
+            self.image = pygame.image.load("Images/Gunbox.png").convert_alpha()
         else:
             self.y = platform.rect.y - platform.rect.height
             num1 = platform.rect.x
             num2 = (platform.rect.x + platform.rect.width)- self.width
             self.x = random.randint(num1, num2)
-        self.height = 15
-        self.yvel = 10
-        self.powerId = random.randint(1, 10)
+            self.powerId = random.randint(1, 10)
+        #Speed up
         if self.powerId == 1:
             self.image = pygame.image.load("Images/speed_power.png").convert()
         if self.powerId == 2:
@@ -426,10 +430,15 @@ while run:
         win.fill(color_dict["sky_blue"])
     else:
         win.fill(color_dict["black"])
+    #Lives counter
+    player1counter = font.render(f"Player 1: {player1.lives} lives", True, (color_dict["olive_green"]))
+    player2counter = font.render(f"Player 2: {player2.lives} lives", True, (color_dict["coral"]))
     update_window()
     #Makes the platforms move
     win.blit(player1image, (player1.square.x, player1.square.y))
     win.blit(platform3image, (platform3.rect.x, platform3.rect.y))
+    win.blit(player1counter, (70 - player1counter.get_width()//2, 560 - player1counter.get_height()//2))
+    win.blit(player2counter, (530 - player2counter.get_width()//2, 560 - player2counter.get_height()//2))
     platform1.moves()
     platform2.moves()
     #Actions of both players
