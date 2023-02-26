@@ -11,6 +11,7 @@ gunbox_list = []
 gunbox_used_list = []
 font = pygame.font.SysFont("comicsansms", 17)
 win = pygame.display.set_mode((600, 600))
+#Images
 player1image = pygame.image.load("Images/Meowth-Pokemon-PNG-Transparent-Image.png").convert()
 platform3image = pygame.image.load("Images/download.png").convert()
 def update_window():
@@ -286,14 +287,17 @@ class Platform(object):
 class Upgrade(object):
     def __init__(self, platform, gunbox_check):
         self.platform = platform
-        self.width = 30
-        self.height = 30
+        #Default width and height
+        self.width = 15
+        self.height = 15
         self.yvel = 10
         #Default powerID(stays 0 if upgrade is gunbox)
         self.powerId = 0
         if gunbox_check:
             self.y = 100
             self.x = random.randint(20, 580)
+            self.width = 30
+            self.height = 30
             self.image = pygame.image.load("Images/Gunbox.png").convert_alpha()
         else:
             self.y = platform.rect.y - platform.rect.height
@@ -347,7 +351,7 @@ class Upgrade(object):
             random_gun_index = random.randint(0, 6)
             gun = gun_list[random_gun_index]
             gun.owner = player
-            player.mainngun = player.gun
+            player.maingun = player.gun
             player.gun = gun
     def radius_change(self):
         if self.radius_change_state:
@@ -409,6 +413,7 @@ gunbox_last = pygame.time.get_ticks()
 
 #Main
 pygame.display.flip()
+last = 0
 while run:
     pygame.time.delay(100)
     #To let the user quit the window
@@ -418,12 +423,12 @@ while run:
     keys = pygame.key.get_pressed()
     #Makes the background and all of the objects
     now = pygame.time.get_ticks()
-    last = 0
-    if now - last == 100:
+    #Day-Night Cycle lasts about 100 seconds(day --> night)
+    if now - last >= 50000:
         if day_or_night == "day":
             day_or_night = "night"
             last = pygame.time.get_ticks()
-        if day_or_night == "night":
+        elif day_or_night == "night":
             day_or_night = "day"
             last = pygame.time.get_ticks()
     if day_or_night == "day":
@@ -433,12 +438,12 @@ while run:
     #Lives counter
     player1counter = font.render(f"Player 1: {player1.lives} lives", True, (color_dict["olive_green"]))
     player2counter = font.render(f"Player 2: {player2.lives} lives", True, (color_dict["coral"]))
+    win.blit(player1counter, (70 - player1counter.get_width()//2, 560 - player1counter.get_height()//2))
+    win.blit(player2counter, (530 - player2counter.get_width()//2, 560 - player2counter.get_height()//2))
     update_window()
     #Makes the platforms move
     win.blit(player1image, (player1.square.x, player1.square.y))
     win.blit(platform3image, (platform3.rect.x, platform3.rect.y))
-    win.blit(player1counter, (70 - player1counter.get_width()//2, 560 - player1counter.get_height()//2))
-    win.blit(player2counter, (530 - player2counter.get_width()//2, 560 - player2counter.get_height()//2))
     platform1.moves()
     platform2.moves()
     #Actions of both players
