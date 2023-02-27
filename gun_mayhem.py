@@ -9,7 +9,6 @@ upgrade_list = []
 upgrade_used_list = []
 gunbox_list = []
 gunbox_used_list = []
-font = pygame.font.SysFont("comicsansms", 17)
 win = pygame.display.set_mode((600, 600))
 #Images
 player1image = pygame.image.load("Images/Meowth-Pokemon-PNG-Transparent-Image.png").convert()
@@ -20,31 +19,43 @@ def update_window():
     pygame.draw.rect(win,color_dict["red"],platform1.rect)
     pygame.draw.rect(win,color_dict["red"],platform2.rect)
     pygame.draw.rect(win,color_dict['red'],platform3.rect)
+    win.blit(platform3image, (platform3.rect.x, platform3.rect.y))
     pygame.draw.rect(win,color_dict["red"],platform4.rect)
     pygame.draw.rect(win,color_dict["red"],platform5.rect)
     pygame.draw.rect(win,color_dict['red'],platform6.rect)
     #Draws the players
     pygame.draw.rect(win,color_dict["green"],(player1.square))
+    win.blit(player1image, (player1.square.x, player1.square.y))
     pygame.draw.rect(win,color_dict['red'],(player2.square))
+    #Draws the guns
+    pygame.draw.rect(win, color_dict["white"], player1.gun.rect)
+    pygame.draw.rect(win, color_dict["white"], player2.gun.rect)
+    #font for the text boxes
+    font = pygame.font.SysFont("comicsansms", 14)
+    #Rectangle that surrounds the player 1 text
+    pygame.draw.rect(win, color_dict["cardboard_brown"],(0, 550, 300, 50))
     #Player 1 text box
-    font = pygame.font.Font("freesansbold.ttf", 14)
-    text_in_box1_list = ["Player1", f"Lives:{player1.lives}", f"Gun:{player1.gun.name}", f"Ammo:{player1.gun.ammo}"]
-    text_height_var1 = 0
+    text_in_box1_list = ["Player1", f"Lives: {player1.lives}  Gun: {player1.gun.name}  Ammo: {player1.gun.ammo}"]
+    text_height_var1 = 65
+    #Makes it so that there are multiple lines of text rather than one big line
     for line in text_in_box1_list:
-        text1 = font.render(line, True, color_dict["black"], color_dict["white"])
+        text1 = font.render(line, True, color_dict["olive_green"], color_dict["white"])
         textRect1 = text1.get_rect()
         textRect1.center = (150, 500+ text_height_var1)
         win.blit(text1, textRect1)
-        text_height_var1 += 15
+        text_height_var1 += 20
+    #Rectangle that surrounds the player 1 text
+    pygame.draw.rect(win, color_dict["green"],(300, 550, 300, 50))
     #Player 2 text box
-    text_in_box2_list = ["Player2", f"Lives:{player2.lives}", f"Gun:{player2.gun.name}", f"Ammo:{player2.gun.ammo}"]
-    text_height_var2 = 0
+    text_in_box2_list = ["Player2", f"Lives: {player2.lives}  Gun: {player2.gun.name}  Ammo: {player2.gun.ammo}"]
+    text_height_var2 = 65
+    #Makes it so that there are multiple lines of text rather than one big line
     for line in text_in_box2_list:
-        text2 = font.render(line, True, color_dict["black"], color_dict["white"])
+        text2 = font.render(line, True, color_dict["coral"], color_dict["white"])
         textRect2 = text1.get_rect()
         textRect2.center = (450, 500+ text_height_var2)
         win.blit(text2, textRect2)
-        text_height_var2 += 15
+        text_height_var2 += 20
 class Gun ():
     def __init__(self, name, owner, ammo, cooldown, bullet_kb, gunid):
         self.cooldown = cooldown
@@ -54,6 +65,7 @@ class Gun ():
         self.bullet_kb = bullet_kb
         self.gunid = gunid
         self.name = name
+        self.rect = pygame.Rect()
     #Shoot method(Outputs a bullet)
     def shoot(self):
         now = pygame.time.get_ticks()
@@ -91,7 +103,7 @@ class Bullet(object):
         self.width = 10
         self.height = 5
         self.xkb = bullet_xkb
-        self.ykb = 5.3
+        self.ykb = 5.5
         self.hit_enemy = False
     def move(self):
         self.velocity = self.direction * abs(self.velocity)
@@ -307,12 +319,15 @@ class Platform(object):
 
 class Upgrade(object):
     def __init__(self, platform, gunbox_check):
+        self.platform = platform
         if gunbox_check:
+            self.xvel = 0
             self.height = 20
             self.width = 20
             self.y = 100
             self.image = pygame.image.load("Images/Gunbox.png").convert()
         else:
+            self.xvel = self.platform.vel
             self.height = 15
             self.width = 15
             self.y = platform.rect.y - platform.rect.height
@@ -337,7 +352,6 @@ class Upgrade(object):
                 self.image = pygame.image.load("Images/speed_power.png").convert()
             elif self.powerId == 10:
                 self.image = pygame.image.load("Images/speed_power.png").convert()
-        self.platform = platform
         num1 = platform.rect.x
         num2 = (platform.rect.x + platform.rect.width)- self.width
         self.x = random.randint(num1, num2)
@@ -355,14 +369,17 @@ class Upgrade(object):
             self.yvel = 0
             self.y = (platform1.rect.y - self.height)
             self.platform = platform1
+            self.xvel = self.platform.vel
         elif self.x >= platform2.rect.x and self.x <= platform2.rect.x + platform2.rect.width and self.y + self.height<= platform2.rect.y and self.y + self.height >= platform2.rect.y - 45:
             self.yvel = 0
             self.y = (platform2.rect.y - self.height)
             self.platform = platform2
+            self.xvel = self.platform.vel
         elif self.x >= platform3.rect.x and self.x <= platform3.rect.x + platform3.rect.width and self.y + self.height <= platform3.rect.y and self.y + self.height >= platform3.rect.y - 45:
             self.yvel = 0
             self.y = (platform3.rect.y - self.height)
             self.platform = platform3
+            self.xvel = self.platform.vel
     def choose_random_gun(self, player):
             random_gun_index = random.randint(0, 6)
             gun = gun_list[random_gun_index]
@@ -379,7 +396,7 @@ class Upgrade(object):
         if self.radius >= 11:
             self.radius_change_state = False
     def platform_move(self):
-        self.x += self.platform.vel
+        self.x += self.xvel
 
         
 
@@ -452,14 +469,8 @@ while run:
     else:
         win.fill(color_dict["black"])
     #Lives counter
-    player1counter = font.render(f"Player 1: {player1.lives} lives", True, (color_dict["olive_green"]))
-    player2counter = font.render(f"Player 2: {player2.lives} lives", True, (color_dict["coral"]))
-    win.blit(player1counter, (70 - player1counter.get_width()//2, 560 - player1counter.get_height()//2))
-    win.blit(player2counter, (530 - player2counter.get_width()//2, 560 - player2counter.get_height()//2))
     update_window()
     #Makes the platforms move
-    win.blit(player1image, (player1.square.x, player1.square.y))
-    win.blit(platform3image, (platform3.rect.x, platform3.rect.y))
     platform1.moves()
     platform2.moves()
     #Actions of both players
@@ -535,7 +546,7 @@ while run:
         if now - upgrade.last >= 3000:
             upgrade_used_list.remove(upgrade)
     #Gunbox code
-    if now - gunbox_last >= 15000:
+    if now - gunbox_last >= 30000:
         gunbox_last = now
         gunbox_platform = random.randint(1, 6)
         if gunbox_platform == 1:
