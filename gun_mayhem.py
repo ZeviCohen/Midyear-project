@@ -285,15 +285,12 @@ class Player(object):
             self.touching_platform = False
     def shot(self, bullet):
         if self.ishit:
-            self.isJump = False
             if bullet.ykb >= 0:
-                self.yvel = 0
-                F = (self.mass ** -1) * (bullet.ykb**2)
+                F = (self.mass ** -1) *(bullet.ykb**2)
                 self.square.y-= F
                 bullet.ykb -= 1
             else:
                 self.yvel = 10
-                self.ishit = False
             self.square.x += (bullet.xkb * bullet.direction)
     def upgraded(self, upgrade):
         if upgrade.powerId == 1:
@@ -414,12 +411,12 @@ class Upgrade(object):
 
 #Creates all of the objects
 #Order goes as follows: x, y, width, height, vel
-platform1 = Platform(0,450,70,10, 5)
-platform2 = Platform(530,450,70,10, -5)
-platform3 = Platform(150,400,300,10,0)
-platform4 = Platform(20,350,100,10,0)
-platform5 = Platform(500,350,100,10,0)
-platform6 = Platform(150,300,300,10,0)
+platform1 = Platform(0,550,70,10, 5)
+platform2 = Platform(530,550,70,10, -5)
+platform3 = Platform(150,500,300,10,0)
+platform4 = Platform(20,450,100,10,0)
+platform5 = Platform(500,450,100,10,0)
+platform6 = Platform(150,400,300,10,0)
 #Order goes as follows: x,y,width,height,yvel,xvel, mass, jvel, player_num, lives
 player1 = Player(300,100,18,35,10,0,1,8, 1, 10)
 player2 = Player(300,100,18,35,10,0,1,8, 2, 10)
@@ -499,9 +496,9 @@ while run:
     player2.check_for_platform(platform1, platform2, platform3, platform4, platform5, platform6)
     #Shoots
     if keys[pygame.K_SPACE]:
-        player1.gun.shoot()
+        maingun1.shoot()
     if keys[pygame.K_z]:
-        player2.gun.shoot()
+        maingun2.shoot()
     for bullet in bullet_list:
         if bullet.x > 600 or bullet.x < 0 or bullet.hit_enemy == True:
             bullet_list.remove(bullet)
@@ -581,9 +578,11 @@ while run:
         pygame.draw.rect(win, color_dict["cardboard_brown"], (gunbox.x, gunbox.y, gunbox.width, gunbox.height))
         gunbox.image = pygame.transform.scale(gunbox.image, (gunbox.width, gunbox.height))
         win.blit(gunbox.image, (gunbox.x, gunbox.y))
+        #Player 1 chooses
         if (gunbox.x<=player1.square.x+player1.square.width) and (gunbox.x + gunbox.width >= player1.square.x) and (gunbox.y <= player1.square.y+ player1.square.height) and (gunbox.y + gunbox.width >= player1.square.y):
             gunbox.choose_random_gun(player1)
             gunbox_list.remove(gunbox)
+        #Player 2 chooses
         elif (gunbox.x<=player2.square.x+player2.square.width) and (gunbox.x + gunbox.width >= player2.square.x) and (gunbox.y <= player2.square.y+ player2.square.height) and (gunbox.y + gunbox.width >= player2.square.y):
             gunbox.choose_random_gun(player2)
             gunbox_list.remove(gunbox)
