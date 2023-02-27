@@ -28,8 +28,14 @@ def update_window():
     win.blit(player1image, (player1.square.x, player1.square.y))
     pygame.draw.rect(win,color_dict['red'],(player2.square))
     #Draws the guns
-    pygame.draw.rect(win, color_dict["white"], player1.gun.rect)
-    pygame.draw.rect(win, color_dict["white"], player2.gun.rect)
+    if player1.lastrecorded == "LEFT":
+        pygame.draw.rect(win, color_dict["white"], (player1.square.x-13, player1.square.y + 5, 10, 5))
+    elif player1.lastrecorded == "RIGHT":
+        pygame.draw.rect(win, color_dict["white"], (player1.square.x+ 21, player1.square.y + 5, 10, 5))
+    if player2.lastrecorded == "LEFT":
+        pygame.draw.rect(win, color_dict["white"], ((player2.square.x-13, player2.square.y + 5, 10, 5)))
+    elif player2.lastrecorded == "RIGHT":
+        pygame.draw.rect(win, color_dict["white"], ((player2.square.x + 21, player2.square.y + 5, 10, 5)))
     #font for the text boxes
     font = pygame.font.SysFont("comicsansms", 14)
     #Rectangle that surrounds the player 1 text
@@ -65,7 +71,6 @@ class Gun ():
         self.bullet_kb = bullet_kb
         self.gunid = gunid
         self.name = name
-        self.rect = pygame.Rect()
     #Shoot method(Outputs a bullet)
     def shoot(self):
         now = pygame.time.get_ticks()
@@ -222,6 +227,7 @@ class Player(object):
         self.lives -= 1
         self.isJump = False
         self.ishit = False
+        self.gun = self.maingun
 
     def check_for_platform(self, platform1, platform2, platform3, platform4, platform5, platform6):
         #Detects if player is on platform or not(Platform Collision)
