@@ -13,18 +13,22 @@ win = pygame.display.set_mode((600, 600))
 #Images
 player1image = pygame.image.load("Images/Meowth-Pokemon-PNG-Transparent-Image.png").convert()
 platform3image = pygame.image.load("Images/download.png").convert()
+player1_maingun_image = pygame.image.load("Images/").convert()
+player2_maingun_image = pygame.image.load("Images/").convert()
 def update_window():
 
     # Draws the platforms
     pygame.draw.rect(win,color_dict["red"],platform1.rect)
     pygame.draw.rect(win,color_dict["red"],platform2.rect)
     pygame.draw.rect(win,color_dict['red'],platform3.rect)
+    platform3image = pygame.transform.scale(platform3image, (platform3.rect.width, platform3.rect.height))
     win.blit(platform3image, (platform3.rect.x, platform3.rect.y))
     pygame.draw.rect(win,color_dict["red"],platform4.rect)
     pygame.draw.rect(win,color_dict["red"],platform5.rect)
     pygame.draw.rect(win,color_dict['red'],platform6.rect)
     #Draws the players
     pygame.draw.rect(win,color_dict["green"],(player1.square))
+    player1image = pygame.transform.scale(player1image, (player1.square.width, player1.square.height))
     win.blit(player1image, (player1.square.x, player1.square.y))
     pygame.draw.rect(win,color_dict['red'],(player2.square))
     #Draws the guns
@@ -36,6 +40,8 @@ def update_window():
         pygame.draw.rect(win, color_dict["white"], ((player2.square.x-13, player2.square.y + 5, 10, 5)))
     elif player2.lastrecorded == "RIGHT":
         pygame.draw.rect(win, color_dict["white"], ((player2.square.x + 21, player2.square.y + 5, 10, 5)))
+    player1_maingun_image = pygame.transform.scale(player1_maingun_image, (10,5))
+    player2_maingun_image = pygame.transform.scale(player2_maingun_image, (10,5))
     #font for the text boxes
     font = pygame.font.SysFont("comicsansms", 14)
     #Rectangle that surrounds the player 1 text
@@ -121,7 +127,7 @@ class Bullet(object):
 #Our player class
 class Player(object):
     def __init__(self,x,y,width,height,yvel,xvel, mass, jvel, player_num, lives):
-        self.lastrecorded = None
+        self.lastrecorded = "RIGHT"
         self.yvel = yvel
         self.xvel = xvel
         self.mass = mass
@@ -441,8 +447,6 @@ gun_list = [gun_1, gun_2, gun_3, gun_4, gun_5, gun_6, gun_7]
 win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
 pygame.display.flip()
-player1image = pygame.transform.scale(player1image, (player1.square.width, player1.square.height))
-platform3image = pygame.transform.scale(platform3image, (platform3.rect.width, platform3.rect.height))
 run = True
 
 #Code for upgrade timer
