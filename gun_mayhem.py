@@ -24,14 +24,34 @@ def update_window():
     #Draws the players
     pygame.draw.rect(win,color_dict["green"],(player1.square))
     pygame.draw.rect(win,color_dict['red'],(player2.square))
+    #Player 1 text box
+    font = pygame.font.Font("freesansbold.ttf", 14)
+    text_in_box1_list = ["Player1", f"Lives:{player1.lives}", f"Gun:{player1.gun.name}", f"Ammo:{player1.gun.ammo}"]
+    text_height_var1 = 0
+    for line in text_in_box1_list:
+        text1 = font.render(line, True, color_dict["black"], color_dict["white"])
+        textRect1 = text1.get_rect()
+        textRect1.center = (150, 500+ text_height_var1)
+        win.blit(text1, textRect1)
+        text_height_var1 += 15
+    #Player 2 text box
+    text_in_box2_list = ["Player2", f"Lives:{player2.lives}", f"Gun:{player2.gun.name}", f"Ammo:{player2.gun.ammo}"]
+    text_height_var2 = 0
+    for line in text_in_box2_list:
+        text2 = font.render(line, True, color_dict["black"], color_dict["white"])
+        textRect2 = text1.get_rect()
+        textRect2.center = (450, 500+ text_height_var2)
+        win.blit(text2, textRect2)
+        text_height_var2 += 15
 class Gun ():
-    def __init__(self, owner, ammo, cooldown, bullet_kb, gunid):
+    def __init__(self, name, owner, ammo, cooldown, bullet_kb, gunid):
         self.cooldown = cooldown
         self.ammo = ammo
         self.last = pygame.time.get_ticks()
         self.owner = owner
         self.bullet_kb = bullet_kb
         self.gunid = gunid
+        self.name = name
     #Shoot method(Outputs a bullet)
     def shoot(self):
         now = pygame.time.get_ticks()
@@ -284,40 +304,41 @@ class Platform(object):
 
 class Upgrade(object):
     def __init__(self, platform, gunbox_check):
-        self.platform = platform
-        self.width = 15
         if gunbox_check:
+            self.height = 20
+            self.width = 20
             self.y = 100
-            self.x = random.randint(20, 580)
             self.image = pygame.image.load("Images/Gunbox.png").convert()
         else:
+            self.height = 15
+            self.width = 15
             self.y = platform.rect.y - platform.rect.height
-            num1 = platform.rect.x
-            num2 = (platform.rect.x + platform.rect.width)- self.width
-            self.x = random.randint(num1, num2)
-        self.height = 15
+            self.powerId = random.randint(1, 10)
+            if self.powerId == 1:
+                self.image = pygame.image.load("Images/speed_power.png").convert()
+            elif self.powerId == 2:
+                self.image = pygame.image.load("Images/speed_power.png").convert()
+            elif self.powerId == 3:
+                self.image = pygame.image.load("Images/speed_power.png").convert()
+            elif self.powerId == 4:
+                self.image = pygame.image.load("Images/speed_power.png").convert()
+            elif self.powerId == 5:
+                self.image = pygame.image.load("Images/speed_power.png").convert()
+            elif self.powerId == 6:
+                self.image = pygame.image.load("Images/speed_power.png").convert()
+            elif self.powerId == 7:
+                self.image = pygame.image.load("Images/speed_power.png").convert()
+            elif self.powerId == 8:
+                self.image = pygame.image.load("Images/speed_power.png").convert()
+            elif self.powerId == 9:
+                self.image = pygame.image.load("Images/speed_power.png").convert()
+            elif self.powerId == 10:
+                self.image = pygame.image.load("Images/speed_power.png").convert()
+        self.platform = platform
+        num1 = platform.rect.x
+        num2 = (platform.rect.x + platform.rect.width)- self.width
+        self.x = random.randint(num1, num2)
         self.yvel = 10
-        self.powerId = random.randint(1, 10)
-        if self.powerId == 1:
-            self.image = pygame.image.load("Images/speed_power.png").convert()
-        if self.powerId == 2:
-            self.image = pygame.image.load("Images/speed_power.png").convert()
-        if self.powerId == 3:
-            self.image = pygame.image.load("Images/speed_power.png").convert()
-        if self.powerId == 4:
-            self.image = pygame.image.load("Images/speed_power.png").convert()
-        if self.powerId == 5:
-            self.image = pygame.image.load("Images/speed_power.png").convert()
-        if self.powerId == 6:
-            self.image = pygame.image.load("Images/speed_power.png").convert()
-        if self.powerId == 7:
-            self.image = pygame.image.load("Images/speed_power.png").convert()
-        if self.powerId == 8:
-            self.image = pygame.image.load("Images/speed_power.png").convert()
-        if self.powerId == 9:
-            self.image = pygame.image.load("Images/speed_power.png").convert()
-        if self.powerId == 10:
-            self.image = pygame.image.load("Images/speed_power.png").convert()
         self.radius = 10
         #True means getting bigger while false means getting smaller
         self.radius_change_state = True
@@ -370,24 +391,24 @@ platform6 = Platform(150,300,300,10,0)
 #Order goes as follows: x,y,width,height,yvel,xvel, mass, jvel, player_num, lives
 player1 = Player(300,100,18,35,10,0,1,8, 1, 10)
 player2 = Player(300,100,18,35,10,0,1,8, 2, 10)
-#Order goes as follows: owner, ammo, cooldown, bullet_kb, gunid
-maingun1 = Gun(player1, 10, 400, 18, 0)
+#Order goes as follows: name, owner, ammo, cooldown, bullet_kb, gunid
+maingun1 = Gun("pistol",player1, 10, 400, 18, 0)
 player1.maingun = maingun1
 player1.gun = maingun1
-maingun2 = Gun(player2, 10, 400, 18, 0)
+maingun2 = Gun("pistol",player2, 10, 400, 18, 0)
 player2.maingun = maingun2
 player2.gun = maingun2
 
 #Gun List:
-#Order goes as follows: owner, ammo, cooldown, bullet_kb, gunid
-gun_1 = Gun(None, 50, 200, 25, 1)#Sub machine gun
-gun_2 = Gun(None, 5, 500, 35, 1)#Sniper
-gun_3 = Gun(None, 5, 500, 35, 1)#Shotgun
-gun_4 = Gun(None, 30, 250, 25, 1)#Assault rifle
-gun_5 = Gun(None, 50, 200, 25, 1)#Light machine gun
+#Order goes as follows: name, owner, ammo, cooldown, bullet_kb, gunid
+gun_1 = Gun("Sub machine gun",None, 50, 200, 25, 1)#Sub machine gun
+gun_2 = Gun("Sniper",None, 5, 500, 35, 1)#Sniper
+gun_3 = Gun("Shotgun",None, 5, 500, 35, 1)#Shotgun
+gun_4 = Gun("Assault rifle",None, 30, 250, 25, 1)#Assault rifle
+gun_5 = Gun("Light machine gun",None, 50, 200, 25, 1)#Light machine gun
 #Special
-gun_6 = Gun(None, 100, 100, 25, 1)#Minigun
-gun_7 = Gun(None, 3, 750, 4, 1)#Dematerializer
+gun_6 = Gun("Minigun",None, 100, 100, 25, 1)#Minigun
+gun_7 = Gun("Dematerializer",None, 3, 750, 4, 1)#Dematerializer
 #Gun_list stores all the special guns that arrive in lootboxes
 gun_list = [gun_1, gun_2, gun_3, gun_4, gun_5, gun_6, gun_7]
 #Sets up the window
@@ -465,7 +486,7 @@ while run:
     player1.shot(player1.bullet)
     player2.shot(player2.bullet)
     #Upgrade code
-    if now - upgrade_last >= 10000:
+    if now - upgrade_last >= 20000:
         upgrade_last = now
         if len(upgrade_list) < 2:
             randchance = random.randint(1,2)
@@ -473,15 +494,15 @@ while run:
                 upgrade_platform = random.randint(1, 6)
                 if upgrade_platform == 1:
                     upgrade = Upgrade(platform1, False)
-                if upgrade_platform == 2:
+                elif upgrade_platform == 2:
                     upgrade = Upgrade(platform2, False)
-                if upgrade_platform == 3:
+                elif upgrade_platform == 3:
                     upgrade = Upgrade(platform3, False)
-                if upgrade_platform == 4:
+                elif upgrade_platform == 4:
                     upgrade = Upgrade(platform4, False)
-                if upgrade_platform == 5:
+                elif upgrade_platform == 5:
                     upgrade = Upgrade(platform5, False)
-                if upgrade_platform == 6:
+                elif upgrade_platform == 6:
                     upgrade = Upgrade(platform6, False)
                 upgrade_list.append(upgrade)
     for upgrade in upgrade_list:
@@ -505,9 +526,21 @@ while run:
         if now - upgrade.last >= 3000:
             upgrade_used_list.remove(upgrade)
     #Gunbox code
-    if now - gunbox_last >= 7500:
+    if now - gunbox_last >= 15000:
         gunbox_last = now
-        gunbox = Upgrade(None, True)
+        gunbox_platform = random.randint(1, 6)
+        if gunbox_platform == 1:
+            gunbox = Upgrade(platform1, True)
+        elif gunbox_platform == 2:
+            gunbox = Upgrade(platform2, True)
+        elif gunbox_platform == 3:
+            gunbox = Upgrade(platform3, True)
+        elif gunbox_platform == 4:
+            gunbox = Upgrade(platform4, True)
+        elif gunbox_platform == 5:
+            gunbox = Upgrade(platform5, True)
+        elif gunbox_platform == 6:
+            gunbox = Upgrade(platform6, True)
         gunbox_list.append(gunbox)
     for gunbox in gunbox_list:
         gunbox.check_for_platform(platform1, platform2, platform3)
