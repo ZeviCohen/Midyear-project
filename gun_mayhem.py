@@ -12,6 +12,7 @@ gunbox_used_list = []
 win = pygame.display.set_mode((600, 600))
 #Images
 player1image = pygame.image.load("Images/Meowth-Pokemon-PNG-Transparent-Image.png").convert()
+player2image = pygame.image.load("Images/player2_image.png").convert()
 platform3image = pygame.image.load("Images/download.png").convert()
 maingun_image1 = pygame.image.load("Images/Main_Gun.png").convert()
 maingun_image2 = pygame.image.load("Images/Main_Gun.png").convert()
@@ -463,6 +464,7 @@ win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("This is pygame")
 pygame.display.flip()
 player1image = pygame.transform.scale(player1image, (player1.square.width, player1.square.height))
+player2image = pygame.transform.scale(player2image, (player2.square.width, player2.square.height))
 platform3image = pygame.transform.scale(platform3image, (platform3.rect.width, platform3.rect.height))
 maingun_image1 = pygame.transform.scale(maingun_image1, (15,10))
 maingun_image2 = pygame.transform.scale(maingun_image2, (15,10))
@@ -502,6 +504,7 @@ while run:
     #Blit the images
     win.blit(platform3image, (platform3.rect.x, platform3.rect.y))
     win.blit(player1image, (player1.square.x, player1.square.y))
+    win.blit(player2image, (player2.square.x, player2.square.y))
     if player1.lastrecorded == "LEFT":
         #maingun_image1 = pygame.transform.flip(maingun_image1, flip_x= True, flip_y=False)
         win.blit(maingun_image1, (player1.square.x-13, player1.square.y + 5, 15, 10))
