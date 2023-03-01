@@ -20,11 +20,11 @@ gunbox_list = []
 gunbox_used_list = []
 
 #Defining Images
-player1image = pygame.image.load("Images/Meowth-Pokemon-PNG-Transparent-Image.png").convert()
-player2image = pygame.image.load("Images/player2_image.png").convert()
-platform3image = pygame.image.load("Images/download.png").convert()
-maingun_image1 = pygame.image.load("Images/Main_Gun.png").convert()
-maingun_image2 = pygame.image.load("Images/Main_Gun.png").convert()
+player1image = pygame.image.load("Images/Meowth-Pokemon-PNG-Transparent-Image.png").convert_alpha()
+player2image = pygame.image.load("Images/player2_image.png").convert_alpha()
+platform3image = pygame.image.load("Images/download.png").convert_alpha()
+maingun_image1 = pygame.image.load("Images/Main_Gun.png").convert_alpha()
+maingun_image2 = pygame.image.load("Images/Main_Gun.png").convert_alpha()
 
 #This is the function that redraws all of the stuff on the screen
 def update_window():
@@ -36,8 +36,6 @@ def update_window():
     pygame.draw.rect(win,color_dict["red"],platform4.rect)
     pygame.draw.rect(win,color_dict["red"],platform5.rect)
     pygame.draw.rect(win,color_dict['red'],platform6.rect)
-    #Draws the players
-    pygame.draw.rect(win,color_dict['red'],(player2.square))
     #font for the text boxes
     font = pygame.font.SysFont("comicsansms", 14)
     #Rectangle that surrounds the player 1 text
@@ -261,8 +259,14 @@ class Player(object):
         self.lives -= 1
         self.isJump = False
         self.ishit = False
+        #resets gun and ammo
         self.gun = self.maingun
         self.maingun.ammo = self.maingun.perm_ammo
+        #Gets rid of all the players upgrades
+        for upgrade in upgrade_used_list:
+            self.remove_upgrade(upgrade)
+            upgrade_used_list.remove(upgrade)
+
 
     def check_for_platform(self, platform1, platform2, platform3, platform4, platform5, platform6):
         #Detects if player is on platform or not(Platform Collision) If it is, as long as the player is finished jumping(so they don't get sucked into the platform mid-jump), the player is able to jump again, their xvel is set to the platforms(so they will move with the moving platforms), they are no longer affected by gravity, and it will set the players y coordinate so they are standing on the platform
@@ -333,49 +337,49 @@ class Player(object):
                 self.ishit = False
             self.square.x += (bullet.xkb * bullet.direction)
     def upgraded(self, upgrade):
-        #Depending on the powerId of the upgrade, the player is given a different power
+        #Depending on the powerId of the upgrade, the player is given a different power. 1-5 are buffs while 6-10 are debuffs. They match up in order 1-6, 2-7 etc.
         if upgrade.powerId == 1:
             self.walkspeed = 15
         if upgrade.powerId == 2:
-            self.walkspeed = 15
+            self.mass = 2
         if upgrade.powerId == 3:
-            self.walkspeed = 15
+            self.mass = 2
         if upgrade.powerId == 4:
-            self.walkspeed = 15
+            self.mass = 2
         if upgrade.powerId == 5:
-            self.walkspeed = 15
+            self.mass = 2
         if upgrade.powerId == 6:
-            self.walkspeed = 15
+            self.walkspeed = 5
         if upgrade.powerId == 7:
-            self.walkspeed = 15
+            self.mass = .5
         if upgrade.powerId == 8:
-            self.walkspeed = 15
+            self.mass = 2
         if upgrade.powerId == 9:
-            self.walkspeed = 15
+            self.mass = 2
         if upgrade.powerId == 10:
-            self.walkspeed = 15
+            self.mass = 2
     def remove_upgrade(self, upgrade):
         #The powerId of the upgrade is used to show what power it gave, and that power is reverted back to the original stats
         if upgrade.powerId == 1:
             self.walkspeed = 10
         if upgrade.powerId == 2:
-            self.walkspeed = 10
+            self.mass = 1
         if upgrade.powerId == 3:
-            self.walkspeed = 10
+            self.mass = 1
         if upgrade.powerId == 4:
-            self.walkspeed = 10
+            self.mass = 1
         if upgrade.powerId == 5:
-            self.walkspeed = 10
+            self.mass = 1
         if upgrade.powerId == 6:
-            self.walkspeed = 10
+            self.mass = 1
         if upgrade.powerId == 7:
-            self.walkspeed = 10
+            self.mass = 1
         if upgrade.powerId == 8:
-            self.walkspeed = 10
+            self.mass = 1
         if upgrade.powerId == 9:
-            self.walkspeed = 10
+            self.mass = 1
         if upgrade.powerId == 10:
-            self.walkspeed = 10
+            self.mass = 1
 
 
 class Platform(object):
@@ -398,46 +402,46 @@ class Upgrade(object):
         if gunbox_check:
             self.touching_platform = False
             self.xvel = 0
-            self.height = 20
-            self.width = 20
+            self.height = 30
+            self.width = 30
             self.y = 100
-            self.image = pygame.image.load("Images/Gunbox.png").convert()
+            self.image = pygame.image.load("Images/Gunbox.png").convert_alpha()
         #If it is just a normal upgrade it gets these properties instead
         else:
             self.touching_platform = True
-            self.height = 15
-            self.width = 15
-            self.y = platform.rect.y - platform.rect.height
+            self.height = 20
+            self.width = 20
+            self.y = platform.rect.y - self.height
             #Power id chooses what power the upgrade gives and gives it an image accordingly
             self.powerId = random.randint(1, 10)
             if self.powerId == 1:
-                self.image = pygame.image.load("Images/speed_power.png").convert()
+                self.image = pygame.image.load("Images/speed_power.png").convert_alpha()
             elif self.powerId == 2:
-                self.image = pygame.image.load("Images/speed_power.png").convert()
+                self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
             elif self.powerId == 3:
-                self.image = pygame.image.load("Images/speed_power.png").convert()
+                self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
             elif self.powerId == 4:
-                self.image = pygame.image.load("Images/speed_power.png").convert()
+                self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
             elif self.powerId == 5:
-                self.image = pygame.image.load("Images/speed_power.png").convert()
+                self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
             elif self.powerId == 6:
-                self.image = pygame.image.load("Images/speed_power.png").convert()
+                self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
             elif self.powerId == 7:
-                self.image = pygame.image.load("Images/speed_power.png").convert()
+                self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
             elif self.powerId == 8:
-                self.image = pygame.image.load("Images/speed_power.png").convert()
+                self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
             elif self.powerId == 9:
-                self.image = pygame.image.load("Images/speed_power.png").convert()
+                self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
             elif self.powerId == 10:
-                self.image = pygame.image.load("Images/speed_power.png").convert()
+                self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
         #Makes it so the gunboxes and upgrades always spawn on/over a platform 
         num1 = platform.rect.x
         num2 = (platform.rect.x + platform.rect.width)- self.width
         self.x = random.randint(num1, num2)
         self.yvel = 10
-        self.radius = 10
+        #self.radius = 10
         #True means getting bigger while false means getting smaller
-        self.radius_change_state = True
+        #self.radius_change_state = True
         self.owner = None
         self.last = None
     def move(self):
@@ -465,20 +469,31 @@ class Upgrade(object):
             gun = gun_list[random_gun_index]
             gun.owner = player
             player.gun = gun
-    def radius_change(self):
-        #This gives the upgrades an effect of pulsing in and out
-        if self.radius_change_state:
-            self.radius += 0.5
-        else:
-            self.radius -= 0.5
-        if self.radius <= 9:
-            self.radius_change_state = True
-        if self.radius >= 11:
-            self.radius_change_state = False
+    #This function was for the circle, which was too anoyying and hard to do
+    # def radius_change(self):
+    #     #This gives the upgrades an effect of pulsing in and out
+    #     if self.radius_change_state:
+    #         self.radius += 0.5
+    #     else:
+    #         self.radius -= 0.5
+    #     if self.radius <= 9:
+    #         self.radius_change_state = True
+    #     if self.radius >= 11:
+    #         self.radius_change_state = False
     def platform_move(self):
         #Makes the upgrade move with the platform (if it is a moving platform)
         if self.touching_platform:
             self.x += self.platform.vel
+    def outline_mask(self, color):
+        #This gives the upgrade an outline to tell the user whether it is a buff or debuff
+        mask = pygame.mask.from_surface(self.image)
+        mask_outline = mask.outline()
+        n = 0
+        for point in mask_outline:
+            mask_outline[n] = (point[0] + self.x, point[1] + self.y)
+            n += 1
+        outline_color = color
+        pygame.draw.polygon(win, outline_color, mask_outline, 2)
 
         
 
@@ -493,8 +508,8 @@ platform5 = Platform(500,350,100,10,0)
 platform6 = Platform(150,300,300,10,0)
 
 #Order goes as follows: x,y,width,height,yvel,xvel, mass, jvel, player_num, lives
-player1 = Player(300,100,18,35,10,0,1,8, 1, 10)
-player2 = Player(300,100,18,35,10,0,1,8, 2, 10)
+player1 = Player(300,100,25,45,10,0,1,8, 1, 10)
+player2 = Player(300,100,25,45,10,0,1,8, 2, 10)
 
 #Order goes as follows: name, owner, ammo, cooldown, bullet_kb, gunid
 maingun1 = Gun("pistol",player1, 10, 400, 18, 0)
@@ -521,8 +536,8 @@ gun_list = [gun_1, gun_2, gun_3, gun_4, gun_5, gun_6, gun_7]
 player1image = pygame.transform.scale(player1image, (player1.square.width, player1.square.height))
 player2image = pygame.transform.scale(player2image, (player2.square.width, player2.square.height))
 platform3image = pygame.transform.scale(platform3image, (platform3.rect.width, platform3.rect.height))
-maingun_image1 = pygame.transform.scale(maingun_image1, (15,10))
-maingun_image2 = pygame.transform.scale(maingun_image2, (15,10))
+maingun_image1 = pygame.transform.scale(maingun_image1, (20,15))
+maingun_image2 = pygame.transform.scale(maingun_image2, (20,15))
 
 #Code for upgrade timer
 upgrade_last = pygame.time.get_ticks()
@@ -610,7 +625,7 @@ while run:
     player1.shot(player1.bullet)
     player2.shot(player2.bullet)
     #Upgrade code
-    if now - upgrade_last >= 20000:
+    if now - upgrade_last >= 2000:#20000:
         upgrade_last = now
         if len(upgrade_list) < 2:
             randchance = random.randint(1,2)
@@ -630,11 +645,13 @@ while run:
                     upgrade = Upgrade(platform6, False)
                 upgrade_list.append(upgrade)
     for upgrade in upgrade_list:
-        upgrade.radius_change()
         upgrade.platform_move()
-        pygame.draw.circle(win, color_dict["blue"], (upgrade.x, upgrade.y), upgrade.radius)
         upgrade.image = pygame.transform.scale(upgrade.image, (upgrade.width, upgrade.height))
         win.blit(upgrade.image, (upgrade.x, upgrade.y))
+        if upgrade.powerId <= 5:
+            upgrade.outline_mask(color_dict["green"])
+        else:
+            upgrade.outline_mask(color_dict["red"])
         if (upgrade.x<=player1.square.x+player1.square.width) and (upgrade.x + upgrade.width >= player1.square.x) and (upgrade.y <= player1.square.y+ player1.square.height) and (upgrade.y + upgrade.width >= player1.square.y):
             upgrade.owner = player1
             upgrade.last = pygame.time.get_ticks()
@@ -667,13 +684,14 @@ while run:
         elif gunbox_platform == 6:
             gunbox = Upgrade(platform6, True)
         gunbox_list.append(gunbox)
+        if len(gunbox_list) >= 3:
+            gunbox_list.remove(gunbox_list[0])
     for gunbox in gunbox_list:
         gunbox.check_for_platform(platform1, platform2, platform3)
         gunbox.check_for_platform(platform4, platform5, platform6)
         gunbox.move()
         if gunbox.platform != None:
             gunbox.platform_move()
-        pygame.draw.rect(win, color_dict["cardboard_brown"], (gunbox.x, gunbox.y, gunbox.width, gunbox.height))
         gunbox.image = pygame.transform.scale(gunbox.image, (gunbox.width, gunbox.height))
         win.blit(gunbox.image, (gunbox.x, gunbox.y))
         if (gunbox.x<=player1.square.x+player1.square.width) and (gunbox.x + gunbox.width >= player1.square.x) and (gunbox.y <= player1.square.y+ player1.square.height) and (gunbox.y + gunbox.width >= player1.square.y):
