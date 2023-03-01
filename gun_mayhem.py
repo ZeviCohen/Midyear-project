@@ -276,7 +276,6 @@ class Player(object):
         #Gets rid of all the players upgrades
         for upgrade in upgrade_used_list:
             self.remove_upgrade(upgrade)
-            upgrade_used_list.remove(upgrade)
 
 
     def check_for_platform(self, platform1, platform2, platform3, platform4, platform5, platform6):
@@ -368,9 +367,9 @@ class Player(object):
             self.lives -= 1
             upgrade_used_list.remove(upgrade)
         elif upgrade.powerId == 9:
-            self.mass = 2
+            self.mass = .5
         elif upgrade.powerId == 10:
-            self.mass = 2
+            self.mass = .5
     def remove_upgrade(self, upgrade):
         #The powerId of the upgrade is used to show what power it gave, and that power is reverted back to the original stats
         if upgrade.powerId == 1:
@@ -637,8 +636,10 @@ while run:
     #respawn
     if player1.square.y > 600:
         player1.respawn()
+        upgrade_used_list = []
     if player2.square.y > 600:
         player2.respawn()
+        upgrade_used_list = []
     #Check for platform collision
     player1.check_for_platform(platform1, platform2, platform3, platform4, platform5, platform6)
     player2.check_for_platform(platform1, platform2, platform3, platform4, platform5, platform6)
