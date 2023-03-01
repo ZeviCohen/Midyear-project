@@ -25,6 +25,10 @@ player2image = pygame.image.load("Images/player2_image.png").convert_alpha()
 platform3image = pygame.image.load("Images/download.png").convert_alpha()
 maingun_image1 = pygame.image.load("Images/Main_Gun.png").convert_alpha()
 maingun_image2 = pygame.image.load("Images/Main_Gun.png").convert_alpha()
+maingun_image1_left = pygame.image.load("Images/Main_Gun.png").convert_alpha()
+maingun_image1_left = pygame.transform.flip(maingun_image1_left, flip_x= True, flip_y=False)
+maingun_image2_left = pygame.image.load("Images/Main_Gun.png").convert_alpha()
+maingun_image2_left = pygame.transform.flip(maingun_image2_left, flip_x= True, flip_y=False)
 
 #This is the function that redraws all of the stuff on the screen
 def update_window():
@@ -541,6 +545,8 @@ player2image = pygame.transform.scale(player2image, (player2.square.width, playe
 platform3image = pygame.transform.scale(platform3image, (platform3.rect.width, platform3.rect.height))
 maingun_image1 = pygame.transform.scale(maingun_image1, (20,15))
 maingun_image2 = pygame.transform.scale(maingun_image2, (20,15))
+maingun_image1_left = pygame.transform.scale(maingun_image1, (20,15))
+maingun_image2_left = pygame.transform.scale(maingun_image2, (20,15))
 
 #Code for upgrade timer
 upgrade_last = pygame.time.get_ticks()
@@ -584,12 +590,11 @@ while run:
     win.blit(player1image, (player1.square.x, player1.square.y))
     win.blit(player2image, (player2.square.x, player2.square.y))
     if player1.lastrecorded == "LEFT":
-        #maingun_image1 = pygame.transform.flip(maingun_image1, flip_x= True, flip_y=False)
-        win.blit(maingun_image1, (player1.square.x-18, player1.square.y + 5, 15, 10))
+        win.blit(maingun_image1_left, (player1.square.x-18, player1.square.y + 5, 15, 10))
     elif player1.lastrecorded == "RIGHT":
         win.blit(maingun_image1, (player1.square.x+ 21, player1.square.y + 5, 15, 10))
     if player2.lastrecorded == "LEFT":
-        win.blit(maingun_image2, ((player2.square.x-18, player2.square.y + 5, 15, 10)))
+        win.blit(maingun_image2_left, ((player2.square.x-18, player2.square.y + 5, 15, 10)))
     elif player2.lastrecorded == "RIGHT":
         win.blit(maingun_image2, ((player2.square.x + 21, player2.square.y + 5, 15, 10)))
     #Makes the platforms move
