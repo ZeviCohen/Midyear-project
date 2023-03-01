@@ -625,7 +625,7 @@ while run:
     player1.shot(player1.bullet)
     player2.shot(player2.bullet)
     #Upgrade code
-    if now - upgrade_last >= 2000:#20000:
+    if now - upgrade_last >= 20000:
         upgrade_last = now
         if len(upgrade_list) < 2:
             randchance = random.randint(1,2)
