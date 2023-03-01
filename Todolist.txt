@@ -4,3 +4,5 @@ To do
 - Create choice of guns
 - Sound Effects
 - Music
+- Do the extra life upgrade
+- Make another gun image flipped horizontally

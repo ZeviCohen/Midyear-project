@@ -151,6 +151,7 @@ class Player(object):
         self.jumpcount = 2
         #To check whether it is player 1 or player 2. This is more for the code in main to easily differentiate between the two players
         self.player_num = player_num
+        #The players lives
         self.lives = lives
         #This is set to true when the player is touching a platform (which is checked for in the function check_for_platform())
         self.touching_platform = False
@@ -343,7 +344,7 @@ class Player(object):
         if upgrade.powerId == 2:
             self.mass = 2
         if upgrade.powerId == 3:
-            self.mass = 2
+            self.lives = 10
         if upgrade.powerId == 4:
             self.mass = 2
         if upgrade.powerId == 5:
@@ -353,7 +354,7 @@ class Player(object):
         if upgrade.powerId == 7:
             self.mass = .5
         if upgrade.powerId == 8:
-            self.mass = 2
+            self.lives = 1
         if upgrade.powerId == 9:
             self.mass = 2
         if upgrade.powerId == 10:
@@ -365,7 +366,7 @@ class Player(object):
         if upgrade.powerId == 2:
             self.mass = 1
         if upgrade.powerId == 3:
-            self.mass = 1
+            self.lives = self.lives
         if upgrade.powerId == 4:
             self.mass = 1
         if upgrade.powerId == 5:
@@ -375,7 +376,7 @@ class Player(object):
         if upgrade.powerId == 7:
             self.mass = 1
         if upgrade.powerId == 8:
-            self.mass = 1
+            self.lives = self.lives
         if upgrade.powerId == 9:
             self.mass = 1
         if upgrade.powerId == 10:
@@ -419,17 +420,17 @@ class Upgrade(object):
             elif self.powerId == 2:
                 self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
             elif self.powerId == 3:
-                self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
+                self.image = pygame.image.load("Images/extra_life.jpeg").convert_alpha()
             elif self.powerId == 4:
                 self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
             elif self.powerId == 5:
                 self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
             elif self.powerId == 6:
-                self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
+                self.image = pygame.image.load("Images/speed_power.png").convert_alpha()
             elif self.powerId == 7:
                 self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
             elif self.powerId == 8:
-                self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
+                self.image = pygame.image.load("Images/extra_life.jpeg").convert_alpha()
             elif self.powerId == 9:
                 self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
             elif self.powerId == 10:
@@ -625,7 +626,7 @@ while run:
     player1.shot(player1.bullet)
     player2.shot(player2.bullet)
     #Upgrade code
-    if now - upgrade_last >= 20000:
+    if now - upgrade_last >= 2000:
         upgrade_last = now
         if len(upgrade_list) < 2:
             randchance = random.randint(1,2)
