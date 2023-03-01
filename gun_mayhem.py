@@ -9,8 +9,8 @@ pygame.display.set_caption("This is pygame")
 pygame.display.flip()
 
 #Color Palette
-color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0), "sky_blue":(138, 206, 251), "olive_green": (95, 107, 47), "coral": (255, 127, 150), "cardboard_brown": (237, 218, 116)}
-day_or_night = "day"
+color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0), "sky_blue":(138, 206, 251), "olive_green": (95, 107, 47), "coral": (255, 127, 150), "cardboard_brown": (237, 218, 116), "dusk_orange": (245, 129, 56)}
+day_or_night = "dawn"
 
 #Lists that will be used later
 bullet_list = []
@@ -66,7 +66,13 @@ def update_window():
         textRect2.center = (450, 500+ text_height_var2)
         win.blit(text2, textRect2)
         text_height_var2 += 20
-
+def change_colors(color1, color2, time):
+    length = 0
+    new_color = []
+    while length < len(color1):
+        new_color.append(color1[length] - (color1[length] - color2[length])/(time/2))
+        length += 1
+    return new_color
 class Gun ():
     def __init__(self, name, owner, ammo, cooldown, bullet_kb, gunid):
         #How long between each bullet being fired
@@ -554,11 +560,8 @@ upgrade_last = pygame.time.get_ticks()
 gunbox_last = pygame.time.get_ticks()
 #Time for day/night timer
 last = 0
-
-
-
-
-
+current_color = [255, 127, 150]
+goal_color = [138, 206, 251]
 
 #Main
 run = True
@@ -572,18 +575,43 @@ while run:
     keys = pygame.key.get_pressed()
     now = pygame.time.get_ticks()
     #Day-Night Cycle lasts about 100 seconds(day --> night)
-    if now - last >= 50000:
-        if day_or_night == "day":
+    if day_or_night == "dawn":
+        if now - last >= 10000:
+            print("day")
+            day_or_night == "day"
+            last = pygame.time.get_ticks()
+            #Goal color(set to day)
+            goal_color = [138, 206, 251]
+        elif now - last >= 3000:
+            current_color = change_colors(current_color, goal_color, 70)
+        else: 
+            current_color = current_color
+    elif day_or_night == "day":
+        if now - last >= 60000:
+            day_or_night = "dusk"
+            last = pygame.time.get_ticks()
+            #Goal color(set to dusk)
+            goal_color = [245, 129, 56]
+        else:
+            current_color = change_colors(current_color, goal_color, 600)
+    elif day_or_night == "dusk":
+        if now - last >= 10000:
             day_or_night = "night"
             last = pygame.time.get_ticks()
-        elif day_or_night == "night":
-            day_or_night = "day"
+            #Goal color(set to night)
+            goal_color = [0, 0, 0]
+        else:
+            current_color = change_colors(current_color, goal_color, 600)
+    elif day_or_night =="night":
+        if now - last >= 60000:
+            day_or_night = "dawn"
             last = pygame.time.get_ticks()
-    if day_or_night == "day":
-        win.fill(color_dict["sky_blue"])
-    else:
-        win.fill(color_dict["coral"])
+            #Goal color(set to day)
+            goal_color = [255, 127, 150]
+        else:
+            current_color = change_colors(current_color, goal_color, 600)
     #Makes the background and all of the objects
+    win.fill(tuple(current_color))
     update_window()
     #Blit the images (not in update_window because of referenced before assignment errors)
     win.blit(platform3image, (platform3.rect.x, platform3.rect.y))
