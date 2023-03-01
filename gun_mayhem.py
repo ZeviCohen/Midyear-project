@@ -341,23 +341,25 @@ class Player(object):
         #Depending on the powerId of the upgrade, the player is given a different power. 1-5 are buffs while 6-10 are debuffs. They match up in order 1-6, 2-7 etc.
         if upgrade.powerId == 1:
             self.walkspeed = 15
-        if upgrade.powerId == 2:
+        elif upgrade.powerId == 2:
             self.mass = 2
-        if upgrade.powerId == 3:
-            self.lives = 10
-        if upgrade.powerId == 4:
+        elif upgrade.powerId == 3:
+            self.lives += 1
+            upgrade_used_list.remove(upgrade)
+        elif upgrade.powerId == 4:
             self.mass = 2
-        if upgrade.powerId == 5:
+        elif upgrade.powerId == 5:
             self.mass = 2
-        if upgrade.powerId == 6:
+        elif upgrade.powerId == 6:
             self.walkspeed = 5
-        if upgrade.powerId == 7:
+        elif upgrade.powerId == 7:
             self.mass = .5
-        if upgrade.powerId == 8:
-            self.lives = 1
-        if upgrade.powerId == 9:
+        elif upgrade.powerId == 8:
+            self.lives -= 1
+            upgrade_used_list.remove(upgrade)
+        elif upgrade.powerId == 9:
             self.mass = 2
-        if upgrade.powerId == 10:
+        elif upgrade.powerId == 10:
             self.mass = 2
     def remove_upgrade(self, upgrade):
         #The powerId of the upgrade is used to show what power it gave, and that power is reverted back to the original stats
