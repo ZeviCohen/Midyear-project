@@ -141,7 +141,7 @@ class Bullet(object):
             enemy.bullet = self
 #Our player class
 class Player(object):
-    def __init__(self,x,y,width,height,yvel,xvel, mass, jvel, player_num, lives):
+    def __init__(self,x,y,width,height,yvel,xvel, mass, jvel, player_num, lives, image):
         #Coordinates and dimensions
         self.square = pygame.Rect(x,y,width,height)
         #to determine the players direction
@@ -172,6 +172,7 @@ class Player(object):
         self.maingun = None
         #So that there is only one bullet affecting the player at a time
         self.bullet = None
+        self.image = image
 
     def move(self):
         #Gravity
@@ -275,8 +276,8 @@ class Player(object):
         self.maingun.ammo = self.maingun.perm_ammo
         #Gets rid of all the players upgrades
         for upgrade in upgrade_used_list:
-            self.remove_upgrade(upgrade)
-            upgrade_used_list.remove(upgrade)
+            if upgrade.owner == self:
+                self.remove_upgrade(upgrade)
 
 
     def check_for_platform(self, platform1, platform2, platform3, platform4, platform5, platform6):
@@ -350,27 +351,43 @@ class Player(object):
     def upgraded(self, upgrade):
         #Depending on the powerId of the upgrade, the player is given a different power. 1-5 are buffs while 6-10 are debuffs. They match up in order 1-6, 2-7 etc.
         if upgrade.powerId == 1:
+            #Speed up
             self.walkspeed = 15
         elif upgrade.powerId == 2:
+            #Jump boost
             self.mass = 2
         elif upgrade.powerId == 3:
+            #Extra life
             self.lives += 1
             upgrade_used_list.remove(upgrade)
         elif upgrade.powerId == 4:
-            self.mass = 2
+            #Minimize
+            self.square.width = 10
+            self.square.height = 15
+            self.image = pygame.transform.scale(self.image, (self.square.width, self.square.height))
+            win.blit(self.image, (self.square.x, self.square.y))
+            upgrade_used_list.remove(upgrade)
         elif upgrade.powerId == 5:
             self.mass = 2
         elif upgrade.powerId == 6:
+            #Speed down
             self.walkspeed = 5
         elif upgrade.powerId == 7:
-            self.mass = .5
+            #Jump debuff
+            self.mass = .7
         elif upgrade.powerId == 8:
+            #Lose a life
             self.lives -= 1
             upgrade_used_list.remove(upgrade)
         elif upgrade.powerId == 9:
-            self.mass = 2
+            #Maxamize
+            self.square.width = 55
+            self.square.height = 75
+            self.image = pygame.transform.scale(self.image, (self.square.width, self.square.height))
+            win.blit(self.image, (self.square.x, self.square.y))
+            upgrade_used_list.remove(upgrade)
         elif upgrade.powerId == 10:
-            self.mass = 2
+            self.mass = .7
     def remove_upgrade(self, upgrade):
         #The powerId of the upgrade is used to show what power it gave, and that power is reverted back to the original stats
         if upgrade.powerId == 1:
@@ -380,7 +397,10 @@ class Player(object):
         if upgrade.powerId == 3:
             self.lives = self.lives
         if upgrade.powerId == 4:
-            self.mass = 1
+            self.square.width = 25
+            self.square.height = 45
+            self.image = pygame.transform.scale(self.image, (self.square.width, self.square.height))
+            win.blit(self.image, (self.square.x, self.square.y))
         if upgrade.powerId == 5:
             self.mass = 1
         if upgrade.powerId == 6:
@@ -390,7 +410,10 @@ class Player(object):
         if upgrade.powerId == 8:
             self.lives = self.lives
         if upgrade.powerId == 9:
-            self.mass = 1
+            self.square.width = 25
+            self.square.height = 45
+            self.image = pygame.transform.scale(self.image, (self.square.width, self.square.height))
+            win.blit(self.image, (self.square.x, self.square.y))
         if upgrade.powerId == 10:
             self.mass = 1
 
@@ -434,7 +457,7 @@ class Upgrade(object):
             elif self.powerId == 3:
                 self.image = pygame.image.load("Images/extra_life.jpeg").convert_alpha()
             elif self.powerId == 4:
-                self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
+                self.image = pygame.image.load("Images/minimize_power.png").convert_alpha()
             elif self.powerId == 5:
                 self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
             elif self.powerId == 6:
@@ -444,7 +467,7 @@ class Upgrade(object):
             elif self.powerId == 8:
                 self.image = pygame.image.load("Images/extra_life.jpeg").convert_alpha()
             elif self.powerId == 9:
-                self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
+                self.image = pygame.image.load("Images/maxamize_power.png").convert_alpha()
             elif self.powerId == 10:
                 self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
         #Makes it so the gunboxes and upgrades always spawn on/over a platform 
@@ -521,8 +544,8 @@ platform5 = Platform(500,350,100,10,0)
 platform6 = Platform(150,300,300,10,0)
 
 #Order goes as follows: x,y,width,height,yvel,xvel, mass, jvel, player_num, lives
-player1 = Player(300,100,25,45,10,0,1,8, 1, 10)
-player2 = Player(300,100,25,45,10,0,1,8, 2, 10)
+player1 = Player(300,100,25,45,10,0,1,8, 1, 10, player1image)
+player2 = Player(300,100,25,45,10,0,1,8, 2, 10, player2image)
 
 #Order goes as follows: name, owner, ammo, cooldown, bullet_kb, gunid
 maingun1 = Gun("pistol",player1, 10, 400, 18, 0)
@@ -546,8 +569,8 @@ gun_7 = Gun("Dematerializer",None, 3, 750, 4, 1)#Dematerializer
 gun_list = [gun_1, gun_2, gun_3, gun_4, gun_5, gun_6, gun_7]
 
 #Makes all of the images fit their objects
-player1image = pygame.transform.scale(player1image, (player1.square.width, player1.square.height))
-player2image = pygame.transform.scale(player2image, (player2.square.width, player2.square.height))
+player1.image = pygame.transform.scale(player1.image, (player1.square.width, player1.square.height))
+player2.image = pygame.transform.scale(player2.image, (player2.square.width, player2.square.height))
 platform3image = pygame.transform.scale(platform3image, (platform3.rect.width, platform3.rect.height))
 maingun_image1 = pygame.transform.scale(maingun_image1, (20,15))
 maingun_image2 = pygame.transform.scale(maingun_image2, (20,15))
@@ -629,8 +652,8 @@ while run:
     update_window()
     #Blit the images (not in update_window because of referenced before assignment errors)
     win.blit(platform3image, (platform3.rect.x, platform3.rect.y))
-    win.blit(player1image, (player1.square.x, player1.square.y))
-    win.blit(player2image, (player2.square.x, player2.square.y))
+    win.blit(player1.image, (player1.square.x, player1.square.y))
+    win.blit(player2.image, (player2.square.x, player2.square.y))
     if player1.lastrecorded == "LEFT":
         win.blit(maingun_image1_left, (player1.square.x-18, player1.square.y + 5, 15, 10))
     elif player1.lastrecorded == "RIGHT":
@@ -651,8 +674,14 @@ while run:
     #respawn
     if player1.square.y > 600:
         player1.respawn()
+        for upgrade in upgrade_used_list:
+            if upgrade.owner == player1:
+                upgrade_used_list.remove(upgrade)
     if player2.square.y > 600:
         player2.respawn()
+        for upgrade in upgrade_used_list:
+            if upgrade.owner == player2:
+                upgrade_used_list.remove(upgrade)
     #Check for platform collision
     player1.check_for_platform(platform1, platform2, platform3, platform4, platform5, platform6)
     player2.check_for_platform(platform1, platform2, platform3, platform4, platform5, platform6)
@@ -713,6 +742,10 @@ while run:
             upgrade_list.remove(upgrade)
             upgrade_used_list.append(upgrade)
     for upgrade in upgrade_used_list:
+        for upgrade2 in upgrade_used_list:
+            if (upgrade.powerId == upgrade2.powerId + 5) or (upgrade2.powerId == upgrade.powerId + 5):
+                upgrade_used_list.remove(upgrade)
+                upgrade_used_list.remove(upgrade2)
         upgrade.owner.upgraded(upgrade)
         if now - upgrade.last >= 10000:
             upgrade.owner.remove_upgrade(upgrade)
