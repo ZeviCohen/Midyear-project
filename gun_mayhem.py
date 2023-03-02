@@ -276,7 +276,8 @@ class Player(object):
         self.maingun.ammo = self.maingun.perm_ammo
         #Gets rid of all the players upgrades
         for upgrade in upgrade_used_list:
-            self.remove_upgrade(upgrade)
+            if upgrade.owner == self:
+                self.remove_upgrade(upgrade)
 
 
     def check_for_platform(self, platform1, platform2, platform3, platform4, platform5, platform6):
@@ -350,13 +351,17 @@ class Player(object):
     def upgraded(self, upgrade):
         #Depending on the powerId of the upgrade, the player is given a different power. 1-5 are buffs while 6-10 are debuffs. They match up in order 1-6, 2-7 etc.
         if upgrade.powerId == 1:
+            #Speed up
             self.walkspeed = 15
         elif upgrade.powerId == 2:
+            #Jump boost
             self.mass = 2
         elif upgrade.powerId == 3:
+            #Extra life
             self.lives += 1
             upgrade_used_list.remove(upgrade)
         elif upgrade.powerId == 4:
+            #Minimize
             self.square.width = 10
             self.square.height = 15
             self.image = pygame.transform.scale(self.image, (self.square.width, self.square.height))
@@ -365,13 +370,17 @@ class Player(object):
         elif upgrade.powerId == 5:
             self.mass = 2
         elif upgrade.powerId == 6:
+            #Speed down
             self.walkspeed = 5
         elif upgrade.powerId == 7:
+            #Jump debuff
             self.mass = .7
         elif upgrade.powerId == 8:
+            #Lose a life
             self.lives -= 1
             upgrade_used_list.remove(upgrade)
         elif upgrade.powerId == 9:
+            #Maxamize
             self.square.width = 55
             self.square.height = 75
             self.image = pygame.transform.scale(self.image, (self.square.width, self.square.height))
@@ -651,10 +660,14 @@ while run:
     #respawn
     if player1.square.y > 600:
         player1.respawn()
-        upgrade_used_list = []
+        for upgrade in upgrade_used_list:
+            if upgrade.owner == player1:
+                upgrade_used_list.remove(upgrade)
     if player2.square.y > 600:
         player2.respawn()
-        upgrade_used_list = []
+        for upgrade in upgrade_used_list:
+            if upgrade.owner == player2:
+                upgrade_used_list.remove(upgrade)
     #Check for platform collision
     player1.check_for_platform(platform1, platform2, platform3, platform4, platform5, platform6)
     player2.check_for_platform(platform1, platform2, platform3, platform4, platform5, platform6)
@@ -715,6 +728,10 @@ while run:
             upgrade_list.remove(upgrade)
             upgrade_used_list.append(upgrade)
     for upgrade in upgrade_used_list:
+        for upgrade2 in upgrade_used_list:
+            if (upgrade.powerId == upgrade2.powerId + 5) or (upgrade2.powerId == upgrade.powerId + 5):
+                upgrade_used_list.remove(upgrade)
+                upgrade_used_list.remove(upgrade2)
         upgrade.owner.upgraded(upgrade)
         if now - upgrade.last >= 10000:
             upgrade.owner.remove_upgrade(upgrade)
