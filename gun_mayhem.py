@@ -10,7 +10,7 @@ pygame.display.flip()
 
 #Color Palette
 color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0), "sky_blue":(138, 206, 251), "olive_green": (95, 107, 47), "coral": (255, 127, 150), "cardboard_brown": (237, 218, 116), "dusk_orange": (245, 129, 56)}
-day_or_night = "dawn"
+TOD = "dawn"
 
 #Lists that will be used later
 bullet_list = []
@@ -574,42 +574,56 @@ while run:
     #Gets all the key inputs
     keys = pygame.key.get_pressed()
     now = pygame.time.get_ticks()
-    #Day-Night Cycle lasts about 100 seconds(day --> night)
-    if day_or_night == "dawn":
+    #A full day lasts about 142 seconds
+    #Time of day: dawn
+    if TOD == "dawn":
+        #Lasts 10 seconds
         if now - last >= 10000:
-            print("day")
-            day_or_night == "day"
-            last = pygame.time.get_ticks()
-            #Goal color(set to day)
-            goal_color = [138, 206, 251]
-        elif now - last >= 3000:
-            current_color = change_colors(current_color, goal_color, 70)
-        else: 
-            current_color = current_color
-    elif day_or_night == "day":
-        if now - last >= 60000:
-            day_or_night = "dusk"
+            TOD = "day"
             last = pygame.time.get_ticks()
             #Goal color(set to dusk)
             goal_color = [245, 129, 56]
-        else:
-            current_color = change_colors(current_color, goal_color, 600)
-    elif day_or_night == "dusk":
-        if now - last >= 10000:
-            day_or_night = "night"
+        elif now - last >= 3000:
+            #Function that changes the background color ever so slightly every tick
+            current_color = change_colors(current_color, goal_color, 70)
+        else: 
+            current_color = current_color
+    #Time of day: day(8:00am - 5:00pm)
+    elif TOD == "day":
+        #Lasts 60 seconds
+        if now - last >= 60000:
+            TOD = "dusk"
             last = pygame.time.get_ticks()
             #Goal color(set to night)
             goal_color = [0, 0, 0]
+        elif now - last >= 55000:
+            current_color = change_colors(current_color, goal_color, 50)
         else:
-            current_color = change_colors(current_color, goal_color, 600)
-    elif day_or_night =="night":
+            current_color = current_color
+    #Time of day: dusk
+    elif TOD == "dusk":
+        #Lasts 12 seconds
+        if now - last >= 12000:
+            TOD = "night"
+            last = pygame.time.get_ticks()
+            #Goal color(set to dawn)
+            goal_color = [255, 127, 150]
+        elif now - last >= 4000:
+            current_color = change_colors(current_color, goal_color, 80)
+        else:
+            current_color = current_color
+    #Time of day: night(6:00pm - 5:00am)
+    elif TOD =="night":
+        #Lasts 60 seconds
         if now - last >= 60000:
-            day_or_night = "dawn"
+            TOD = "dawn"
             last = pygame.time.get_ticks()
             #Goal color(set to day)
-            goal_color = [255, 127, 150]
+            goal_color = [138, 206, 251]
+        elif now - last >= 55000:
+            current_color = change_colors(current_color, goal_color, 50)
         else:
-            current_color = change_colors(current_color, goal_color, 600)
+            current_color = current_color
     #Makes the background and all of the objects
     win.fill(tuple(current_color))
     update_window()
