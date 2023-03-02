@@ -5,7 +5,7 @@ pygame.init()
 
 #Sets up the window
 win = pygame.display.set_mode((600, 600))
-pygame.display.set_caption("This is pygame")
+pygame.display.set_caption("Gone Mayhem")
 pygame.display.flip()
 
 #Color Palette
