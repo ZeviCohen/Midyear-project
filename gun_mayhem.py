@@ -564,7 +564,7 @@ gun_4 = Gun("Assault rifle",None, 30, 250, 25, 1)#Assault rifle
 gun_5 = Gun("Light machine gun",None, 50, 200, 25, 1)#Light machine gun
 #Special
 gun_6 = Gun("Minigun",None, 100, 100, 25, 1)#Minigun
-gun_7 = Gun("Dematerializer",None, 3, 750, 4, 1)#Dematerializer
+gun_7 = Gun("Dematerializer",None, 3, 750, 50, 1)#Dematerializer
 #Gun_list stores all the special guns that arrive in lootboxes
 gun_list = [gun_1, gun_2, gun_3, gun_4, gun_5, gun_6, gun_7]
 
