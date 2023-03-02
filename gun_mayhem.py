@@ -25,11 +25,8 @@ player2image = pygame.image.load("Images/player2_image.png").convert_alpha()
 platform3image = pygame.image.load("Images/download.png").convert_alpha()
 maingun_image1 = pygame.image.load("Images/Main_Gun.png").convert_alpha()
 maingun_image2 = pygame.image.load("Images/Main_Gun.png").convert_alpha()
-maingun_image1_left = pygame.image.load("Images/Main_Gun.png").convert_alpha()
-maingun_image1_left = pygame.transform.flip(maingun_image1_left, flip_x= True, flip_y=False)
-maingun_image2_left = pygame.image.load("Images/Main_Gun.png").convert_alpha()
-maingun_image2_left = pygame.transform.flip(maingun_image2_left, flip_x= True, flip_y=False)
-
+maingun_image1_left = pygame.image.load("Images/Main_Gun_Left.png").convert_alpha()
+maingun_image2_left = pygame.image.load("Images/Main_Gun_Left.png").convert_alpha()
 #This is the function that redraws all of the stuff on the screen
 def update_window():
 
@@ -574,8 +571,8 @@ player2.image = pygame.transform.scale(player2.image, (player2.square.width, pla
 platform3image = pygame.transform.scale(platform3image, (platform3.rect.width, platform3.rect.height))
 maingun_image1 = pygame.transform.scale(maingun_image1, (20,15))
 maingun_image2 = pygame.transform.scale(maingun_image2, (20,15))
-maingun_image1_left = pygame.transform.scale(maingun_image1, (20,15))
-maingun_image2_left = pygame.transform.scale(maingun_image2, (20,15))
+maingun_image1_left = pygame.transform.scale(maingun_image1_left, (20,15))
+maingun_image2_left = pygame.transform.scale(maingun_image2_left, (20,15))
 
 #Code for upgrade timer
 upgrade_last = pygame.time.get_ticks()
