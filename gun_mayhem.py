@@ -96,24 +96,21 @@ class Gun ():
         self.name = name
         #Current image
         self.image = image_left
-        self.isupgraded = False
         self.image_left = image_left
         self.image_right = image_right
         #Dimensions(Original)
         self.scalefactor = 1
         self.width = 20
         self.height = 15
-        #Distance from player
-        if self.owner != None:
-            self.xdistance = self.owner.square.x - 18
+
     def image_update(self):
         #If the owner is facing left & isn't upgraded
         if self.owner.lastrecorded == "LEFT":
             self.image = self.image_left
-            win.blit(self.image, (self.owner.square.x - 18 - self.width, self.owner.square.y + 5))
+            win.blit(self.image, (self.owner.square.x - self.width, self.owner.square.y + 5))
         if self.owner.lastrecorded == "RIGHT":
             self.image = self.image_right
-            win.blit(self.image, (self.owner.square.x + self.owner.square.width + 18, self.owner.square.y + 5))
+            win.blit(self.image, (self.owner.square.x + self.owner.square.width, self.owner.square.y + 5))
     #Shoot method(Outputs a bullet)
     def shoot(self):
         now = pygame.time.get_ticks()
@@ -197,6 +194,8 @@ class Player(object):
         #So that there is only one bullet affecting the player at a time
         self.bullet = None
         self.image = image
+        #Checks if there is a sheild
+        self.isShield = False
 
     def move(self):
         #Gravity
@@ -361,17 +360,18 @@ class Player(object):
             self.touching_platform = False
     def shot(self, bullet):
         #This pushes the player back(depending on the xkb which is different depending on its owners gun type) and up a little (almost like a forced jump)
-        if self.ishit:
-            self.isJump = False
-            if bullet.ykb >= 0:
-                self.yvel = 0
-                F = (self.mass ** -1) * (bullet.ykb**2)
-                self.square.y-= F
-                bullet.ykb -= 1
-            else:
-                self.yvel = 10
-                self.ishit = False
-            self.square.x += (bullet.xkb * bullet.direction)
+        if not self.isShield:
+            if self.ishit:
+                self.isJump = False
+                if bullet.ykb >= 0:
+                    self.yvel = 0
+                    F = (self.mass ** -1) * (bullet.ykb**2)
+                    self.square.y-= F
+                    bullet.ykb -= 1
+                else:
+                    self.yvel = 10
+                    self.ishit = False
+                self.square.x += (bullet.xkb * bullet.direction)
     def upgraded(self, upgrade):
         #Depending on the powerId of the upgrade, the player is given a different power. 1-5 are buffs while 6-10 are debuffs. They match up in order 1-6, 2-7 etc.
         if upgrade.powerId == 1:
@@ -386,23 +386,16 @@ class Player(object):
             upgrade_used_list.remove(upgrade)
         elif upgrade.powerId == 4:
             #Minimize
+            # x
             self.square.width = 10
             self.square.height = 15
             self.image = pygame.transform.scale(self.image, (self.square.width, self.square.height))
             self.gun.width = 8
             self.gun.height = 6
             self.gun.image = pygame.transform.scale(self.gun.image, (self.gun.width, self.gun.height))
-            self.gun.isupgraded = True
-            win.blit(self.image, (self.square.x, self.square.y))
-            if self.lastrecorded == "LEFT":
-                self.gun.xdistance = -18/5
-                win.blit(self.gun.image, (self.square.x + self.gun.xdistance, self.square.y + 5))
-            elif self.lastrecorded == "RIGHT":
-                self.gun.xdistance = 21/5
-                win.blit(self.gun.image, (self.square.x + self.gun.xdistance, self.square.y + 5))
             upgrade_used_list.remove(upgrade)
         elif upgrade.powerId == 5:
-            self.mass = 2
+            self.isShield = True
         elif upgrade.powerId == 6:
             #Speed down
             self.walkspeed = 5
@@ -418,64 +411,27 @@ class Player(object):
             self.square.width = 55
             self.square.height = 75
             self.image = pygame.transform.scale(self.image, (self.square.width, self.square.height))
+            # x4 scale factor
             self.gun.width = 60
             self.gun.height = 45
             self.gun.image = pygame.transform.scale(self.gun.image, (self.gun.width, self.gun.height))
-            self.gun.isupgraded = True
-            win.blit(self.image, (self.square.x, self.square.y))
-            if self.lastrecorded == "LEFT":
-                self.gun.xdistance = -72
-                win.blit(self.gun.image, (self.square.x + self.gun.xdistance, self.square.y + 5))
-            elif self.lastrecorded == "RIGHT":
-                self.gun.xdistance = 84
-                win.blit(self.gun.image, (self.square.x + self.gun.xdistance, self.square.y + 5))
-            upgrade_used_list.remove(upgrade)
-        elif upgrade.powerId == 10:
-            self.mass = .7
     def remove_upgrade(self, upgrade):
         #The powerId of the upgrade is used to show what power it gave, and that power is reverted back to the original stats
-        if upgrade.powerId == 1:
+        if upgrade.powerId == 1 or upgrade.powerId == 6:
             self.walkspeed = 10
-        if upgrade.powerId == 2:
+        if upgrade.powerId == 2 or upgrade.powerId == 7:
             self.mass = 1
-        if upgrade.powerId == 3:
+        if upgrade.powerId == 3 or upgrade.powerId == 8:
             self.lives = self.lives
-        if upgrade.powerId == 4:
+        if upgrade.powerId == 4 or upgrade.powerId == 9:
             self.square.width = 25
             self.square.height = 45
             self.image = pygame.transform.scale(self.image, (self.square.width, self.square.height))
-            self.gun.image = pygame.transform.scale(self.gun.image, (self.gun.default_width, self.gun.default_height))
-            self.gun.isupgraded = False
-            win.blit(self.image, (self.square.x, self.square.y))
-            if self.lastrecorded == "LEFT":
-                self.gun.xdistance = self.square.x - 18
-                win.blit(self.gun.image, (self.gun.xdistance, self.square.y + 5))
-            elif self.lastrecorded == "RIGHT":
-                self.gun.xdistance = self.square.x + 21
-                win.blit(self.gun.image, (self.gun.xdistance, self.square.y + 5))
-        if upgrade.powerId == 5:
-            self.mass = 1
-        if upgrade.powerId == 6:
-            self.mass = 1
-        if upgrade.powerId == 7:
-            self.mass = 1
-        if upgrade.powerId == 8:
-            self.lives = self.lives
-        if upgrade.powerId == 9:
-            self.square.width = 25
-            self.square.height = 45
-            self.image = pygame.transform.scale(self.image, (self.square.width, self.square.height))
+            self.gun.width = 20
+            self.gun.height = 15
             self.gun.image = pygame.transform.scale(self.gun.image, (self.gun.width, self.gun.height))
-            self.gun.isupgraded = False
-            win.blit(self.image, (self.square.x, self.square.y))
-            if self.lastrecorded == "LEFT":
-                self.gun.xdistance = self.square.x - 18
-                win.blit(self.gun.image, (self.gun.xdistance, self.square.y + 5))
-            elif self.lastrecorded == "RIGHT":
-                self.gun.xdistance = self.square.x + 21
-                win.blit(self.gun.image, (self.gun.xdistance, self.square.y + 5))
-        if upgrade.powerId == 10:
-            self.mass = 1
+        if upgrade.powerId == 5:
+            self.isShield = False
 
 
 class Platform(object):
@@ -509,7 +465,7 @@ class Upgrade(object):
             self.width = 20
             self.y = platform.rect.y - self.height
             #Power id chooses what power the upgrade gives and gives it an image accordingly
-            self.powerId = random.randint(1, 10)
+            self.powerId = random.randint(1, 9)
             if self.powerId == 1:
                 self.image = pygame.image.load("Images/speed_power.png").convert_alpha()
             elif self.powerId == 2:
@@ -519,7 +475,7 @@ class Upgrade(object):
             elif self.powerId == 4:
                 self.image = pygame.image.load("Images/minimize_power.png").convert_alpha()
             elif self.powerId == 5:
-                self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
+                self.image = pygame.image.load("Images/.png").convert_alpha()
             elif self.powerId == 6:
                 self.image = pygame.image.load("Images/speed_power.png").convert_alpha()
             elif self.powerId == 7:
@@ -527,9 +483,7 @@ class Upgrade(object):
             elif self.powerId == 8:
                 self.image = pygame.image.load("Images/extra_life.jpeg").convert_alpha()
             elif self.powerId == 9:
-                self.image = pygame.image.load("Images/maxamize_power.png").convert_alpha()
-            elif self.powerId == 10:
-                self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
+                self.image = pygame.image.load("Images/maximize_power.png").convert_alpha()
         #Makes it so the gunboxes and upgrades always spawn on/over a platform 
         num1 = platform.rect.x
         num2 = (platform.rect.x + platform.rect.width)- self.width
