@@ -8,6 +8,9 @@ win = pygame.display.set_mode((600, 600))
 pygame.display.set_caption("Gone Mayhem")
 pygame.display.flip()
 
+#Defines the current screen
+game_state = "start"
+
 #Color Palette
 color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0), "sky_blue":(138, 206, 251), "olive_green": (95, 107, 47), "coral": (255, 127, 150), "cardboard_brown": (237, 218, 116), "dusk_orange": (245, 129, 56)}
 TOD = "dawn"
@@ -27,7 +30,11 @@ maingun_image1 = pygame.image.load("Images/Main_Gun.png").convert_alpha()
 maingun_image2 = pygame.image.load("Images/Main_Gun.png").convert_alpha()
 maingun_image1_left = pygame.image.load("Images/Main_Gun_Left.png").convert_alpha()
 maingun_image2_left = pygame.image.load("Images/Main_Gun_Left.png").convert_alpha()
-#This is the function that redraws all of the stuff on the screen
+
+#This function creates the game's start menu
+def create_start_menu():
+    pass
+#This is the function that redraws all of the stuff in the game
 def update_window():
 
     # Draws the platforms
@@ -42,7 +49,7 @@ def update_window():
     #Rectangle that surrounds the player 1 text
     pygame.draw.rect(win, color_dict["cardboard_brown"],(0, 550, 300, 50))
     #Player 1 text box
-    text_in_box1_list = ["Player1", f"Lives: {player1.lives}  Gun: {player1.gun.name}  Ammo: {player1.gun.ammo}"]
+    text_in_box1_list = ["Player 1:", f"Lives: {player1.lives}  Gun: {player1.gun.name}  Ammo: {player1.gun.ammo}"]
     text_height_var1 = 65
     #Makes it so that there are multiple lines of text rather than one big line
     for line in text_in_box1_list:
@@ -54,12 +61,12 @@ def update_window():
     #Rectangle that surrounds the player 1 text
     pygame.draw.rect(win, color_dict["green"],(300, 550, 300, 50))
     #Player 2 text box
-    text_in_box2_list = ["Player2", f"Lives: {player2.lives}  Gun: {player2.gun.name}  Ammo: {player2.gun.ammo}"]
+    text_in_box2_list = ["Player 2:", f"Lives: {player2.lives}  Gun: {player2.gun.name}  Ammo: {player2.gun.ammo}"]
     text_height_var2 = 65
     #Makes it so that there are multiple lines of text rather than one big line
     for line in text_in_box2_list:
         text2 = font.render(line, True, color_dict["coral"], color_dict["white"])
-        textRect2 = text1.get_rect()
+        textRect2 = text2.get_rect()
         textRect2.center = (450, 500+ text_height_var2)
         win.blit(text2, textRect2)
         text_height_var2 += 20
