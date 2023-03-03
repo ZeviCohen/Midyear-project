@@ -100,20 +100,20 @@ class Gun ():
         self.image_left = image_left
         self.image_right = image_right
         #Dimensions(Original)
+        self.scalefactor = 1
         self.width = 20
         self.height = 15
         #Distance from player
         if self.owner != None:
             self.xdistance = self.owner.square.x - 18
-    def switch(self):
+    def image_update(self):
         #If the owner is facing left & isn't upgraded
-        if self.isupgraded == False:
-            if self.owner.lastrecorded == "LEFT":
-                self.image = self.image_left
-                self.xdistance = self.owner.square.x - 18
-            if self.owner.lastrecorded == "RIGHT":
-                self.xdistance = self.owner.square.x + 21
-                self.image = self.image_right
+        if self.owner.lastrecorded == "LEFT":
+            self.image = self.image_left
+            win.blit(self.image, (self.owner.square.x - 18 - self.width, self.owner.square.y + 5))
+        if self.owner.lastrecorded == "RIGHT":
+            self.image = self.image_right
+            win.blit(self.image, (self.owner.square.x + self.owner.square.width + 18, self.owner.square.y + 5))
     #Shoot method(Outputs a bullet)
     def shoot(self):
         now = pygame.time.get_ticks()
@@ -389,15 +389,17 @@ class Player(object):
             self.square.width = 10
             self.square.height = 15
             self.image = pygame.transform.scale(self.image, (self.square.width, self.square.height))
-            self.gun.image = pygame.transform.scale(self.gun.image, (4, 3))
-            self.gun.upgraded = True
+            self.gun.width = 8
+            self.gun.height = 6
+            self.gun.image = pygame.transform.scale(self.gun.image, (self.gun.width, self.gun.height))
+            self.gun.isupgraded = True
             win.blit(self.image, (self.square.x, self.square.y))
             if self.lastrecorded == "LEFT":
-                self.gun.xdistance = self.square.x - 18/5
-                win.blit(self.gun.image, (self.gun.xdistance, self.square.y + 5))
+                self.gun.xdistance = -18/5
+                win.blit(self.gun.image, (self.square.x + self.gun.xdistance, self.square.y + 5))
             elif self.lastrecorded == "RIGHT":
-                self.gun.xdistance = self.square.x + 21/5
-                win.blit(self.gun.image, (self.gun.xdistance, self.square.y + 5))
+                self.gun.xdistance = 21/5
+                win.blit(self.gun.image, (self.square.x + self.gun.xdistance, self.square.y + 5))
             upgrade_used_list.remove(upgrade)
         elif upgrade.powerId == 5:
             self.mass = 2
@@ -416,15 +418,17 @@ class Player(object):
             self.square.width = 55
             self.square.height = 75
             self.image = pygame.transform.scale(self.image, (self.square.width, self.square.height))
-            self.gun.image = pygame.transform.scale(self.gun.image, (80, 60))
-            self.gun.upgraded = True
+            self.gun.width = 60
+            self.gun.height = 45
+            self.gun.image = pygame.transform.scale(self.gun.image, (self.gun.width, self.gun.height))
+            self.gun.isupgraded = True
             win.blit(self.image, (self.square.x, self.square.y))
             if self.lastrecorded == "LEFT":
-                self.gun.xdistance = self.square.x - 72
-                win.blit(self.gun.image, (self.gun.xdistance, self.square.y + 5))
+                self.gun.xdistance = -72
+                win.blit(self.gun.image, (self.square.x + self.gun.xdistance, self.square.y + 5))
             elif self.lastrecorded == "RIGHT":
-                self.gun.xdistance = self.square.x + 84
-                win.blit(self.gun.image, (self.gun.xdistance, self.square.y + 5))
+                self.gun.xdistance = 84
+                win.blit(self.gun.image, (self.square.x + self.gun.xdistance, self.square.y + 5))
             upgrade_used_list.remove(upgrade)
         elif upgrade.powerId == 10:
             self.mass = .7
@@ -440,8 +444,8 @@ class Player(object):
             self.square.width = 25
             self.square.height = 45
             self.image = pygame.transform.scale(self.image, (self.square.width, self.square.height))
-            self.gun.image = pygame.transform.scale(self.gun.image, (self.gun.width, self.gun.height))
-            self.gun.upgraded = False
+            self.gun.image = pygame.transform.scale(self.gun.image, (self.gun.default_width, self.gun.default_height))
+            self.gun.isupgraded = False
             win.blit(self.image, (self.square.x, self.square.y))
             if self.lastrecorded == "LEFT":
                 self.gun.xdistance = self.square.x - 18
@@ -462,7 +466,7 @@ class Player(object):
             self.square.height = 45
             self.image = pygame.transform.scale(self.image, (self.square.width, self.square.height))
             self.gun.image = pygame.transform.scale(self.gun.image, (self.gun.width, self.gun.height))
-            self.gun.upgraded = False
+            self.gun.isupgraded = False
             win.blit(self.image, (self.square.x, self.square.y))
             if self.lastrecorded == "LEFT":
                 self.gun.xdistance = self.square.x - 18
@@ -711,10 +715,8 @@ while run:
     win.blit(platform3image, (platform3.rect.x, platform3.rect.y))
     win.blit(player1.image, (player1.square.x, player1.square.y))
     win.blit(player2.image, (player2.square.x, player2.square.y))
-    player1.gun.switch()
-    player2.gun.switch()
-    win.blit(player1.gun.image, (player1.gun.xdistance, player1.square.y + 5))
-    win.blit(player2.gun.image, ((player2.gun.xdistance, player2.square.y + 5)))
+    player1.gun.image_update()
+    player2.gun.image_update()
     #Makes the platforms move
     platform1.moves()
     platform2.moves()
