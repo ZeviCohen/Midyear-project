@@ -30,6 +30,8 @@ maingun_image1 = pygame.image.load("Images/Main_Gun.png").convert_alpha()
 maingun_image2 = pygame.image.load("Images/Main_Gun.png").convert_alpha()
 maingun_image1_left = pygame.image.load("Images/Main_Gun_Left.png").convert_alpha()
 maingun_image2_left = pygame.image.load("Images/Main_Gun_Left.png").convert_alpha()
+player1_shield = pygame.image.load("Images/shield.png").convert_alpha()
+player2_shield = pygame.image.load("Images/shield.png").convert_alpha()
 
 #This function creates the game's start menu
 def create_start_menu():
@@ -99,10 +101,8 @@ class Gun ():
         self.image_left = image_left
         self.image_right = image_right
         #Dimensions(Original)
-        self.scalefactor = 1
         self.width = 20
         self.height = 15
-
     def image_update(self):
         #If the owner is facing left & isn't upgraded
         if self.owner.lastrecorded == "LEFT":
@@ -194,8 +194,10 @@ class Player(object):
         #So that there is only one bullet affecting the player at a time
         self.bullet = None
         self.image = image
-        #Checks if there is a sheild
+        #Checks if there is a shield
         self.isShield = False
+        self.shield_width = 35
+        self.shield_height = 55
 
     def move(self):
         #Gravity
@@ -392,7 +394,10 @@ class Player(object):
             self.image = pygame.transform.scale(self.image, (self.square.width, self.square.height))
             self.gun.width = 8
             self.gun.height = 6
-            self.gun.image = pygame.transform.scale(self.gun.image, (self.gun.width, self.gun.height))
+            self.gun.image_left = pygame.transform.scale(self.gun.image_left, (self.gun.width, self.gun.height))
+            self.gun.image_right = pygame.transform.scale(self.gun.image_right, (self.gun.width, self.gun.height))
+            self.shield_width = 18
+            self.shield_width = 23
             upgrade_used_list.remove(upgrade)
         elif upgrade.powerId == 5:
             self.isShield = True
@@ -414,7 +419,10 @@ class Player(object):
             # x4 scale factor
             self.gun.width = 60
             self.gun.height = 45
-            self.gun.image = pygame.transform.scale(self.gun.image, (self.gun.width, self.gun.height))
+            self.gun.image_left = pygame.transform.scale(self.gun.image_left, (self.gun.width, self.gun.height))
+            self.gun.image_right = pygame.transform.scale(self.gun.image_right, (self.gun.width, self.gun.height))
+            self.shield_width = 70
+            self.shield_width = 110
     def remove_upgrade(self, upgrade):
         #The powerId of the upgrade is used to show what power it gave, and that power is reverted back to the original stats
         if upgrade.powerId == 1 or upgrade.powerId == 6:
@@ -429,7 +437,10 @@ class Player(object):
             self.image = pygame.transform.scale(self.image, (self.square.width, self.square.height))
             self.gun.width = 20
             self.gun.height = 15
-            self.gun.image = pygame.transform.scale(self.gun.image, (self.gun.width, self.gun.height))
+            self.gun.image_left = pygame.transform.scale(self.gun.image_left, (self.gun.width, self.gun.height))
+            self.gun.image_right = pygame.transform.scale(self.gun.image_right, (self.gun.width, self.gun.height))
+            self.shield_width = 35
+            self.shield_width = 55
         if upgrade.powerId == 5:
             self.isShield = False
 
@@ -475,7 +486,7 @@ class Upgrade(object):
             elif self.powerId == 4:
                 self.image = pygame.image.load("Images/minimize_power.png").convert_alpha()
             elif self.powerId == 5:
-                self.image = pygame.image.load("Images/.png").convert_alpha()
+                self.image = pygame.image.load("Images/shield_power.png").convert_alpha()
             elif self.powerId == 6:
                 self.image = pygame.image.load("Images/speed_power.png").convert_alpha()
             elif self.powerId == 7:
@@ -484,7 +495,7 @@ class Upgrade(object):
                 self.image = pygame.image.load("Images/extra_life.jpeg").convert_alpha()
             elif self.powerId == 9:
                 self.image = pygame.image.load("Images/maximize_power.png").convert_alpha()
-        #Makes it so the gunboxes and upgrades always spawn on/over a platform 
+        #Makes it so the gunboxes and upgrades always spawn on/over a platform
         num1 = platform.rect.x
         num2 = (platform.rect.x + platform.rect.width)- self.width
         self.x = random.randint(num1, num2)
@@ -669,6 +680,12 @@ while run:
     win.blit(platform3image, (platform3.rect.x, platform3.rect.y))
     win.blit(player1.image, (player1.square.x, player1.square.y))
     win.blit(player2.image, (player2.square.x, player2.square.y))
+    if player1.isShield:
+        player1.shield = pygame.transform.scale(player1_shield, (player1.shield_width, player1.shield_height))
+        win.blit(player1_shield, (player1.square.x - 10 ,player1.square.y - 5))
+    if player2.isShield:
+        player1.shield = pygame.transform.scale(player1_shield, (player1.shield_width, player1.shield_height))
+        win.blit(player2_shield, (player1.square.x - 10 ,player1.square.y - 5))
     player1.gun.image_update()
     player2.gun.image_update()
     #Makes the platforms move
