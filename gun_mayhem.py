@@ -26,12 +26,12 @@ gunbox_used_list = []
 player1image = pygame.image.load("Images/Meowth-Pokemon-PNG-Transparent-Image.png").convert_alpha()
 player2image = pygame.image.load("Images/player2_image.png").convert_alpha()
 platform3image = pygame.image.load("Images/download.png").convert_alpha()
-maingun_image1 = pygame.image.load("Images/Main_Gun.png").convert_alpha()
-maingun_image2 = pygame.image.load("Images/Main_Gun.png").convert_alpha()
-maingun_image1_left = pygame.image.load("Images/Main_Gun_Left.png").convert_alpha()
-maingun_image2_left = pygame.image.load("Images/Main_Gun_Left.png").convert_alpha()
-player1_shield = pygame.image.load("Images/shield.png").convert_alpha()
-player2_shield = pygame.image.load("Images/shield.png").convert_alpha()
+#Main Gun
+maingun_image1 = maingun_image2 = pygame.image.load("Images/Main_Gun/Main_Gun.png").convert_alpha()
+maingun_image1_left = maingun_image2_left = pygame.image.load("Images/Main_Gun/Main_Gun_Left.png").convert_alpha()
+#Mini Gun
+#Shield
+player1_shield = player2_shield = pygame.image.load("Images/shield.png").convert_alpha()
 
 #This function creates the game's start menu
 def create_start_menu():
