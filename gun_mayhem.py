@@ -30,6 +30,14 @@ platform3image = pygame.image.load("Images/download.png").convert_alpha()
 maingun_image1 = maingun_image2 = pygame.image.load("Images/Main_Gun/Main_Gun.png").convert_alpha()
 maingun_image1_left = maingun_image2_left = pygame.image.load("Images/Main_Gun/Main_Gun_Left.png").convert_alpha()
 #Mini Gun
+minigun_image = pygame.image.load("Images/Mini_Gun/Mini_Gun.png").convert_alpha()
+minigun_image_left = pygame.image.load("Images/Mini_Gun/Mini_Gun_Left.png").convert_alpha()
+#Sub Machine Gun
+submachinegun_image = pygame.image.load("Images/Sub_Machine_Gun/Sub_Machine_Gun.png").convert_alpha()
+submachinegun_image_left = pygame.image.load("Images/Sub_Machine_Gun/Sub_Machine_Gun_Left.png").convert_alpha()
+#Shotgun
+shotgun_image = pygame.image.load("Images/Shotgun/Shotgun.png").convert_alpha()
+shotgun_image_left = pygame.image.load("Images/Shotgun/Shotgun_Left.png").convert_alpha()
 #Shield
 player1_shield = player2_shield = pygame.image.load("Images/shield.png").convert_alpha()
 
@@ -587,13 +595,13 @@ player2.gun = maingun2
 #Gun List:
 #Order goes as follows: name, owner, ammo, cooldown, bullet_kb, gunid, image
 #For now, the special guns take the image of the maingun
-gun_1 = Gun("Sub machine gun",None, 50, 200, 25, 1, maingun_image1_left, maingun_image1)#Sub machine gun
+gun_1 = Gun("Sub machine gun",None, 50, 200, 25, 1, submachinegun_image_left, submachinegun_image)#Sub machine gun
 gun_2 = Gun("Sniper",None, 5, 500, 35, 1, maingun_image1_left, maingun_image1)#Sniper
-gun_3 = Gun("Shotgun",None, 5, 500, 35, 1, maingun_image1_left, maingun_image1)#Shotgun
+gun_3 = Gun("Shotgun",None, 5, 500, 35, 1, shotgun_image, shotgun_image_left)#Shotgun
 gun_4 = Gun("Assault rifle",None, 30, 250, 25, 1, maingun_image1_left, maingun_image1)#Assault rifle
 gun_5 = Gun("Light machine gun",None, 50, 200, 25, 1, maingun_image1_left, maingun_image1)#Light machine gun
 #Special
-gun_6 = Gun("Minigun",None, 100, 100, 25, 1, maingun_image1_left, maingun_image1)#Minigun
+gun_6 = Gun("Minigun",None, 100, 100, 25, 1, minigun_image_left, minigun_image)#Minigun
 gun_7 = Gun("Dematerializer",None, 3, 750, 50, 1, maingun_image1_left, maingun_image1)#Dematerializer
 #Gun_list stores all the special guns that arrive in lootboxes
 gun_list = [gun_1, gun_2, gun_3, gun_4, gun_5, gun_6, gun_7]
