@@ -475,7 +475,7 @@ class Upgrade(object):
             elif self.powerId == 4:
                 self.image = pygame.image.load("Images/minimize_power.png").convert_alpha()
             elif self.powerId == 5:
-                self.image = pygame.image.load("Images/.png").convert_alpha()
+                self.image = pygame.image.load("Images/mass_power.png").convert_alpha()
             elif self.powerId == 6:
                 self.image = pygame.image.load("Images/speed_power.png").convert_alpha()
             elif self.powerId == 7:
