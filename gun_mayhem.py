@@ -404,8 +404,8 @@ class Player(object):
             self.gun.height = 6
             self.gun.image_left = pygame.transform.scale(self.gun.image_left, (self.gun.width, self.gun.height))
             self.gun.image_right = pygame.transform.scale(self.gun.image_right, (self.gun.width, self.gun.height))
-            self.shield_width = 18
-            self.shield_width = 23
+            self.shield_width = 8
+            self.shield_width = 14
             upgrade_used_list.remove(upgrade)
         elif upgrade.powerId == 5:
             self.isShield = True
@@ -429,8 +429,8 @@ class Player(object):
             self.gun.height = 45
             self.gun.image_left = pygame.transform.scale(self.gun.image_left, (self.gun.width, self.gun.height))
             self.gun.image_right = pygame.transform.scale(self.gun.image_right, (self.gun.width, self.gun.height))
-            self.shield_width = 70
-            self.shield_width = 110
+            self.shield_width = 30
+            self.shield_width = 50
     def remove_upgrade(self, upgrade):
         #The powerId of the upgrade is used to show what power it gave, and that power is reverted back to the original stats
         if upgrade.powerId == 1 or upgrade.powerId == 6:
@@ -447,8 +447,8 @@ class Player(object):
             self.gun.height = 15
             self.gun.image_left = pygame.transform.scale(self.gun.image_left, (self.gun.width, self.gun.height))
             self.gun.image_right = pygame.transform.scale(self.gun.image_right, (self.gun.width, self.gun.height))
-            self.shield_width = 35
-            self.shield_width = 55
+            self.shield_width = 19
+            self.shield_width = 32
         if upgrade.powerId == 5:
             self.isShield = False
 
@@ -692,8 +692,8 @@ while run:
         player1.shield = pygame.transform.scale(player1_shield, (player1.shield_width, player1.shield_height))
         win.blit(player1_shield, (player1.square.x - 10 ,player1.square.y - 5))
     if player2.isShield:
-        player1.shield = pygame.transform.scale(player1_shield, (player1.shield_width, player1.shield_height))
-        win.blit(player2_shield, (player1.square.x - 10 ,player1.square.y - 5))
+        player2.shield = pygame.transform.scale(player2_shield, (player2.shield_width, player2.shield_height))
+        win.blit(player2_shield, (player2.square.x - 10 ,player2.square.y - 5))
     player1.gun.image_update()
     player2.gun.image_update()
     #Makes the platforms move
