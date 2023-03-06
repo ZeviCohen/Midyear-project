@@ -12,7 +12,7 @@ pygame.display.flip()
 game_state = "start"
 
 #Color Palette
-color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0), "sky_blue":(138, 206, 251), "olive_green": (95, 107, 47), "coral": (255, 127, 150), "cardboard_brown": (237, 218, 116), "dusk_orange": (245, 129, 56)}
+color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0), "sky_blue":(138, 206, 251), "olive_green": (95, 107, 47), "deep_green": (0, 100, 0), "coral": (255, 127, 150), "cardboard_brown": (237, 218, 116), "dusk_orange": (245, 129, 56)}
 TOD = "dawn"
 
 #Lists that will be used later
@@ -41,9 +41,58 @@ shotgun_image_left = pygame.image.load("Images/Shotgun/Shotgun_Left.png").conver
 #Shield
 player1_shield = player2_shield = pygame.image.load("Images/shield.png").convert_alpha()
 
+#Changes color
+def change_colors(color1, color2, time):
+    length = 0
+    new_color = []
+    while length < len(color1):
+        new_color.append(color1[length] - (color1[length] - color2[length])/(time/2))
+        length += 1
+    return new_color
+
+#Fades to black and back
+def fade_to_black(current_color, future_color):
+    now = last = pygame.time.get_ticks()
+    temp_color = current_color
+    while now - last <= 2000:
+        pygame.time.delay(10)
+        temp_color = change_colors(temp_color, color_dict["black"], 200)
+        now = pygame.time.get_ticks()
+        win.fill(temp_color)
+        pygame.display.update()
+    now = last = pygame.time.get_ticks()
+    while now - last <= 2000:
+        pygame.time.delay(10)
+        temp_color = change_colors(temp_color, future_color, 200)
+        now = pygame.time.get_ticks()
+        win.fill(temp_color)
+        pygame.display.update()
 #This function creates the game's start menu
 def create_start_menu():
-    pass
+    run = True
+    while run:
+        pygame.time.delay(100)
+        win.fill(color_dict["sky_blue"])
+        #To let the user quit the window
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                run = False
+        #Title
+        title_font = pygame.font.SysFont("timesnewroman", 45)
+        titleRender = title_font.render("Gone Mayhem", True, color_dict["deep_green"])
+        titleRect = titleRender.get_rect()
+        titleRect.center = (175, 75)
+        win.blit(titleRender, titleRect.center)
+        #Button
+        start_font = pygame.font.SysFont("timesnewroman", 30)
+        startRender = start_font.render("Left-click to start", True, color_dict["olive_green"])
+        startRect = startRender.get_rect()
+        startRect.center = (200, 450)
+        win.blit(startRender, startRect.center)
+        pygame.display.update()
+    fade_to_black(color_dict["sky_blue"], color_dict["coral"])
 #This is the function that redraws all of the stuff in the game
 def update_window():
 
@@ -80,13 +129,6 @@ def update_window():
         textRect2.center = (450, 500+ text_height_var2)
         win.blit(text2, textRect2)
         text_height_var2 += 20
-def change_colors(color1, color2, time):
-    length = 0
-    new_color = []
-    while length < len(color1):
-        new_color.append(color1[length] - (color1[length] - color2[length])/(time/2))
-        length += 1
-    return new_color
 class Gun ():
     def __init__(self, name, owner, ammo, cooldown, bullet_kb, gunid, image_left, image_right):
         #How long between each bullet being fired
@@ -565,7 +607,8 @@ class Upgrade(object):
         pygame.draw.polygon(win, outline_color, mask_outline, 2)
 
         
-
+#Creates start menu
+create_start_menu()
 #Creates all of the objects
 
 #Order goes as follows: x, y, width, height, vel
