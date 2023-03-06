@@ -36,8 +36,8 @@ minigun_image_left = pygame.image.load("Images/Mini_Gun/Mini_Gun_Left.png").conv
 submachinegun_image = pygame.image.load("Images/Sub_Machine_Gun/Sub_Machine_Gun.png").convert_alpha()
 submachinegun_image_left = pygame.image.load("Images/Sub_Machine_Gun/Sub_Machine_Gun_Left.png").convert_alpha()
 #Shotgun
-shotgun_image = pygame.image.load("Images/Shotgun/Shotgun_Left.png").convert_alpha()
-shotgun_image_left = pygame.image.load("Images/Shotgun/Shotgun.png").convert_alpha()
+shotgun_image = pygame.image.load("Images/Shotgun/Shotgun.png").convert_alpha()
+shotgun_image_left = pygame.image.load("Images/Shotgun/Shotgun_Left.png").convert_alpha()
 #Shield
 player1_shield = player2_shield = pygame.image.load("Images/shield.png").convert_alpha()
 
