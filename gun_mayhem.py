@@ -597,7 +597,7 @@ player2.gun = maingun2
 #For now, the special guns take the image of the maingun
 gun_1 = Gun("Sub machine gun",None, 50, 200, 25, 1, submachinegun_image_left, submachinegun_image)#Sub machine gun
 gun_2 = Gun("Sniper",None, 5, 500, 35, 1, maingun_image1_left, maingun_image1)#Sniper
-gun_3 = Gun("Shotgun",None, 5, 500, 35, 1, shotgun_image, shotgun_image_left)#Shotgun
+gun_3 = Gun("Shotgun",None, 5, 500, 35, 1, shotgun_image_left, shotgun_image)#Shotgun
 gun_4 = Gun("Assault rifle",None, 30, 250, 25, 1, maingun_image1_left, maingun_image1)#Assault rifle
 gun_5 = Gun("Light machine gun",None, 50, 200, 25, 1, maingun_image1_left, maingun_image1)#Light machine gun
 #Special
