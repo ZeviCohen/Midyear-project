@@ -36,8 +36,8 @@ minigun_image_left = pygame.image.load("Images/Mini_Gun/Mini_Gun_Left.png").conv
 submachinegun_image = pygame.image.load("Images/Sub_Machine_Gun/Sub_Machine_Gun.png").convert_alpha()
 submachinegun_image_left = pygame.image.load("Images/Sub_Machine_Gun/Sub_Machine_Gun_Left.png").convert_alpha()
 #Shotgun
-shotgun_image = pygame.image.load("Images/Shotgun/Shotgun.png").convert_alpha()
-shotgun_image_left = pygame.image.load("Images/Shotgun/Shotgun_Left.png").convert_alpha()
+shotgun_image = pygame.image.load("Images/Shotgun/Shotgun_Left.png").convert_alpha()
+shotgun_image_left = pygame.image.load("Images/Shotgun/Shotgun.png").convert_alpha()
 #Shield
 player1_shield = player2_shield = pygame.image.load("Images/shield.png").convert_alpha()
 
@@ -157,10 +157,10 @@ class Gun ():
         #If the owner is facing left & isn't upgraded
         if self.owner.lastrecorded == "LEFT":
             self.image = self.image_left
-            win.blit(self.image, (self.owner.square.x - self.width, self.owner.square.y + 5))
+            win.blit(self.image, (self.owner.square.x - self.width - 5, self.owner.square.y + 5))
         if self.owner.lastrecorded == "RIGHT":
             self.image = self.image_right
-            win.blit(self.image, (self.owner.square.x + self.owner.square.width, self.owner.square.y + 5))
+            win.blit(self.image, (self.owner.square.x + self.owner.square.width + 5, self.owner.square.y + 5))
     #Shoot method(Outputs a bullet)
     def shoot(self):
         now = pygame.time.get_ticks()
@@ -246,8 +246,8 @@ class Player(object):
         self.image = image
         #Checks if there is a shield
         self.isShield = False
-        self.shield_width = 35
-        self.shield_height = 55
+        self.shield_width = 60
+        self.shield_height = 60
 
     def move(self):
         #Gravity
@@ -350,9 +350,22 @@ class Player(object):
         self.gun = self.maingun
         self.maingun.ammo = self.maingun.perm_ammo
         #Gets rid of all the players upgrades
-        for upgrade in upgrade_used_list:
-            if upgrade.owner == self:
-                self.remove_upgrade(upgrade)
+        # for upgrade in upgrade_used_list:
+        #     if upgrade.owner == self:
+        #         self.remove_upgrade(upgrade)
+        self.walkspeed = 10
+        self.mass = 1
+        self.lives = self.lives
+        self.square.width = 25
+        self.square.height = 45
+        self.image = pygame.transform.scale(self.image, (self.square.width, self.square.height))
+        self.gun.width = 20
+        self.gun.height = 15
+        self.gun.image_left = pygame.transform.scale(self.gun.image_left, (self.gun.width, self.gun.height))
+        self.gun.image_right = pygame.transform.scale(self.gun.image_right, (self.gun.width, self.gun.height))
+        self.shield_width = 10
+        self.shield_height = 10
+        self.isShield = False
 
 
     def check_for_platform(self, platform1, platform2, platform3, platform4, platform5, platform6):
@@ -424,6 +437,8 @@ class Player(object):
                     self.yvel = 10
                     self.ishit = False
                 self.square.x += (bullet.xkb * bullet.direction)
+        else:
+            self.ishit = False
     def upgraded(self, upgrade):
         #Depending on the powerId of the upgrade, the player is given a different power. 1-5 are buffs while 6-10 are debuffs. They match up in order 1-6, 2-7 etc.
         if upgrade.powerId == 1:
@@ -732,11 +747,11 @@ while run:
     win.blit(player1.image, (player1.square.x, player1.square.y))
     win.blit(player2.image, (player2.square.x, player2.square.y))
     if player1.isShield:
-        player1.shield = pygame.transform.scale(player1_shield, (player1.shield_width, player1.shield_height))
-        win.blit(player1_shield, (player1.square.x - 10 ,player1.square.y - 5))
+        player1_shield = pygame.transform.scale(player1_shield, (player1.shield_width, player1.shield_height))
+        win.blit(player1_shield, (player1.square.x - 17 ,player1.square.y - 7))
     if player2.isShield:
-        player2.shield = pygame.transform.scale(player2_shield, (player2.shield_width, player2.shield_height))
-        win.blit(player2_shield, (player2.square.x - 10 ,player2.square.y - 5))
+        player2_shield = pygame.transform.scale(player2_shield, (player2.shield_width, player2.shield_height))
+        win.blit(player2_shield, (player2.square.x - 17 ,player2.square.y - 7))
     player1.gun.image_update()
     player2.gun.image_update()
     #Makes the platforms move
@@ -781,7 +796,7 @@ while run:
     player1.shot(player1.bullet)
     player2.shot(player2.bullet)
     #Upgrade code
-    if now - upgrade_last >= 2000:
+    if now - upgrade_last >= 20000:
         upgrade_last = now
         if len(upgrade_list) < 2:
             randchance = random.randint(1,2)
