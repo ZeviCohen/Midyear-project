@@ -12,7 +12,7 @@ pygame.display.flip()
 game_state = "start"
 
 #Color Palette
-color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0), "sky_blue":(138, 206, 251), "olive_green": (95, 107, 47), "deep_green": (0, 100, 0), "coral": (255, 127, 150), "cardboard_brown": (237, 218, 116), "dusk_orange": (245, 129, 56)}
+color_dict = {"white":(255, 255, 255),"red":(255, 0, 0), "green":(0, 255, 0), "blue":(0, 0, 255), "black":(0, 0, 0), "sky_blue":(138, 206, 251), "olive_green": (95, 107, 47), "deep_green": (0, 100, 0), "coral": (255, 127, 150), "cardboard_brown": (237, 218, 116), "dusk_orange": (245, 129, 56), "turquoise": (2)}
 TOD = "dawn"
 
 #Lists that will be used later
@@ -54,14 +54,14 @@ def change_colors(color1, color2, time):
 def fade_to_black(current_color, future_color):
     now = last = pygame.time.get_ticks()
     temp_color = current_color
-    while now - last <= 2000:
+    while now - last <= 1000:
         pygame.time.delay(10)
-        temp_color = change_colors(temp_color, color_dict["black"], 200)
+        temp_color = change_colors(temp_color, color_dict["black"], 100)
         now = pygame.time.get_ticks()
         win.fill(temp_color)
         pygame.display.update()
     now = last = pygame.time.get_ticks()
-    while now - last <= 2000:
+    while now - last <= 1500:
         pygame.time.delay(10)
         temp_color = change_colors(temp_color, future_color, 200)
         now = pygame.time.get_ticks()
@@ -157,10 +157,20 @@ class Gun ():
         #If the owner is facing left & isn't upgraded
         if self.owner.lastrecorded == "LEFT":
             self.image = self.image_left
-            win.blit(self.image, (self.owner.square.x - self.width, self.owner.square.y + 5))
+            #Maingun
+            if self.gunid == 0:
+                win.blit(self.image, (self.owner.square.x - self.width, self.owner.square.y + 5))
+            #Specials(because image is slightly misaligned)
+            else:
+                win.blit(self.image, (self.owner.square.x - self.width, self.owner.square.y - 7))
         if self.owner.lastrecorded == "RIGHT":
             self.image = self.image_right
-            win.blit(self.image, (self.owner.square.x + self.owner.square.width, self.owner.square.y + 5))
+            #Maingun
+            if self.gunid == 0:
+                win.blit(self.image, (self.owner.square.x + self.owner.square.width, self.owner.square.y + 5))
+            #Specials(because image is slightly misaligned)
+            else:
+                win.blit(self.image, (self.owner.square.x + self.owner.square.width, self.owner.square.y - 7))
     #Shoot method(Outputs a bullet)
     def shoot(self):
         now = pygame.time.get_ticks()
