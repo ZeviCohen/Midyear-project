@@ -104,7 +104,7 @@ class Gun ():
                 win.blit(self.image, (self.owner.square.x - self.width, self.owner.square.y + 5))
             #Specials(because image is slightly misaligned)
             else:
-                win.blit(self.image, (self.owner.square.x - self.width, self.owner.square.y - 7))
+                win.blit(self.image, (self.owner.square.x - self.width - 15, self.owner.square.y - 7))
         if self.owner.lastrecorded == "RIGHT":
             self.image = self.image_right
             #Maingun
@@ -159,9 +159,15 @@ class Bullet(object):
     def check_collision(self, enemy):
         #Checks for collision with the enemy/opponent
         if (self.x + self.width >= enemy.square.x) and (self.x <= enemy.square.x + enemy.square.width) and (self.y + self.height >= enemy.square.y) and (self.y <= enemy.square.y + enemy.square.height) and self.hit_enemy == False:
-            enemy.ishit = True
-            self.hit_enemy = True
-            enemy.bullet = self
+            if self.owner.gun.name == "Dematerializer":
+                enemy.ishit = False
+                self.hit_enemy = True
+                enemy.bullet = None
+                enemy.respawn()
+            else:
+                enemy.ishit = True
+                self.hit_enemy = True
+                enemy.bullet = self
 #Our player class
 class Player(object):
     def __init__(self,x,y,width,height,yvel,xvel, mass, jvel, player_num, lives, image):
@@ -377,11 +383,8 @@ class Player(object):
             self.yvel = 15
             self.touching_platform = False
     def shot(self, bullet):
-        if bullet.owner.gun.name == "Dematerializer":
-            bullet_list.remove(bullet)
-            self.respawn()
         #This pushes the player back(depending on the xkb which is different depending on its owners gun type) and up a little (almost like a forced jump)
-        elif not self.isShield:
+        if not self.isShield:
             if self.ishit:
                 self.isJump = False
                 if bullet.ykb >= 0:
@@ -601,6 +604,9 @@ def main():
     #Assault Rifle
     assault_rifle_image = pygame.image.load("Images/Assault_Rifle/Assault_Rifle.png").convert_alpha()
     assault_rifle_image_left = pygame.image.load("Images/Assault_Rifle/Assault_Rifle_Left.png").convert_alpha()
+    #Dematerializer
+    dematerializer_image = pygame.image.load("Images/Dematerializer/Dematerializer.png").convert_alpha()
+    dematerializer_image_left = pygame.image.load("Images/Dematerializer/Dematerializer_Left.png").convert_alpha()
     #Shield
     player1_shield = player2_shield = pygame.image.load("Images/shield.png").convert_alpha()
     #Order goes as follows: x, y, width, height, vel
@@ -621,7 +627,7 @@ def main():
     maingun_image1 = pygame.transform.scale(maingun_image1, (20,15))
     maingun1 = Gun("pistol",player1, 10, 400, 18, 0, maingun_image1_left, maingun_image1)
     player1.maingun = maingun1
-    player1.gun = maingun1
+    #player1.gun = maingun1
     maingun_image2_left = pygame.transform.scale(maingun_image2_left, (20,15))
     maingun_image2 = pygame.transform.scale(maingun_image2, (20,15))
     maingun2 = Gun("pistol",player2, 10, 400, 18, 0, maingun_image2_left, maingun_image2)
@@ -638,10 +644,10 @@ def main():
     gun_5 = Gun("Light machine gun",None, 50, 200, 25, 1, maingun_image1_left, maingun_image1)#Light machine gun
     #Special
     gun_6 = Gun("Minigun",None, 100, 100, 25, 1, minigun_image_left, minigun_image)#Minigun
-    gun_7 = Gun("Dematerializer",None, 1, 750, 50, 1, maingun_image1_left, maingun_image1)#Dematerializer
+    gun_7 = Gun("Dematerializer",player1, 1, 750, 50, 1, dematerializer_image_left, dematerializer_image)#Dematerializer
     #Gun_list stores all the special guns that arrive in lootboxes
     gun_list = [gun_1, gun_2, gun_3, gun_4, gun_5, gun_6, gun_7]
-
+    player1.gun = gun_7
     #Makes all of the images fit their objects
     player1.image = pygame.transform.scale(player1.image, (player1.square.width, player1.square.height))
     player2.image = pygame.transform.scale(player2.image, (player2.square.width, player2.square.height))
