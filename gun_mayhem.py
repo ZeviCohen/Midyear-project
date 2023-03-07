@@ -377,8 +377,11 @@ class Player(object):
             self.yvel = 15
             self.touching_platform = False
     def shot(self, bullet):
+        if bullet.owner.gun.name == "Dematerializer":
+            bullet_list.remove(bullet)
+            self.respawn()
         #This pushes the player back(depending on the xkb which is different depending on its owners gun type) and up a little (almost like a forced jump)
-        if not self.isShield:
+        elif not self.isShield:
             if self.ishit:
                 self.isJump = False
                 if bullet.ykb >= 0:
@@ -635,7 +638,7 @@ def main():
     gun_5 = Gun("Light machine gun",None, 50, 200, 25, 1, maingun_image1_left, maingun_image1)#Light machine gun
     #Special
     gun_6 = Gun("Minigun",None, 100, 100, 25, 1, minigun_image_left, minigun_image)#Minigun
-    gun_7 = Gun("Dematerializer",None, 3, 750, 50, 1, maingun_image1_left, maingun_image1)#Dematerializer
+    gun_7 = Gun("Dematerializer",None, 1, 750, 50, 1, maingun_image1_left, maingun_image1)#Dematerializer
     #Gun_list stores all the special guns that arrive in lootboxes
     gun_list = [gun_1, gun_2, gun_3, gun_4, gun_5, gun_6, gun_7]
 
