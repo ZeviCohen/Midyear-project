@@ -593,8 +593,11 @@ def main():
     submachinegun_image = pygame.image.load("Images/Sub_Machine_Gun/Sub_Machine_Gun.png").convert_alpha()
     submachinegun_image_left = pygame.image.load("Images/Sub_Machine_Gun/Sub_Machine_Gun_Left.png").convert_alpha()
     #Shotgun
-    shotgun_image = pygame.image.load("Images/Shotgun/Shotgun_Left.png").convert_alpha()
-    shotgun_image_left = pygame.image.load("Images/Shotgun/Shotgun.png").convert_alpha()
+    shotgun_image = pygame.image.load("Images/Shotgun/Shotgun.png").convert_alpha()
+    shotgun_image_left = pygame.image.load("Images/Shotgun/Shotgun_Left.png").convert_alpha()
+    #Assault Rifle
+    assault_rifle_image = pygame.image.load("Images/Assault_Rifle/Assault_Rifle.png").convert_alpha()
+    assault_rifle_image_left = pygame.image.load("Images/Assault_Rifle/Assault_Rifle_Left.png").convert_alpha()
     #Shield
     player1_shield = player2_shield = pygame.image.load("Images/shield.png").convert_alpha()
     #Order goes as follows: x, y, width, height, vel
@@ -627,8 +630,8 @@ def main():
     #For now, the special guns take the image of the maingun
     gun_1 = Gun("Sub machine gun",None, 50, 200, 25, 1, submachinegun_image_left, submachinegun_image)#Sub machine gun
     gun_2 = Gun("Sniper",None, 5, 500, 35, 1, maingun_image1_left, maingun_image1)#Sniper
-    gun_3 = Gun("Shotgun",None, 5, 500, 35, 1, shotgun_image, shotgun_image_left)#Shotgun
-    gun_4 = Gun("Assault rifle",None, 30, 250, 25, 1, maingun_image1_left, maingun_image1)#Assault rifle
+    gun_3 = Gun("Shotgun",None, 5, 500, 35, 1, shotgun_image_left, shotgun_image)#Shotgun
+    gun_4 = Gun("Assault rifle",None, 30, 250, 25, 1, assault_rifle_image_left, assault_rifle_image)#Assault rifle
     gun_5 = Gun("Light machine gun",None, 50, 200, 25, 1, maingun_image1_left, maingun_image1)#Light machine gun
     #Special
     gun_6 = Gun("Minigun",None, 100, 100, 25, 1, minigun_image_left, minigun_image)#Minigun
