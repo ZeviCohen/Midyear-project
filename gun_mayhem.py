@@ -627,7 +627,7 @@ def main():
     maingun_image1 = pygame.transform.scale(maingun_image1, (20,15))
     maingun1 = Gun("pistol",player1, 10, 400, 18, 0, maingun_image1_left, maingun_image1)
     player1.maingun = maingun1
-    #player1.gun = maingun1
+    player1.gun = maingun1
     maingun_image2_left = pygame.transform.scale(maingun_image2_left, (20,15))
     maingun_image2 = pygame.transform.scale(maingun_image2, (20,15))
     maingun2 = Gun("pistol",player2, 10, 400, 18, 0, maingun_image2_left, maingun_image2)
@@ -647,7 +647,6 @@ def main():
     gun_7 = Gun("Dematerializer",player1, 1, 750, 50, 1, dematerializer_image_left, dematerializer_image)#Dematerializer
     #Gun_list stores all the special guns that arrive in lootboxes
     gun_list = [gun_1, gun_2, gun_3, gun_4, gun_5, gun_6, gun_7]
-    player1.gun = gun_7
     #Makes all of the images fit their objects
     player1.image = pygame.transform.scale(player1.image, (player1.square.width, player1.square.height))
     player2.image = pygame.transform.scale(player2.image, (player2.square.width, player2.square.height))
