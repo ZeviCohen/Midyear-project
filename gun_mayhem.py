@@ -500,7 +500,7 @@ class Upgrade(object):
             self.width = 20
             self.y = platform.rect.y - self.height
             #Power id chooses what power the upgrade gives and gives it an image accordingly
-            self.powerId = 5#random.randint(1, 9)
+            self.powerId = random.randint(1, 9)
             if self.powerId == 1:
                 self.image = pygame.image.load("Images/speed_power.png").convert_alpha()
             elif self.powerId == 2:
