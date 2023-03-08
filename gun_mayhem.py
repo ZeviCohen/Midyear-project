@@ -297,7 +297,7 @@ class Player(object):
                 self.isJump = False
                 self.jvel = 6
 
-    def respawn(self):
+    def respawn(self, enemy):
         #This is called when the player falls off the map. Everything is reset for the player, they are affected by gravity and they are spawned in at a random x-coordinate
         pygame.time.delay(100)
         self.square.y = 50
@@ -325,6 +325,9 @@ class Player(object):
         self.shield_width = 10
         self.shield_height = 10
         self.isShield = False
+        if self.lives <= 0:
+                run = False
+                winScreen(enemy)
 
 
     def check_for_platform(self, platform1, platform2, platform3, platform4, platform5, platform6):
@@ -782,18 +785,12 @@ def main():
         player2.jumpy()
         #respawn
         if player1.square.y > 600:
-            player1.respawn()
-            if player1.lives <= 0:
-                run = False
-                winScreen(player2)
+            player1.respawn(player2)
             for upgrade in upgrade_used_list:
                 if upgrade.owner == player1:
                     upgrade_used_list.remove(upgrade)
         if player2.square.y > 600:
-            player2.respawn()
-            if player2.lives <= 0:
-                run = False
-                winScreen(player1)
+            player2.respawn(player1)
             for upgrade in upgrade_used_list:
                 if upgrade.owner == player2:
                     upgrade_used_list.remove(upgrade)
