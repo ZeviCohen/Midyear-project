@@ -553,7 +553,7 @@ class Upgrade(object):
             self.touching_platform = True
     def choose_random_gun(self, player, gun_list):
             #Gives the player a random gun from a predefined gun list. However, player also has .maingun so when they run out of ammo it will revert back to their main gun
-            random_gun_index = random.randint(0, 5)
+            random_gun_index = random.randint(0, 6)
             gun = gun_list[random_gun_index]
             gun.owner = player
             player.gun = gun
@@ -607,9 +607,6 @@ def main():
     #Assault Rifle
     assault_rifle_image = pygame.image.load("Images/Assault_Rifle/Assault_Rifle.png").convert_alpha()
     assault_rifle_image_left = pygame.image.load("Images/Assault_Rifle/Assault_Rifle_Left.png").convert_alpha()
-    #Sniper
-    sniper_image = pygame.image.load("Images/Sniper/Sniper.png").convert_alpha()
-    sniper_image_left = pygame.image.load("Images/Sniper/Sniper_Left.png").convert_alpha()
     #Dematerializer
     dematerializer_image = pygame.image.load("Images/Dematerializer/Dematerializer.png").convert_alpha()
     dematerializer_image_left = pygame.image.load("Images/Dematerializer/Dematerializer_Left.png").convert_alpha()
@@ -644,15 +641,15 @@ def main():
     #Order goes as follows: name, owner, ammo, cooldown, bullet_kb, gunid, image
     #For now, the special guns take the image of the maingun
     gun_1 = Gun("Sub machine gun",None, 50, 200, 25, 1, submachinegun_image_left, submachinegun_image)#Sub machine gun
-    gun_2 = Gun("Sniper",None, 5, 500, 35, 1, sniper_image_left, sniper_image)#Sniper
+    gun_2 = Gun("Sniper",None, 5, 500, 35, 1, maingun_image1_left, maingun_image1)#Sniper
     gun_3 = Gun("Shotgun",None, 5, 500, 35, 1, shotgun_image_left, shotgun_image)#Shotgun
     gun_4 = Gun("Assault rifle",None, 30, 250, 25, 1, assault_rifle_image_left, assault_rifle_image)#Assault rifle
+    gun_5 = Gun("Light machine gun",None, 50, 200, 25, 1, maingun_image1_left, maingun_image1)#Light machine gun
     #Special
-    gun_5 = Gun("Minigun",None, 100, 100, 25, 1, minigun_image_left, minigun_image)#Minigun
-    gun_6 = Gun("Dematerializer",None, 1, 750, 50, 1, dematerializer_image_left, dematerializer_image)#Dematerializer
+    gun_6 = Gun("Minigun",None, 100, 100, 25, 1, minigun_image_left, minigun_image)#Minigun
+    gun_7 = Gun("Dematerializer",player1, 1, 750, 50, 1, dematerializer_image_left, dematerializer_image)#Dematerializer
     #Gun_list stores all the special guns that arrive in lootboxes
-    gun_list = [gun_1, gun_2, gun_3, gun_4, gun_5, gun_6]
-
+    gun_list = [gun_1, gun_2, gun_3, gun_4, gun_5, gun_6, gun_7]
     #Makes all of the images fit their objects
     player1.image = pygame.transform.scale(player1.image, (player1.square.width, player1.square.height))
     player2.image = pygame.transform.scale(player2.image, (player2.square.width, player2.square.height))
@@ -816,6 +813,8 @@ def main():
                     bullet.check_collision(player1)
                     pygame.draw.rect(win,color_dict['red'],(bullet.x, bullet.y,bullet.width,bullet.height))
                 bullet.move()
+        player1.shot(player1.bullet)
+        player2.shot(player2.bullet)
         #Upgrade code
         if now - upgrade_last >= 20000:
             upgrade_last = now
