@@ -163,7 +163,7 @@ class Bullet(object):
                 enemy.ishit = False
                 self.hit_enemy = True
                 enemy.bullet = None
-                enemy.respawn()
+                enemy.respawn(self.owner)
             else:
                 enemy.ishit = True
                 self.hit_enemy = True
@@ -617,9 +617,9 @@ def main():
     platform1 = Platform(0,450,70,10, 5)
     platform2 = Platform(530,450,70,10, -5)
     platform3 = Platform(150,400,300,10,0)
-    platform4 = Platform(20,350,100,10,0)
+    platform4 = Platform(0,350,100,10,0)
     platform5 = Platform(500,350,100,10,0)
-    platform6 = Platform(150,300,300,10,0)
+    platform6 = Platform(200,300,200,10,0)
 
     #Order goes as follows: x,y,width,height,yvel,xvel, mass, jvel, player_num, lives, image
     player1 = Player(300,100,25,45,10,0,1,8, 1, 10, player1image)
