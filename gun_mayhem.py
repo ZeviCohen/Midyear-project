@@ -2,6 +2,7 @@ import pygame, math, random
 
 #Initializes pygame
 pygame.init()
+clock = pygame.time.Clock()
 
 #Sets up the window
 win = pygame.display.set_mode((600, 600))
@@ -896,6 +897,7 @@ def main():
                 gunbox.choose_random_gun(player2, gun_list)
                 gunbox_list.remove(gunbox)
         pygame.display.update()
+        clock.tick(100)
     pygame.quit()
 
 def winScreen(player):
