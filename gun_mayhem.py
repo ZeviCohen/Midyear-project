@@ -607,6 +607,9 @@ def main():
     #Assault Rifle
     assault_rifle_image = pygame.image.load("Images/Assault_Rifle/Assault_Rifle.png").convert_alpha()
     assault_rifle_image_left = pygame.image.load("Images/Assault_Rifle/Assault_Rifle_Left.png").convert_alpha()
+    #Sniper
+    sniper_image = pygame.image.load("Images/Sniper/Sniper.png").convert_alpha()
+    sniper_image_left = pygame.image.load("Images/Sniper/Sniper_Left.png").convert_alpha()
     #Dematerializer
     dematerializer_image = pygame.image.load("Images/Dematerializer/Dematerializer.png").convert_alpha()
     dematerializer_image_left = pygame.image.load("Images/Dematerializer/Dematerializer_Left.png").convert_alpha()
@@ -641,10 +644,10 @@ def main():
     #Order goes as follows: name, owner, ammo, cooldown, bullet_kb, gunid, image
     #For now, the special guns take the image of the maingun
     gun_1 = Gun("Sub machine gun",None, 50, 200, 25, 1, submachinegun_image_left, submachinegun_image)#Sub machine gun
-    gun_2 = Gun("Sniper",None, 5, 500, 35, 1, maingun_image1_left, maingun_image1)#Sniper
+    gun_2 = Gun("Sniper",None, 5, 500, 35, 1, sniper_image_left, sniper_image)#Sniper
     gun_3 = Gun("Shotgun",None, 5, 500, 35, 1, shotgun_image_left, shotgun_image)#Shotgun
     gun_4 = Gun("Assault rifle",None, 30, 250, 25, 1, assault_rifle_image_left, assault_rifle_image)#Assault rifle
-    gun_5 = Gun("Light machine gun",None, 50, 200, 25, 1, maingun_image1_left, maingun_image1)#Light machine gun
+    gun_5 = Gun("Light machine gun",None, 50, 200, 25, 1, submachinegun_image_left, submachinegun_image)#Light machine gun
     #Special
     gun_6 = Gun("Minigun",None, 100, 100, 25, 1, minigun_image_left, minigun_image)#Minigun
     gun_7 = Gun("Dematerializer",player1, 1, 750, 50, 1, dematerializer_image_left, dematerializer_image)#Dematerializer
