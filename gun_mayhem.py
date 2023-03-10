@@ -922,7 +922,7 @@ def winScreen(player):
         start_font = pygame.font.SysFont("timesnewroman", 30)
         startRender = start_font.render("Left-click to play again", True, color_dict["olive_green"])
         startRect = startRender.get_rect()
-        startRect.center = (200, 450)
+        startRect.center = (175, 450)
         win.blit(startRender, startRect.center)
         pygame.display.update()
     fade_to_black(color_dict["sky_blue"], color_dict["coral"])
